@@ -11,3 +11,6 @@ wow such file
 
 Not a failure
 		- Dylan
+		
+I got fired from my job as a software engineer. I just couldn't get with the program.
+		-Thomas
