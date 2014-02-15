@@ -22,6 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:icon="@drawable/home" android:theme="@android:style/Theme.Holo" android:name="CommentActivity"></activity>
     </application>
 
 </manifest>
