@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_action_attachment" />
+        android:src="@drawable/ic_action_save" />
 
     <ImageButton
         android:id="@+id/imageButton1"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/imageButton2"
-        android:src="@android:drawable/ic_menu_mapmode" />
+        android:src="@drawable/ic_action_favorite" />
 
     <ImageButton
         android:id="@+id/imageButton3"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/imageButton2"
-        android:src="@android:drawable/ic_menu_send" />
+        android:src="@drawable/ic_action_reply" />
 
     <EditText
         android:id="@+id/editText1"

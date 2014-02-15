@@ -55,10 +55,10 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStart();
 		allComments = new ArrayList<String>();
-		allComments.add("This is a pretty good comment. - 0m away - 0 replies");
-		allComments.add("Look at this cat - 450m away - 7 replies");
-		allComments.add("Does anyone else use this app? If so... - 900m away - 0 replies");
-		allComments.add("Plz upvte thx. - 4.4km away - 9001 replies");
+		allComments.add("This is a pretty good comment. - 0m away - 2 replies shown below");
+		allComments.add(" - It's okay I guess. - 90m away - 0 replies");
+		allComments.add(" - Can a comment really be \"good\"? - 40m away - 3 replies");
+		//allComments.add(" - If you liked this comment, check out my profile! - 1km away - 0 replies");
 		adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item, allComments);
 		commentList.setAdapter(adapter);
