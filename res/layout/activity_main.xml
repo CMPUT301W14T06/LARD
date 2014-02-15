@@ -9,23 +9,41 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/checkBox2"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+
+    </ListView>
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewUser"
+        android:checked="true"
+        android:text="Use GPS Location" />
+
     <TextView
         android:id="@+id/textViewUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Author: j$r#0d7Uy"
+        android:text="Location Settings"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/textViewUser"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
-
-    </ListView>
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/checkBox1"
+        android:text="Use Custom Location: CSIS" />
     
 </RelativeLayout>

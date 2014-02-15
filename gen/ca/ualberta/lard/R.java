@@ -30,10 +30,12 @@ public final class R {
         public static final int ic_launcher=0x7f020006;
     }
     public static final class id {
-        public static final int action_favourites=0x7f08000a;
-        public static final int action_location=0x7f08000b;
-        public static final int action_new=0x7f080008;
-        public static final int action_sort=0x7f080009;
+        public static final int action_favourites=0x7f08000c;
+        public static final int action_location=0x7f08000d;
+        public static final int action_new=0x7f08000a;
+        public static final int action_sort=0x7f08000b;
+        public static final int checkBox1=0x7f080009;
+        public static final int checkBox2=0x7f080008;
         public static final int editText1=0x7f080004;
         public static final int editText2=0x7f080006;
         public static final int imageButton1=0x7f080002;
