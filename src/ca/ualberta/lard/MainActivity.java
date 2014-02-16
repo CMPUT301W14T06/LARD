@@ -45,8 +45,8 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-    	// MenuInflater inflater = getMenuInflater();
-        // inflater.inflate(R.menu.main, menu);
+    	//MenuInflater inflater = getMenuInflater();
+        //inflater.inflate(R.menu.main, menu);
         return true;
     }
     
@@ -55,10 +55,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStart();
 		allComments = new ArrayList<String>();
-		allComments.add("CSC");
-		allComments.add("CSIS");
-		allComments.add("CAB");
-		allComments.add("BUS");
+		allComments.add("It's okay I guess. - 90m away - 0 replies");
 		adapter = new ArrayAdapter<String>(this,
 				R.layout.list_item, allComments);
 		commentList.setAdapter(adapter);
