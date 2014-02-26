@@ -14,23 +14,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-        Button button = (Button) findViewById(R.id.BadBadDeleteMe);
-        
-        button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-            	
-                Intent intent = new Intent(MainActivity.this,
-                        NewCommentActivity.class);
-                startActivity(intent);
-
-            }
-            
-        });
-        
-        
+        setContentView(R.layout.activity_main);        
     }
 
 
