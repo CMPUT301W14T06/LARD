@@ -1,4 +1,0 @@
-LARD
-====
-
-Location Aware ReDdit

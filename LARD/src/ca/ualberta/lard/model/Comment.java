@@ -22,7 +22,7 @@ public class Comment {
 		
 		User user = new User("Anonymous", context);// Todo put this in preferences
 		this.author = user.getUsername();
-		// Todo geolocation
+		this.location = new GeoLocation(context);
 	} 
 	
 	public String toString() {
