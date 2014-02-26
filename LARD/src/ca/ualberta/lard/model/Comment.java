@@ -2,6 +2,8 @@ package ca.ualberta.lard.model;
 
 import java.util.Date;
 
+import android.content.Context;
+
 public class Comment {
 	
 	private String Id;
@@ -14,10 +16,12 @@ public class Comment {
 	private Comment parent;
 	
 	/* Minimal constructor, contains only body text */
-	public Comment(String body) {
+	public Comment(String body, Context context) {
 		this.createdAt = new Date();
 		this.updatedAt = new Date();
-		this.author = "Anonymous"; // Todo put this in preferences
+		
+		User user = new User("Anonymous", context);// Todo put this in preferences
+		this.author = user.getUsername();
 		// Todo geolocation
 	} 
 	
@@ -62,8 +66,9 @@ public class Comment {
 		this.setUpdated();
 	}
 	
-	public void setAuthor(String username) {
-		// Todo proper username getting.
+	public void setAuthor(String username, Context context) {
+		User user = new User(username, context);
+		this.author = user.getUsername();
 		this.setUpdated();
 	}
 	
