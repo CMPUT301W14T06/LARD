@@ -19,11 +19,12 @@ public class GeoLocationModelTests extends
 	}
 	
 	public void testPreconditions() {
+		fail();
 		
 	}
 	
 	public void testDistanceFrom() {
-		
+		fail();
 	}
 
 }

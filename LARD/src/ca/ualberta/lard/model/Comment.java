@@ -1,12 +1,13 @@
 package ca.ualberta.lard.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import android.content.Context;
 
 public class Comment {
 	
-	private String Id;
+	private String id;
 	private String bodyText;
 	private Date createdAt;
 	private Date updatedAt;
@@ -23,6 +24,7 @@ public class Comment {
 		User user = new User("Anonymous", context);// Todo put this in preferences
 		this.author = user.getUsername();
 		this.location = new GeoLocation(context);
+		this.id = UUID.randomUUID().toString();
 	} 
 	
 	public String toString() {
@@ -32,7 +34,7 @@ public class Comment {
 	// Getters
 	
 	public String getId() {
-		return this.Id;
+		return this.id;
 	}
 	
 	public String getBodyText() {

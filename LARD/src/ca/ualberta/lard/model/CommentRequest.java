@@ -65,5 +65,9 @@ public class CommentRequest {
 	public void withoutPictures() {
 		this.hasPicture = false;
 	}
+	
+	public String getId() {
+		return this.id;
+	}
 
 }
