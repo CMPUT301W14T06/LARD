@@ -22,12 +22,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/seperator"
-        android:text="LARD"
+        android:text="@string/LARD"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
+    
+    <TextView
+          android:id="@+id/usernameTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/seperator"
+          android:layout_below="@+id/lardTextView"
+          android:text="@string/username_text_view"
+          android:textColor="#FFFFFF" />
 
     <EditText
         android:id="@+id/usernameEditText"
+        android:hint="@string/fake_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/usernameTextView"
@@ -44,10 +54,11 @@
         android:layout_alignLeft="@+id/usernameEditText"
         android:layout_below="@+id/usernameEditText"
         android:textColor="#FFFFFF"
-        android:text="Comment:" />
+        android:text="@string/comment_text_view" />
 
     <EditText
         android:id="@+id/commentEditText"
+        android:hint="@string/fake_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/commentTextView"
@@ -63,7 +74,7 @@
          android:layout_height="wrap_content"
          android:layout_alignParentBottom="true"
          android:layout_centerHorizontal="true"
-         android:text="*atch*"
+         android:text="@string/attach_button"
          android:textColor="#FFFFFF" />
     
      <Button
@@ -72,7 +83,7 @@
          android:layout_height="wrap_content"  
          android:layout_toRightOf="@+id/attachButton"
          android:layout_alignBottom="@+id/attachButton"
-         android:text="*send*"
+         android:text="@string/send_button"
          android:textColor="#FFFFFF" />
      
       <Button
@@ -81,16 +92,7 @@
          android:layout_height="wrap_content"  
          android:layout_toLeftOf="@+id/attachButton"
          android:layout_alignBottom="@+id/attachButton"
-         android:text="*loca*"
+         android:text="@string/location_button"
          android:textColor="#FFFFFF" />
-
-      <TextView
-          android:id="@+id/usernameTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/seperator"
-          android:layout_below="@+id/lardTextView"
-          android:text="Username:"
-          android:textColor="#FFFFFF" />
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class NewCommentActivity extends Activity {
 	private int pid;
@@ -16,12 +17,20 @@ public class NewCommentActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_new_comment);
 		
 		// get the parent id out of the intent
 		// will be -1 if this is a top level comment
 		Intent intent = getIntent();
 	    pid = intent.getIntExtra("parentID", -1);
+	    
+	    if (pid != -1) {
+	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView);
+	    	// TODO: Fix this
+	    	lardTextView.setText("Reply to: " + pid);
+	    	//lardTextView.setText("Reply to: " + CommentController.getCommentName(pid));
+	    }
+	    
+		setContentView(R.layout.activity_new_comment);
 	}
 
 	// Not sure if we even need this function
