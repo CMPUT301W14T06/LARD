@@ -10,8 +10,8 @@ import android.widget.EditText;
 
 public class NewCommentActivity extends Activity {
 	private int pid;
-	private String name;
 	private Picture picture;
+	// private location?
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +24,7 @@ public class NewCommentActivity extends Activity {
 	    pid = intent.getIntExtra("parentID", -1);
 	}
 
+	// Not sure if we even need this function
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -42,10 +43,10 @@ public class NewCommentActivity extends Activity {
 		
 		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
 		if (usernameText.getText().toString().isEmpty()) {
-			name = null;
+			String name = null;
 		}
 		else {
-			name = usernameText.getText().toString();
+			String name = usernameText.getText().toString();
 		}
 		
 		// needs comment controller to exist
@@ -78,6 +79,10 @@ public class NewCommentActivity extends Activity {
 
 	public int getPid() {
 		return pid;
+	}
+	
+	public Picture getPicture() {
+		return picture;
 	}
 
 }
