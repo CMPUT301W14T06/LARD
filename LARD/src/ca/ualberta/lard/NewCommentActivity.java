@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.view.Menu;
 
 public class NewCommentActivity extends Activity {
-	int pid[];
+	private int pid;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +16,7 @@ public class NewCommentActivity extends Activity {
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
 		Intent intent = getIntent();
-	    pid = intent.getIntArrayExtra("parentID");
+	    pid = intent.getIntExtra("parentID", -1);
 	}
 
 	@Override
@@ -24,6 +24,10 @@ public class NewCommentActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.new_comment, menu);
 		return true;
+	}
+
+	public int getPid() {
+		return pid;
 	}
 
 }
