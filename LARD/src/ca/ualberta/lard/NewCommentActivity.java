@@ -1,5 +1,6 @@
 package ca.ualberta.lard;
 
+import ca.ualberta.lard.model.Picture;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 public class NewCommentActivity extends Activity {
 	private int pid;
 	private String name;
+	private Picture picture;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class NewCommentActivity extends Activity {
 		}
 		
 		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
-		if (!usernameText.getText().toString().isEmpty()) {
+		if (usernameText.getText().toString().isEmpty()) {
 			name = null;
 		}
 		else {
@@ -49,14 +51,29 @@ public class NewCommentActivity extends Activity {
 		// needs comment controller to exist
 		if (pid == -1) {
 			// create a top level comment
-			// CreateComment(commentText, name)
+			// CreateComment(commentText, name, picture)
 		}
 		else {
 			// create a reply comment
-			// CreateComment(commentText, name, pid)
+			// CreateComment(commentText, name, picture, pid)
 		}
 		
 		finish();
+	}
+	
+	// Called when the AttachButton Button is clicked
+	// TODO: Finish this function
+	public void onClickAttachButton(View v) {
+		// needs picture model to exist
+		// picture = new Picture();
+	}
+	
+	// Called when the LocationButton Button is clicked
+	// Not sure what this should actually do, will ask then complete
+	// TODO: Finish this function
+	public void onClickLocationButton(View v) {
+		Intent intent = new Intent(this, LocationSelectionActivity.class);
+		startActivity(intent);
 	}
 
 	public int getPid() {
