@@ -1,5 +1,6 @@
 package ca.ualberta.lard.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -14,18 +15,41 @@ public class Comment {
 	private String author;
 	private GeoLocation location;
 	private Picture picture;
-	private Comment parent;
+	/**
+	 * ID of parent comment element.
+	 */
+	private String parent;
+	
+	/**
+	 * General initialization code for a comment
+	 * <p>
+	 * Initializes code common to the multiple Comment constructors.
+	 * </p>
+	 * @param c The Comment object to populate
+	 * @param body BodyText of the Comment
+	 * @param context Application context of the current Comment Creation request
+	 */
+	public void init(Comment c, String body, Context context) {
+		c.createdAt = new Date();
+		c.updatedAt = new Date();
+		
+		User user = new User("Anonymous", context);// Todo put this in preferences
+		this.bodyText = body;
+		c.author = user.getUsername();
+		c.location = new GeoLocation(context);
+		c.id = UUID.randomUUID().toString();
+	}
 	
 	/* Minimal constructor, contains only body text */
 	public Comment(String body, Context context) {
-		this.createdAt = new Date();
-		this.updatedAt = new Date();
-		
-		User user = new User("Anonymous", context);// Todo put this in preferences
-		this.author = user.getUsername();
-		this.location = new GeoLocation(context);
-		this.id = UUID.randomUUID().toString();
-	} 
+		this.init(this, body, context);
+	}
+	
+	/* Constructor for creating replies */
+	public Comment (String body, String parentID, Context context) {
+		this.init(this, body, context);
+		this.parent = parentID;
+	}
 	
 	public String toString() {
 		return this.bodyText;
@@ -58,7 +82,17 @@ public class Comment {
 	}
 	
 	public Comment getParent() {
-		return this.parent;
+		CommentRequest req = new CommentRequest(1);
+		req.setId(this.parent);
+		ArrayList<Comment> arr = DataModel.retrieveComments(req);
+		
+		if (arr.size() > 0) return arr.get(0);
+		return null;
+	}
+	
+	public ArrayList<Comment> children() {
+		ArrayList<Comment> arr;
+		return null;
 	}
 	
 	// Setters
@@ -84,8 +118,8 @@ public class Comment {
 		this.setUpdated();
 	}
 	
-	public void setParent(Comment comment) {
-		this.parent = comment;
+	public void setParent(String parentID) {
+		this.parent = parentID;
 		this.setUpdated();
 	}
 	

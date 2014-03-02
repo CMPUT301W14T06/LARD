@@ -14,6 +14,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.Stretchy.StretchyClient;
 import ca.ualberta.lard.Stretchy.StretchyResponse;
 
@@ -78,6 +79,9 @@ public class DataModel {
 			// Todo check local storage as a last resort.
 			return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 		}
+		
+		SearchRequest sReq = new SearchRequest(req);
+		ArrayList<Comment> comments2 = client.search(sReq); // TODO finish
 		return null;
 	}
 	

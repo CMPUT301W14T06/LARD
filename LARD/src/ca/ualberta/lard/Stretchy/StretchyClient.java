@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -34,6 +35,14 @@ public class StretchyClient {
 		client = new DefaultHttpClient();
 	}
 	
+	/**
+	 * Gets a particular comment by its ID.
+	 * <p>
+	 * Queries Elastic Search for a resource of type comment matching the provided ID.
+	 * </p>
+	 * @param id ID of the Comment the client is searching for
+	 * @return Comment if found, null otherwise
+	 */
 	public Comment getById(String id) {
 		HttpGet getReq = new HttpGet(ES_LOCATION + id + "?pretty=1");
 		getReq.addHeader("Accept", "application/json");
@@ -84,6 +93,10 @@ public class StretchyClient {
 		}
 		
 		return StretchyResponse.create(response);
+	}
+	
+	public ArrayList<Comment> search(SearchRequest req) {
+		return null;
 	}
 	
 	

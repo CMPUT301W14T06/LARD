@@ -16,7 +16,7 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	
 	// This test will be a little bit handwavey, I suppose. We're involving external infrastructure.
 	public void testSave() {
-		Comment c = new Comment("Android 4 lyfe #yolo", getActivity());
+		Comment c = new Comment("Super comment wow, such comment amaze", getActivity());
 		boolean result = DataModel.save(c);
 		assertTrue(result); // this is a finnicky not-a-test
 	}
@@ -47,6 +47,11 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	}
 	
 	public void testIsLocal() {
+		fail();
+	}
+	
+	public void testSearchByBody() {
+		CommentRequest req = new CommentRequest(5);
 		fail();
 	}
 

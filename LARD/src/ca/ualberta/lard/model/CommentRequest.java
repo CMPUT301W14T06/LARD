@@ -13,6 +13,11 @@ public class CommentRequest {
 	 * The most important parameter. If the CommentRequest contains an ID, then the user is searching for a specific, single comment.
 	 */
 	private String id;
+	
+	/**
+	 * We can specify that the comment must be a child of a particular comment.
+	 */
+	private String parentId;
 	/**
 	 * If the location property is set, Comments nearest this location will be returned over those further from this location.
 	 */
@@ -29,6 +34,10 @@ public class CommentRequest {
 	 * The number of results we want returned
 	 */
 	private int resultSize;
+	/**
+	 * Key words to search the body text for
+	 */
+	private String bodyText;
 	
 	/**
 	 * Instantiates the Comment Request
@@ -44,6 +53,10 @@ public class CommentRequest {
 	
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public void setParentId(String id) {
+		this.parentId = id;
 	}
 	
 	public void setLocation(GeoLocation loc) {
@@ -66,8 +79,22 @@ public class CommentRequest {
 		this.hasPicture = false;
 	}
 	
+	public void bodyText(String body) {
+		this.bodyText = body;
+	}
+	
+
+	
 	public String getId() {
 		return this.id;
+	}
+	
+	public String getBodyText() {
+		return this.bodyText;
+	}
+	
+	public int size() {
+		return this.resultSize;
 	}
 
 }
