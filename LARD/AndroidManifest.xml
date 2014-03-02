@@ -5,10 +5,11 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -27,6 +28,10 @@
         <activity
             android:name="ca.ualberta.lard.NewCommentActivity"
             android:label="@string/title_activity_new_comment" >
+        </activity>
+        <activity
+            android:name="ca.ualberta.lard.LocationSelectionActivity"
+            android:label="@string/title_activity_location_selection" >
         </activity>
     </application>
 
