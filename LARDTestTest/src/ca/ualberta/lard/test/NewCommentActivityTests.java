@@ -10,14 +10,20 @@ public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<Ne
 		super(NewCommentActivity.class);
 	}
 	
-	public void testParentID() {
+	public void testParentIDExists() {
 		Intent intent = new Intent();
 		int value = 1;
 		intent.putExtra("parentID", value);
 		setActivityIntent(intent);
 		NewCommentActivity activity = getActivity();
-		
 		assertEquals("NewCommentActivity should get the value from intent", value, activity.getPid());
+	}
+	
+	public void testParentIDNotExists() {
+		Intent intent = new Intent();
+		setActivityIntent(intent);
+		NewCommentActivity activity = getActivity();
+		assertEquals("NewCommentActivity should get the value from intent", -1, activity.getPid());
 	}
 
 }
