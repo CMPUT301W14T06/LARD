@@ -52,10 +52,10 @@ public class NewCommentActivity extends Activity {
 		
 		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
 		if (usernameText.getText().toString().isEmpty()) {
-			String name = null;
+			//String name = null;
 		}
 		else {
-			String name = usernameText.getText().toString();
+			//String name = usernameText.getText().toString();
 		}
 		
 		// needs comment controller to exist
