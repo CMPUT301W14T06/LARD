@@ -9,5 +9,6 @@
     <string name="action_fav">Favourite</string>
     <string name="action_reply">Reply</string>
     <string name="action_save">Save</string>
+    <string name="title_activity_comment">Comment</string>
 
 </resources>
