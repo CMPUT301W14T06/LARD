@@ -30,12 +30,31 @@
         android:layout_alignLeft="@+id/gpsLocationCheckbox"
         android:layout_below="@+id/gpsLocationCheckbox"
         android:onClick="customLocationClick"
-        android:text="Use Custom Location" />
+        android:text="Use Custom Location:" />
     
     <ListView
         android:id="@+id/locationListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/saveLocationButton"
         android:layout_below="@+id/customLocationCheckbox" />
+
+    <Button
+        android:id="@+id/saveLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="locationSaveClick"
+        android:text="Save" />
+
+    <TextView
+        android:id="@+id/locationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/customLocationCheckbox"
+        android:layout_alignBottom="@+id/customLocationCheckbox"
+        android:layout_toRightOf="@+id/customLocationCheckbox"
+        android:text="" />
 
 </RelativeLayout>

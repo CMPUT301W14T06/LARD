@@ -63,15 +63,25 @@ public final class R {
         public static final int new_comment=0x7f070003;
     }
     public static final class string {
+        public static final int LARD=0x7f050008;
         public static final int action_fav=0x7f050005;
         public static final int action_reply=0x7f050006;
         public static final int action_save=0x7f050007;
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
+        public static final int attach_button=0x7f05000c;
+        public static final int comment_text_view=0x7f05000b;
+        public static final int fake_hint=0x7f05000a;
         public static final int hello_world=0x7f050002;
+<<<<<<< HEAD
         public static final int title_activity_comment=0x7f050008;
+=======
+        public static final int location_button=0x7f05000e;
+        public static final int send_button=0x7f05000d;
+>>>>>>> 9b565f2d76d4c8e07eeb25f0ca2ede2096b4c495
         public static final int title_activity_location_selection=0x7f050004;
         public static final int title_activity_new_comment=0x7f050003;
+        public static final int username_text_view=0x7f050009;
     }
     public static final class style {
         /** 

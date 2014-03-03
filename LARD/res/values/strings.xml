@@ -9,6 +9,13 @@
     <string name="action_fav">Favourite</string>
     <string name="action_reply">Reply</string>
     <string name="action_save">Save</string>
+    <string name="LARD">LARD</string>
+    <string name="username_text_view">Username:</string>
+    <string name="fake_hint">&#8230;</string>
+    <string name="comment_text_view">Comment:</string>
+    <string name="attach_button">Attach</string>
+    <string name="send_button">Send</string>
+    <string name="location_button">Location</string>
     <string name="title_activity_comment">Comment</string>
 
 </resources>
