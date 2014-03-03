@@ -33,6 +33,10 @@
             android:name="ca.ualberta.lard.LocationSelectionActivity"
             android:label="@string/title_activity_location_selection" >
         </activity>
+        <activity
+            android:name="ca.ualberta.lard.CommentActivity"
+            android:label="@string/title_activity_comment" >
+        </activity>
     </application>
 
 </manifest>

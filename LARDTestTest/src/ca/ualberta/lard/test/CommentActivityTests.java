@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import ca.ualberta.lard.CommentActivity;
 import ca.ualberta.lard.model.Comment;
+import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
 
 public class CommentActivityTests extends ActivityInstrumentationTestCase2<CommentActivity> {
@@ -19,6 +20,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	public void testReceiveId() {
 		Comment comment = new Comment("This is a comment.", getActivity());
 		String id = comment.getId();
+		DataModel.save(comment);
 		
 		Intent intent = new Intent();
 		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, id);
@@ -41,6 +43,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	public void testReply() {
 		Comment comment = new Comment("This is a comment.", getActivity());
 		String id = comment.getId();
+		DataModel.save(comment);
 		
 		Intent intent = new Intent();
 		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, id);
@@ -65,6 +68,8 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 
 	// A saved comment should be saved locally.
 	public void testSave() {
+		fail();
+		/*
 		Comment comment = new Comment("This is a comment.", getActivity());
 		String id = comment.getId();
 		
@@ -80,7 +85,8 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	    saveButton.performClick();
 	    
 	    DataModel.saveLocal(comment, true);
-	    assertTrue("Comment should be saved locally", DataModel.isLocal(comment));  
+	    assertTrue("Comment should be saved locally", DataModel.isLocal(comment));
+	    */ 
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,30 +22,44 @@ import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
 
 public class CommentActivity extends Activity {
-	private String parentId;
+	private String commentId;
 	private ListView commentListView;
-	private Comment parent;
+	private Comment comment;
 	private ArrayList<Comment> commentList;
 	private ArrayList<String> commentStrList;
 	private ArrayAdapter<String> adapter;
 	
+	// For debugging purposes
+	private static final String TAG = "Comment Activity";
+	
 	// For getting the parent id from the extra
 	public static final String EXTRA_PARENT_ID = "TEXT";
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_comment);
 	    
+	    Log.d(TAG, "1. Start");
+	    
 	    // Get the id of the top level comment from intent
 	    Intent intent = getIntent();
-	    parentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
+	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
+	    
+	    Log.d(TAG, "2. Got id");
 	    
 	    // Get the comment by passing the id to the controller
-	    CommentRequest parentRequest = new CommentRequest(1);
-	    parentRequest.setId(parentId);
-	    parent = DataModel.retrieveComments(parentRequest).get(0);
+	    CommentRequest commentRequest = new CommentRequest(1);
+	    commentRequest.setId(commentId);
+	    // Check a comment was received 
+	    ArrayList<Comment> temp = DataModel.retrieveComments(commentRequest);
+	    if (temp == null) {
+	    	// Couldn't find the comment, should never get here though.
+	    	finish();
+	    }
+	    comment = temp.get(0);
+	    
+	    Log.d(TAG, "3. Got comment");
 	    
 	    // Configure the list view
 	    commentListView = (ListView)findViewById(R.id.toplevel_and_children_list);
@@ -59,19 +74,21 @@ public class CommentActivity extends Activity {
 	    		startActivity(intent);		
 	    	}	    	
 		}); 
+		
 	}
+	
 	
 	@Override
 	protected void onResume() {
 		super.onResume();	
 		// TODO: Create list of comments to display based off parentId.
-		if (parent.children() == null) {
+		if (comment.children() == null) {
 			commentList = new ArrayList<Comment>();
 		}
 		else {
-			commentList = parent.children();
+			commentList = comment.children();
 		}
-	    commentList.add(0, parent);
+	    commentList.add(0, comment);
 		
 		// Create a list of strings for the adapter
 		// TODO: Decide what part of comment to display. Currently only shows bodyText.
@@ -102,18 +119,18 @@ public class CommentActivity extends Activity {
         case R.id.action_fav:
             // Favourite a comment
         	// TODO: Add comment to favourites
-        	DataModel.saveLocal(parent, true);
+        	DataModel.saveLocal(comment, true);
             return true;
         case R.id.action_reply:
             // Reply to a comment (open NewCommentActivity)
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
-    		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, parentId);
+    		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, commentId);
     		startActivity(intent);
             return true;
         case R.id.action_save:
             // Save a comment for later
         	// TODO: Save
-        	DataModel.saveLocal(parent, true);
+        	DataModel.saveLocal(comment, true);
             return true;
         default:
             return super.onOptionsItemSelected(item);
