@@ -24,7 +24,7 @@ public class NewCommentActivity extends Activity {
 	    pid = intent.getIntExtra("parentID", -1);
 	    
 	    if (pid != -1) {
-	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView);
+	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
 	    	// TODO: Fix this
 	    	lardTextView.setText("Reply to: " + pid);
 	    	//lardTextView.setText("Reply to: " + CommentController.getCommentName(pid));
