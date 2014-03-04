@@ -87,8 +87,8 @@ public class LocationSelectionActivity extends Activity {
 		CheckBox gpsLocationCheckBox = (CheckBox) findViewById(R.id.gpsLocationCheckbox);
 		CheckBox customLocationCheckBox = (CheckBox) findViewById(R.id.customLocationCheckbox);
 		//changes what the view wants to return
-		boolean gpsLocationClicked = true;
-		boolean customLocationClicked = false;
+		gpsLocationClicked = true;
+		customLocationClicked = false;
 		//cant have two checkboxes selected at same time
 		if (customLocationCheckBox.isChecked()) {
 			customLocationCheckBox.setChecked(false);
@@ -103,8 +103,8 @@ public class LocationSelectionActivity extends Activity {
 		CheckBox customLocationCheckBox = (CheckBox) findViewById(R.id.customLocationCheckbox);
 		CheckBox gpsLocationCheckBox = (CheckBox) findViewById(R.id.gpsLocationCheckbox);
 		//changes what the view wants to return
-		boolean gpsLocationClicked = false;
-		boolean customLocationClicked = true;
+		gpsLocationClicked = false;
+		customLocationClicked = true;
 		//cant have two checkboxes selected at same time
 		if (gpsLocationCheckBox.isChecked()) {
 			gpsLocationCheckBox.setChecked(false);
@@ -116,22 +116,15 @@ public class LocationSelectionActivity extends Activity {
 	
 	public void locationSaveClick(View view){
 		
-		Log.d("click", "gps Location, custom Location");
-		System.out.println(gpsLocationClicked);
-		System.out.println(customLocationClicked);
-		
 		if(gpsLocationClicked == true) {
 			//Create a gps location from current phone context
 			//geoLocation = new GeoLocation(getApplicationContext());
 		}
 		else if (customLocationClicked == true) {
 			//checks if you have selected a location
-			if (slectedLocationString.isEmpty() || slectedLocationString == "Please select a location from the list!") {
+			if (slectedLocationString == null ||slectedLocationString.isEmpty() || slectedLocationString == "Please select a location from the list!") {
 				slectedLocationString = "Please select a location from the list!";
 				shownLocation.setText("Please select a location!");
-				
-				Log.d("blah", "blah blah");
-				
 				return;
 			}
 			//TODO enumerated locations
