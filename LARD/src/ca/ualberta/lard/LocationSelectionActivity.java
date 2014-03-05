@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ca.ualberta.lard.model.GeoLocation;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -114,11 +115,14 @@ public class LocationSelectionActivity extends Activity {
 		customLocationCheckBox.setClickable(false);
 	}
 	
-	public void locationSaveClick(View view){
-		
+	public void locationSaveClick(View view){		
 		if(gpsLocationClicked == true) {
 			//Create a gps location from current phone context
 			//geoLocation = new GeoLocation(getApplicationContext());
+			//Intent resultData = new Intent();
+			//resultData.putExtra("geoLocation", "valueData");
+			//setResult(Activity.RESULT_OK, resultData);
+			//finish();
 		}
 		else if (customLocationClicked == true) {
 			//checks if you have selected a location
@@ -128,7 +132,11 @@ public class LocationSelectionActivity extends Activity {
 				return;
 			}
 			//TODO enumerated locations
-			//geoLocation = new GeoLocation(id)
+			//geoLocation = new GeoLocation(id);
+			//Intent resultData = new Intent();
+			//resultData.putExtra("geoLocation", "valueData");
+			//setResult(Activity.RESULT_OK, resultData);
+			//finish();
 		}
 		else {
 			//We should not of got here
