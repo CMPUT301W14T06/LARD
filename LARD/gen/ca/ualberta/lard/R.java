@@ -36,8 +36,8 @@ public final class R {
         public static final int commentTextView=0x7f08000d;
         public static final int customLocationCheckbox=0x7f080003;
         public static final int gpsLocationCheckbox=0x7f080002;
+        public static final int itemAuthor=0x7f080014;
         public static final int itemIcon=0x7f080012;
-        public static final int itemInfo=0x7f080014;
         public static final int itemPreview=0x7f080013;
         public static final int lardTextView=0x7f08000b;
         public static final int locationButton=0x7f080011;

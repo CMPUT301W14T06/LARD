@@ -3,18 +3,19 @@ package ca.ualberta.lard;
 import java.util.ArrayList;
 
 import ca.ualberta.lard.R;
+import ca.ualberta.lard.model.Comment;
+import ca.ualberta.lard.model.BarrenComment;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
 
-private ArrayAdapter<String> adapter;
-private ArrayList<String> allComments;
+private CommentListBaseAdapter adapter;
+private ArrayList<BarrenComment> allComments;
 private ListView commentList;
 
     @Override
@@ -39,12 +40,12 @@ private ListView commentList;
 protected void onStart() {
 // TODO Auto-generated method stub
 super.onStart();
-allComments = new ArrayList<String>();
-allComments.add("Look at this cat - 450m away - 7 replies");
-allComments.add("Does anyone else use this app? If so... - 900m away - 0 replies");
-allComments.add("Plz upvte thx. - 4.4km away - 9001 replies");
-adapter = new ArrayAdapter<String>(this,
-R.layout.thread_list_item, allComments);
+allComments = new ArrayList<BarrenComment>();
+allComments.add(new BarrenComment("Test comment.", "Anonymous", false));
+allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true));
+allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false));
+adapter = new CommentListBaseAdapter(this,
+ allComments);
 commentList.setAdapter(adapter);
 }
 
