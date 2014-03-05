@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class NewCommentActivity extends Activity {
+	static final int REQUEST_ID = 1;  // The request code
 	private int pid;
 	private Picture picture;
 	// private location?
@@ -83,7 +84,21 @@ public class NewCommentActivity extends Activity {
 	// TODO: Finish this function
 	public void onClickLocationButton(View v) {
 		Intent intent = new Intent(this, LocationSelectionActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, REQUEST_ID);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    // Check which request we're responding to
+	    if (requestCode == REQUEST_ID) {
+	        // Make sure the request was successful
+	        if (resultCode == RESULT_OK) {
+	            // The user picked a contact.
+	            // The Intent's data Uri identifies which contact was selected.
+
+	            // Do something with the contact here (bigger example below)
+	        }
+	    }
 	}
 
 	public int getPid() {
