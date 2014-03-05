@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class LocationSelectionActivity extends Activity {
@@ -36,12 +37,12 @@ public class LocationSelectionActivity extends Activity {
 		//default state is gps location is set to true
 		gpsLocationClicked = true;
 		customLocationClicked = false;
-		CheckBox gpsLocationCheckBox = (CheckBox) findViewById(R.id.gpsLocationCheckbox);
-		CheckBox customLocationCheckBox = (CheckBox) findViewById(R.id.customLocationCheckbox);
-		gpsLocationCheckBox.setChecked(true);
-		//locks gps checkbox and unlocks custom checkbox
-		gpsLocationCheckBox.setClickable(false);
-		customLocationCheckBox.setClickable(true);
+		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
+		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
+		gpsLocationRadioButton.setChecked(true);
+		//locks gps RadioButton and unlocks custom RadioButton
+		gpsLocationRadioButton.setClickable(false);
+		customLocationRadioButton.setClickable(true);
 		
 		//Makes the list clickable
 		listView = (ListView) findViewById(R.id.locationListView);
@@ -83,36 +84,36 @@ public class LocationSelectionActivity extends Activity {
 	}
 	
 	
-	//gets checkboxed clicked then unchecks the other checkbox, also sets the bools
+	//gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
 	public void gpsLocationClick(View view) {
-		CheckBox gpsLocationCheckBox = (CheckBox) findViewById(R.id.gpsLocationCheckbox);
-		CheckBox customLocationCheckBox = (CheckBox) findViewById(R.id.customLocationCheckbox);
+		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
+		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
 		//changes what the view wants to return
 		gpsLocationClicked = true;
 		customLocationClicked = false;
 		//cant have two checkboxes selected at same time
-		if (customLocationCheckBox.isChecked()) {
-			customLocationCheckBox.setChecked(false);
+		if (customLocationRadioButton.isChecked()) {
+			customLocationRadioButton.setChecked(false);
 	    }
-		//locks gps checkbox and unlocks custom checkbox
-		gpsLocationCheckBox.setClickable(false);
-		customLocationCheckBox.setClickable(true);
+		//locks gps RadioButton and unlocks custom RadioButton
+		gpsLocationRadioButton.setClickable(false);
+		customLocationRadioButton.setClickable(true);
 	}
 	
-	//gets checkboxed clicked then unchecks the other checkbox, also sets the bools
+	//gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
 	public void customLocationClick(View view) {
-		CheckBox customLocationCheckBox = (CheckBox) findViewById(R.id.customLocationCheckbox);
-		CheckBox gpsLocationCheckBox = (CheckBox) findViewById(R.id.gpsLocationCheckbox);
+		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
+		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
 		//changes what the view wants to return
 		gpsLocationClicked = false;
 		customLocationClicked = true;
-		//cant have two checkboxes selected at same time
-		if (gpsLocationCheckBox.isChecked()) {
-			gpsLocationCheckBox.setChecked(false);
+		//cant have two RadioButton selected at same time
+		if (gpsLocationRadioButton.isChecked()) {
+			gpsLocationRadioButton.setChecked(false);
 	    }
-		//locks location checkbox and unlocks gps checkbox
-		gpsLocationCheckBox.setClickable(true);
-		customLocationCheckBox.setClickable(false);
+		//locks location RadioButton and unlocks gps RadioButton
+		gpsLocationRadioButton.setClickable(true);
+		customLocationRadioButton.setClickable(false);
 	}
 	
 	public void locationSaveClick(View view){		
