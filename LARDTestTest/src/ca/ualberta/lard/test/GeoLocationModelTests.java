@@ -1,6 +1,7 @@
 package ca.ualberta.lard.test;
 
 import ca.ualberta.lard.MainActivity;
+import ca.ualberta.lard.model.GeoLocation;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class GeoLocationModelTests extends
@@ -27,4 +28,14 @@ public class GeoLocationModelTests extends
 		fail();
 	}
 
+	public void testSerialization() {
+		GeoLocation geoLocation = new GeoLocation(9999);
+		String string = geoLocation.serialization();
+		GeoLocation newGeoLocation = geoLocation.deserialization(string);
+		
+		assertEquals("newGeoLocation lat should be the same", geoLocation.getLatitude(), newGeoLocation.getLatitude());
+		assertEquals("newGeoLocation lon should be the same", geoLocation.getLongitude(), newGeoLocation.getLongitude());
+		assertEquals("newGeoLocation long should be 60.0", 60.0, newGeoLocation.getLongitude());
+		assertEquals("newGeoLocation lat should be 60.0", 60.0, newGeoLocation.getLatitude());
+	}
 }
