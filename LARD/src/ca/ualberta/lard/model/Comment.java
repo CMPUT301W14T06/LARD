@@ -38,6 +38,7 @@ public class Comment {
 		c.author = user.getUsername();
 		c.location = new GeoLocation(context);
 		c.id = UUID.randomUUID().toString();
+		c.picture = null;
 	}
 	
 	/* Minimal constructor, contains only body text */
@@ -67,6 +68,10 @@ public class Comment {
 	
 	public Date getCreatedDate() {
 		return this.createdAt;
+	}
+	
+	public Date getUpdatedDate() {
+		return this.updatedAt;
 	}
 	
 	public String getAuthor() {
@@ -132,6 +137,22 @@ public class Comment {
 	
 	public void setUpdated() {
 		this.updatedAt = new Date();
+	}
+	
+	public boolean hasPicture() {
+		if (this.picture == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	public int numReplies() {
+		return this.children().size();
+	}
+	
+	public boolean isLocal() {
+		// TODO implement this
+		return false;
 	}
 	
 }
