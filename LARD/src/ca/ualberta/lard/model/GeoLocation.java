@@ -1,5 +1,8 @@
 package ca.ualberta.lard.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.google.gson.Gson;
 
 import android.content.Context;
@@ -11,6 +14,36 @@ public class GeoLocation {
 	private double lon;
 	private double lat;
 	
+	public ArrayList<GeoLocation> locations;
+	
+	public static enum LOCATIONS {
+		CAB, 
+		CAMERON, 
+		CCIS, 
+		CSC, 
+		DEWEYS, 
+		ETLC, 
+		HUB, 
+		RUTHERFORD, 
+		STJOSPEH, 
+		SUB, 
+		TORY
+	}
+	
+	public static double[][] points = { 
+		{ 53.526572, -113.524734 }, // CAB 
+		{ 53.52677, -113.523672 }, // Cameron Library
+		{ 53.528243, -113.525657 }, // CCIS
+		{ 53.526808, -113.527127 }, // CSC
+		{ 53.526049, -113.523318 }, // Deweys
+		{  53.527382,  -113.529509 }, // ETLC
+		{  53.526425, -113.520443 }, // HUB
+		{ 53.525896, -113.52172 }, // Rutherford South
+		{ 53.524486, -113.524541 }, // St. Jospehs
+		{53.525322, -113.52732 }, // SUB
+		{ 53.528185,  -113.521462 } // TORY
+		};
+	
 	public GeoLocation(Context context) {
 		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE); 
 		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -18,15 +51,13 @@ public class GeoLocation {
 		this.lat = location.getLatitude();
 	}
 	
-	public GeoLocation(int id) {
-		// Todo enumerated locations
-		
-		// Todo remove
-		if (id == 9999) {
-			this.lon = 60;
-			this.lat = 60;
-					
-		}
+	/**
+	 * 
+	 * @param pointNo
+	 */
+	public GeoLocation(int pointNo) {
+		this.lat = points[pointNo][0];
+		this.lon = points[pointNo][1];
 	}
 	/**
 	 * 
