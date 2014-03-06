@@ -11,59 +11,7 @@
 
     <ListView
         android:id="@+id/threadsListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/threadsTextView" />
-
-    <Button
-        android:id="@+id/addCommentButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/seperator"
-        android:textSize = "20sp"
-        android:textColor="#FFFFFF" 
-        android:background="#000000"
-        android:text="+" />
-    
-     <Button
-        android:id="@+id/optionsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/addCommentButton"
-        android:textSize = "20sp"
-        android:textColor="#FFFFFF" 
-        android:background="#000000"
-        android:text=":" />
-
-    <View
-        android:id="@+id/seperator"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_alignBottom="@+id/addCommentButton"
-        android:layout_alignParentRight="true"
-        android:background="#33b5E5" />
-
-    <TextView
-        android:id="@+id/lardTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/optionsButton"
-        android:layout_alignBottom="@+id/optionsButton"
-        android:layout_alignLeft="@+id/seperator"
-        android:text="LARD"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/threadsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/threadsListView"
-        android:layout_below="@+id/seperator"
-        android:text="Threads:"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:layout_height="fill_parent" />
 
 </RelativeLayout>
