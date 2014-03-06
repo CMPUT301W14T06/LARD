@@ -3,6 +3,7 @@ package ca.ualberta.lard.test;
 import java.util.ArrayList;
 
 import ca.ualberta.lard.MainActivity;
+import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
@@ -48,6 +49,20 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	
 	public void testIsLocal() {
 		fail();
+	}
+	
+	/**
+	 * Precondition: Elastic search has at least one comment.
+	 */
+	public void testEmptySearch() {
+		CommentRequest req = new CommentRequest(5);
+		ArrayList<Comment> comments = DataModel.retrieveComments(req);
+		
+		
+		assertTrue(comments.size() > 1);
+		System.err.println(comments.get(0));
+		
+		
 	}
 	
 	public void testSearchByBody() {

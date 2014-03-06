@@ -28,6 +28,16 @@ public class GeoLocation {
 					
 		}
 	}
+	/**
+	 * 
+	 * @param lat
+	 * @param lon
+	 */
+	public GeoLocation (double lat, double lon) {
+		this.lon = lon;
+		this.lat = lat;
+	}
+	
 	
 	public double getLatitude() {
 		return this.lat;
@@ -53,14 +63,14 @@ public class GeoLocation {
 	}
 	
 	//Returns this model as a Gson serialized text
-	public String serialization() {
+	public String toJSON() {
 		Gson gson = new Gson();
 		String json = gson.toJson(this);
 		return json;
 	}
 	
 	//Turns a Gson serialized text into a GeoLocation Object
-	public static GeoLocation deserialization(String text) {
+	public static GeoLocation fromJSON(String text) {
 		Gson gson = new Gson();
 		GeoLocation new_model = gson.fromJson(text, GeoLocation.class);
 		return new_model;
