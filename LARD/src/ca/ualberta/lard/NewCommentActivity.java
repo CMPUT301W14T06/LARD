@@ -1,8 +1,6 @@
 package ca.ualberta.lard;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
@@ -12,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -88,7 +87,7 @@ public class NewCommentActivity extends Activity {
 	}
 	
 	// Called when the AttachButton Button is clicked
-	// TODO: Finish this function
+	// Launches an activity with the Intent.ACTION_GET_CONTENT action and sets its type to image, will return an image that was choosen
 	public void onClickAttachButton(View v) {
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 		intent.setType("image/*");
@@ -117,17 +116,19 @@ public class NewCommentActivity extends Activity {
 	    if (requestCode == CAMERA_REQUEST_ID) {
 	        if (resultCode == RESULT_OK) {
 	        	if(data != null)
-	            {           
+	            {
+	        		// gets the image out of the return intent and stores it as a a string in the picture model
 	                Uri uri = data.getData();
 	                String file = uri.getPath();
 	                Bitmap thumbnail = BitmapFactory.decodeFile(file);
 	                ByteArrayOutputStream os = new ByteArrayOutputStream();
 	                thumbnail.compress(Bitmap.CompressFormat.JPEG , 80, os);
-	                picture.setImageString(Picture.encode(os));
+	                picture.setImageString(Base64.encodeToString(os.toByteArray(), Base64.URL_SAFE));
 	            }
 	            else
 	            {
-	                System.out.println("SDCard have no images");  
+	            	// should never get here
+	                System.out.println("SDCard have no images");
 	            }
 	        }
 	    }
