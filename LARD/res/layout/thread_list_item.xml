@@ -22,35 +22,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:scrollHorizontally="true"
+			android:ellipsize="end" 
+			android:maxLines="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:baselineAligned="false"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:textSize="13sp" >
 
             <TextView
                 android:id="@+id/itemAuthor"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.5"
+                android:gravity="left"
+                android:text="TextView"
+                android:textAlignment="gravity"
+                android:scrollHorizontally="true"
+				android:ellipsize="end" 
+				android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/itemDistance"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="left"
                 android:text="TextView"
                 android:textAlignment="gravity" />
-
-            <TextView
-                android:id="@+id/itemDistance"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="2"
-                android:gravity="center_horizontal"
-                android:text="TextView"
-                android:textAlignment="gravity" />
-
+            
             <TextView
                 android:id="@+id/itemReplyCount"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="right"
