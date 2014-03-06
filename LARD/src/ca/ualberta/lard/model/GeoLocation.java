@@ -16,33 +16,31 @@ public class GeoLocation {
 	
 	public ArrayList<GeoLocation> locations;
 	
+	/**
+	 * 
+	 * @author Troy Pavlek
+	 *
+	 */
 	public static enum LOCATIONS {
-		CAB, 
-		CAMERON, 
-		CCIS, 
-		CSC, 
-		DEWEYS, 
-		ETLC, 
-		HUB, 
-		RUTHERFORD, 
-		STJOSPEH, 
-		SUB, 
-		TORY
+		CAB (53.526572, -113.524734), 
+		CAMERON (53.52677, -113.523672), 
+		CCIS (53.528243, -113.525657), 
+		CSC (53.526808, -113.527127), 
+		DEWEYS (53.526049, -113.523318), 
+		ETLC (53.527382,  -113.529509), 
+		HUB (53.526425, -113.520443), 
+		RUTHERFORD (53.525896, -113.52172), 
+		STJOSPEH (53.524486, -113.524541), 
+		SUB (53.525322, -113.52732), 
+		TORY (53.528185,  -113.521462);
+		
+		private double lat;
+		private double lon;
+		private LOCATIONS(double latt, double lonn) {
+			lat = latt;
+			lon = lonn;
+		}
 	}
-	
-	public static double[][] points = { 
-		{ 53.526572, -113.524734 }, // CAB 
-		{ 53.52677, -113.523672 }, // Cameron Library
-		{ 53.528243, -113.525657 }, // CCIS
-		{ 53.526808, -113.527127 }, // CSC
-		{ 53.526049, -113.523318 }, // Deweys
-		{  53.527382,  -113.529509 }, // ETLC
-		{  53.526425, -113.520443 }, // HUB
-		{ 53.525896, -113.52172 }, // Rutherford South
-		{ 53.524486, -113.524541 }, // St. Jospehs
-		{53.525322, -113.52732 }, // SUB
-		{ 53.528185,  -113.521462 } // TORY
-		};
 	
 	public GeoLocation(Context context) {
 		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE); 
@@ -52,12 +50,15 @@ public class GeoLocation {
 	}
 	
 	/**
-	 * 
+	 * Constructor for instantiating default locations.
+	 * <p>
+	 * Example Usage: GeoLoation loc1 = new GeoLocation(GeoLocation.CSC);
+	 * </p>
 	 * @param pointNo
 	 */
-	public GeoLocation(int pointNo) {
-		this.lat = points[pointNo][0];
-		this.lon = points[pointNo][1];
+	public GeoLocation(GeoLocation.LOCATIONS pointNo) {
+		this.lat = pointNo.lat;
+		this.lon = pointNo.lon;
 	}
 	/**
 	 * 
@@ -81,6 +82,7 @@ public class GeoLocation {
 	
 	// Thanks for the base code for the haversine formula here: http://www.movable-type.co.uk/scripts/latlong.html
 	public double distanceFrom(GeoLocation loc1) {
+		
 		int earthRadius = 6371; // earth's radius in KM - constant in source code because we don't expect this to change - ever.
 		double dLat = Math.toRadians(this.getLatitude() - loc1.getLatitude());
 		double dLon = Math.toRadians(this.getLongitude() - loc1.getLongitude());
