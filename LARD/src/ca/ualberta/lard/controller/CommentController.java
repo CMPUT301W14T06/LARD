@@ -55,5 +55,9 @@ public class CommentController {
 	public CommentController sort() {
 		return this;
 	}
+	
+	public ArrayList<Comment> get() {
+		return buffer;
+	}
 
 }

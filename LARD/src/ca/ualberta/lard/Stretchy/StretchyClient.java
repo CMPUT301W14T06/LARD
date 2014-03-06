@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
 import ca.ualberta.lard.model.Comment;
 
 import com.google.gson.Gson;
@@ -47,22 +48,23 @@ public class StretchyClient {
 		HttpGet getReq = new HttpGet(ES_LOCATION + id + "?pretty=1");
 		getReq.addHeader("Accept", "application/json");
 		try {
-		HttpResponse response = client.execute(getReq);
-		
-		StretchyResult<Comment> sResult = StretchyResult.create(response);
-		if (sResult.exists()) {
-			return sResult.getSource();
-		}
+			HttpResponse response = client.execute(getReq);
+
+			StretchyResult<Comment> sResult = StretchyResult.create(response);
+			if (sResult.exists()) {
+				return sResult.getSource();
+				//return sResult.getSource();
+			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// We've come too far, the Comment doesn't exist
 		return null;
-		
 	}
+
 	
 	/**
 	 * Saves a Comment to Elastic Search.
@@ -95,35 +97,54 @@ public class StretchyClient {
 		return StretchyResponse.create(response);
 	}
 	
-	public ArrayList<Comment> search(SearchRequest req) {
-		HttpPost postReq = new HttpPost(ES_LOCATION + "_search?pretty=1");
-		
-		StringEntity json = null;
-		try {
-			json = new StringEntity(req.toString());
-		} catch (UnsupportedEncodingException ex) {
-			ex.printStackTrace(); // TODO
+	public ArrayList<Comment> search(final SearchRequest req) {
+		class RunSearch implements Runnable {
+			private volatile ArrayList<Comment> returnComments;
+
+			@Override
+			public void run() {
+				HttpPost postReq = new HttpPost(ES_LOCATION + "_search?pretty=1");
+
+				StringEntity json = null;
+				try {
+					json = new StringEntity(req.toString());
+				} catch (UnsupportedEncodingException ex) {
+					ex.printStackTrace(); // TODO
+				}
+
+				postReq.setHeader("Accept", "application/json");
+				postReq.setEntity(json);
+
+				HttpResponse response = null;
+				try { 
+					response = client.execute(postReq);
+				} catch (ClientProtocolException e) {
+					e.printStackTrace(); // TODO
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				StretchySearchResult<Comment> result = StretchySearchResult.create(response);
+				if (result.timedOut()) {
+					// TODO
+					//throw new IOException("Timed out");
+				}
+
+				returnComments = result.hits().get();
+			}
+			public ArrayList<Comment> get() {
+				return returnComments;
+			}
 		}
-		
-		postReq.setHeader("Accept", "application/json");
-		postReq.setEntity(json);
-		
-		HttpResponse response = null;
-		try { 
-			response = client.execute(postReq);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace(); // TODO
-		} catch (IOException e) {
+		RunSearch s = new RunSearch();
+		try {
+		new Thread(s).start();
+		} catch (Exception e) {
+			Log.d("HELP", "PLZ HALP");
 			e.printStackTrace();
 		}
-		
-		StretchySearchResult<Comment> result = StretchySearchResult.create(response);
-		if (result.timedOut()) {
-			// TODO
-			//throw new IOException("Timed out");
-		}
-				
-		return result.hits().get();
+
+		return s.get();
 	}
 	
 	
