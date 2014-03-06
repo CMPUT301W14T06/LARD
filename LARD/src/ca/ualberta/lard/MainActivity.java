@@ -3,6 +3,7 @@ package ca.ualberta.lard;
 import java.util.ArrayList;
 
 import ca.ualberta.lard.R;
+import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.Comment;
 import android.os.Bundle;
@@ -41,12 +42,8 @@ protected void onStart() {
     	// TODO Auto-generated method stub
     	super.onStart();
     	allComments = new ArrayList<Comment>();
-    	for (int i = 0; i < 10; i++) { // This entire loop is just for sample list population, it should be deleted later.
-    		allComments.add(new Comment("Test comment.", this));
-    		allComments.add(new Comment("Another comment!", this));
-    		allComments.add(new Comment("Dogz suk catz4lyfe", this));
-    		allComments.add(new Comment("LOL THIS POST IS SO LONG OMG I HOPE IT DOESNT MESS UP MY BALLER VIEW", this));
-    	}
+    	CommentController controller = new CommentController(this);
+    	allComments = controller.get();
     	adapter = new CommentListBaseAdapter(this, allComments);
     	commentList.setAdapter(adapter);
     }
