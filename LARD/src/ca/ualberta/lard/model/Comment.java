@@ -146,5 +146,14 @@ public class Comment {
 		return true;
 	}
 	
+	public int numReplies() {
+		return this.children().size();
+	}
+	
+	public boolean isLocal() {
+		// TODO implement this
+		return false;
+	}
+	
 }
 

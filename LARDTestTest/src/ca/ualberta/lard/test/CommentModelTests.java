@@ -1,3 +1,8 @@
+/**
+ * JUnit tests for 
+ * @author Victoria
+ */
+
 package ca.ualberta.lard.test;
 
 import java.util.Date;
@@ -5,6 +10,8 @@ import java.util.Date;
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.lard.MainActivity;
 import ca.ualberta.lard.model.Comment;
+import ca.ualberta.lard.model.DataModel;
+import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 
 public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -22,7 +29,8 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	
 	/**
 	 * Test the creation of comment. All fields should have a value on creation with
-	 * the exception of picture. Picture is null until a picture is attached.
+	 * the exception of picture and parent. Picture is null until a picture is attached.
+	 * Parent remains null if it is a top level comment.
 	 */
 	public void testConstructors() {		
 		assertNotNull("An id should be created.", comment.getId());
@@ -36,11 +44,18 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	}
 	
 	public void testAuthor() {
-		fail();
-	}
-	
-	public void testId() {
-		fail();
+		String curAuthor = comment.getAuthor();
+		// Try to change the author to the current name, shouldn't affect anything
+		comment.setAuthor(curAuthor, getActivity());
+		assertEquals("Updating with the same author name shoudl make no changes",
+				curAuthor, comment.getAuthor());
+			
+		// Try to change the author to a new name
+		String newAuthor = "FluffyBunny";
+		comment.setAuthor(newAuthor, getActivity());		
+		assertFalse("New author should not be the same as the old author.",
+				curAuthor.equals(comment.getAuthor()));
+		assertEquals("Author should be updated to new author.", newAuthor, comment.getAuthor());
 	}
 	
 	/**
@@ -57,10 +72,6 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		assertEquals("The text should match the new input text.", newText, comment.getBodyText());
 	}
 	
-	public void testCreatedAt() {
-		fail();
-	}
-	
 	/**
 	 * When a comment is updated the updated date should not match the created date
 	 * but should be updated to the correct date.
@@ -74,8 +85,13 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	}
 	
 	public void testLocation() {
-		fail();
-		// TODO: how to create a random and different geolocation?
+		GeoLocation curLocation = comment.getLocation();
+		GeoLocation newLocation = new GeoLocation(9999);
+		comment.setLocation(newLocation);
+		
+		assertFalse("After updating, new location should not equal old location",
+				curLocation.equals(newLocation));
+		assertEquals("Location should have been updated.", comment.getLocation(), newLocation);	
 	}
 	
 	/**
@@ -97,22 +113,28 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		assertEquals("Picture should be the same as the uploaded picture.", picture, comment.getPicture());
 	}
 	
-	public void testHasPicture() {
-		fail();
-		// TODO: ask Troy if it is okay that I combined this with testPicture.
-	}
-	
 	public void testParent() {
-		fail();
-		// TODO: Is parent set to anything originally?
+		// null or set to parents id
+		assertFalse("A newly created comment has no parent by default.", comment.hasParent());
+		assertNull(comment.getParent());
+		
+		// Update to have a parent
+		String parentId = "1111";
+		comment.setParent("1111");
+		assertTrue(comment.hasParent());
+		assertEquals("Id should be same as parent id", parentId, comment.getParent());
 	}
 	
 	public void testIsLocal() {
-		fail();
+		assertFalse(comment.isLocal());
+		DataModel.saveLocal(comment, false);
+		assertTrue(comment.isLocal());
 	}
 	
 	public void testToString() {
-		fail();
+		assertEquals("getTextBody and toString should return the same thing.", 
+				comment.getBodyText(), comment.toString());
+		
 	}
 
 }
