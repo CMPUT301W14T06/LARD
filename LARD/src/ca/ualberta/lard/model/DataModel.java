@@ -32,8 +32,6 @@ import com.google.gson.Gson;
  */
 public class DataModel {
 	
-	
-	
 	/**
 	 * Saves a comment to local storage
 	 * <p>

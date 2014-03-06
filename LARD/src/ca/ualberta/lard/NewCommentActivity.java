@@ -1,5 +1,6 @@
 package ca.ualberta.lard;
 
+import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 import android.os.Bundle;
 import android.app.Activity;
@@ -10,9 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class NewCommentActivity extends Activity {
+	public final static int LOCATION_REQUEST_ID = 1;
 	private int pid;
 	private Picture picture;
-	// private location?
+	private GeoLocation location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +54,20 @@ public class NewCommentActivity extends Activity {
 		
 		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
 		if (usernameText.getText().toString().isEmpty()) {
-			//String name = null;
+			String name = "Anonymous";
 		}
 		else {
-			//String name = usernameText.getText().toString();
+			String name = usernameText.getText().toString();
 		}
 		
 		// needs comment controller to exist
 		if (pid == -1) {
 			// create a top level comment
-			// CreateComment(commentText, name, picture)
+			// CreateComment(commentText.getText().toString(), name, picture, location)
 		}
 		else {
 			// create a reply comment
-			// CreateComment(commentText, name, picture, pid)
+			// CreateComment(commentText.getText().toString(), name, picture, location, pid)
 		}
 		
 		finish();
@@ -79,11 +81,22 @@ public class NewCommentActivity extends Activity {
 	}
 	
 	// Called when the LocationButton Button is clicked
-	// Not sure what this should actually do, will ask then complete
-	// TODO: Finish this function
+	// Launches the LocationSelectionActivity activity, which will return a GeoLocation that we chose for this comment
 	public void onClickLocationButton(View v) {
 		Intent intent = new Intent(this, LocationSelectionActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, LOCATION_REQUEST_ID);
+	}
+	
+	// Called when LocationSelectionActivity returns
+	// Gets the Geolocation data from LocationSelectionActivity
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (requestCode == LOCATION_REQUEST_ID) {
+	        if (resultCode == RESULT_OK) {
+	        	String locationData = data.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
+	        	location = GeoLocation.deserialization(locationData);
+	        }
+	    }
 	}
 
 	public int getPid() {
@@ -92,6 +105,10 @@ public class NewCommentActivity extends Activity {
 	
 	public Picture getPicture() {
 		return picture;
+	}
+	
+	public GeoLocation getGeoLocation() {
+		return location;
 	}
 
 }

@@ -29,5 +29,9 @@ public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<Ne
 	public void testPicture() {
 		// can not test yet
 	}
+	
+	public void testGeoLocation() {
+		// can not test yet
+	}
 
 }

@@ -1,5 +1,7 @@
 package ca.ualberta.lard.model;
 
+import com.google.gson.Gson;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,6 +20,13 @@ public class GeoLocation {
 	
 	public GeoLocation(int id) {
 		// Todo enumerated locations
+		
+		// Todo remove
+		if (id == 9999) {
+			this.lon = 60;
+			this.lat = 60;
+					
+		}
 	}
 	
 	public double getLatitude() {
@@ -41,6 +50,20 @@ public class GeoLocation {
 		        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 		return earthRadius * c;
+	}
+	
+	//Returns this model as a Gson serialized text
+	public String serialization() {
+		Gson gson = new Gson();
+		String json = gson.toJson(this);
+		return json;
+	}
+	
+	//Turns a Gson serialized text into a GeoLocation Object
+	public static GeoLocation deserialization(String text) {
+		Gson gson = new Gson();
+		GeoLocation new_model = gson.fromJson(text, GeoLocation.class);
+		return new_model;
 	}
 
 }
