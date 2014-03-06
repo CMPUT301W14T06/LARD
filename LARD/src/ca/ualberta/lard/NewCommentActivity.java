@@ -81,13 +81,14 @@ public class NewCommentActivity extends Activity {
 	}
 	
 	// Called when the LocationButton Button is clicked
-	// Not sure what this should actually do, will ask then complete
-	// TODO: Finish this function
+	// Launches the LocationSelectionActivity activity, which will return a GeoLocation that we chose for this comment
 	public void onClickLocationButton(View v) {
 		Intent intent = new Intent(this, LocationSelectionActivity.class);
 		startActivityForResult(intent, LOCATION_REQUEST_ID);
 	}
 	
+	// Called when LocationSelectionActivity returns
+	// Gets the Geolocation data from LocationSelectionActivity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == LOCATION_REQUEST_ID) {

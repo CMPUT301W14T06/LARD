@@ -43,7 +43,7 @@
         android:layout_below="@+id/usernameTextView"
         android:ems="10"
         android:gravity="center_vertical|left"
-        android:hint="@string/fake_hint" >
+        android:hint="@string/username_edittext_view" >
 
         <requestFocus />
     </EditText>
