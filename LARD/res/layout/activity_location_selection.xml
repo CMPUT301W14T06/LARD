@@ -14,30 +14,13 @@
         android:layout_height="wrap_content"
         android:text="Location Settings" />
 
-    <CheckBox
-        android:id="@+id/gpsLocationCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/locationSettingsTextView"
-        android:onClick="gpsLocationClick"
-        android:text="Use GPS Location" />
-
-    <CheckBox
-        android:id="@+id/customLocationCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gpsLocationCheckbox"
-        android:layout_below="@+id/gpsLocationCheckbox"
-        android:onClick="customLocationClick"
-        android:text="Use Custom Location:" />
-    
     <ListView
         android:id="@+id/locationListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/saveLocationButton"
-        android:layout_below="@+id/customLocationCheckbox" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/selectLocationRadioButton" />
 
     <Button
         android:id="@+id/saveLocationButton"
@@ -48,13 +31,29 @@
         android:onClick="locationSaveClick"
         android:text="Save" />
 
-    <TextView
-        android:id="@+id/locationTextView"
+    <RadioButton
+        android:id="@+id/gpsRadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/customLocationCheckbox"
-        android:layout_alignBottom="@+id/customLocationCheckbox"
-        android:layout_toRightOf="@+id/customLocationCheckbox"
-        android:text="" />
+        android:layout_below="@+id/locationSettingsTextView"
+        android:text="GPS Location" 
+        android:onClick= "gpsLocationClick"/>
+
+    <RadioButton
+        android:id="@+id/selectLocationRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/locationSettingsTextView"
+        android:layout_below="@+id/gpsRadioButton"
+        android:text="Selected Location:"
+        android:onClick= "customLocationClick" />
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/selectLocationRadioButton"
+            android:layout_alignBottom="@+id/selectLocationRadioButton"
+            android:layout_toRightOf="@+id/selectLocationRadioButton" />
 
 </RelativeLayout>
