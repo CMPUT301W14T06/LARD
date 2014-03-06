@@ -51,5 +51,9 @@ public class CommentController {
 	public boolean any() {
 		return buffer.size() > 0;
 	}
+	
+	public CommentController sort() {
+		return this;
+	}
 
 }
