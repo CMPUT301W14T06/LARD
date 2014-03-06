@@ -56,6 +56,11 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		
 		mViewHolder.itemPreview = detail(convertView, R.id.itemPreview, myList.get(position).toString()); // TODO: Truncate to an appropriate length
 		mViewHolder.itemAuthor  = detail(convertView, R.id.itemAuthor,  myList.get(position).getAuthor()); // TODO: Concatenate distance, num replies, author, etc
+		mViewHolder.itemDistance  = detail(convertView, R.id.itemDistance,
+				Integer.toString(myList.get(position).getDistance()) + "m away"); // TODO: Actually calculate distance
+		mViewHolder.itemNumChildren  = detail(convertView, R.id.itemReplyCount,
+				Integer.toString(myList.get(position).getNumChildren()) + " replies"); // TODO: Concatenate distance, num replies, author, etc
+		
 		// mViewHolder.itemIcon  = detail(convertView, R.id.itemIcon, "@android:drawable/ic_menu_camera"); // TODO: Pick icon based on whether or not the comment has a picture
 		
 		return convertView;
@@ -76,7 +81,7 @@ public class CommentListBaseAdapter extends BaseAdapter {
 	}
 	*/
 	private class MyViewHolder {
-		TextView itemPreview, itemAuthor;
+		TextView itemPreview, itemAuthor, itemDistance, itemNumChildren;
 		//ImageView itemIcon;
 	}
 

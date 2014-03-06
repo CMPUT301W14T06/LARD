@@ -41,9 +41,9 @@ protected void onStart() {
 // TODO Auto-generated method stub
 super.onStart();
 allComments = new ArrayList<BarrenComment>();
-allComments.add(new BarrenComment("Test comment.", "Anonymous", false));
-allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true));
-allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false));
+allComments.add(new BarrenComment("Test comment.", "Anonymous", false, 60, 9));
+allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true, 1200, 0));
+allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false, 10, 9001));
 adapter = new CommentListBaseAdapter(this,
  allComments);
 commentList.setAdapter(adapter);
