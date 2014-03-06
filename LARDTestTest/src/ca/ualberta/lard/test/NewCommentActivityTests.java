@@ -23,7 +23,7 @@ public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<Ne
 		Intent intent = new Intent();
 		setActivityIntent(intent);
 		NewCommentActivity activity = getActivity();
-		assertEquals("NewCommentActivity should get the value from intent", -1, activity.getPid());
+		assertEquals("NewCommentActivity should get the value from intent", null, activity.getPid());
 	}
 	
 	public void testPicture() {

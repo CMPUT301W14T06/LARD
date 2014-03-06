@@ -1,5 +1,6 @@
 package ca.ualberta.lard;
 
+import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 import android.os.Bundle;
@@ -12,9 +13,10 @@ import android.widget.TextView;
 
 public class NewCommentActivity extends Activity {
 	public final static int LOCATION_REQUEST_ID = 1;
-	private int pid;
+	private String pid;
 	private Picture picture;
 	private GeoLocation location;
+	private Comment comment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +25,9 @@ public class NewCommentActivity extends Activity {
 		// get the parent id out of the intent
 		// will be -1 if this is a top level comment
 		Intent intent = getIntent();
-	    pid = intent.getIntExtra("parentID", -1);
+	    pid = intent.getStringExtra("parentID");
 	    
-	    if (pid != -1) {
+	    if (pid != null) {
 	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
 	    	// TODO: Fix this
 	    	lardTextView.setText("Reply to: " + pid);
@@ -51,24 +53,29 @@ public class NewCommentActivity extends Activity {
 		if (commentText.getText().toString().isEmpty()) {
 			return;
 		}
+
+		if (pid == null) {
+			comment = new Comment(commentText.getText().toString(), this);
+		}
+		else {
+			comment = new Comment(commentText.getText().toString(), pid, this);
+		}
 		
 		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
-		if (usernameText.getText().toString().isEmpty()) {
-			String name = "Anonymous";
-		}
-		else {
-			String name = usernameText.getText().toString();
+		if (!usernameText.getText().toString().isEmpty()) {
+			comment.setAuthor(usernameText.getText().toString(), this);
 		}
 		
-		// needs comment controller to exist
-		if (pid == -1) {
-			// create a top level comment
-			// CreateComment(commentText.getText().toString(), name, picture, location)
+		if (location != null) {
+			comment.setLocation(location);
 		}
-		else {
-			// create a reply comment
-			// CreateComment(commentText.getText().toString(), name, picture, location, pid)
+		
+		if (picture != null) {
+			comment.setPicture(picture);
 		}
+		
+		// TODO:
+		// provide the comment to the comment controller
 		
 		finish();
 	}
@@ -99,7 +106,7 @@ public class NewCommentActivity extends Activity {
 	    }
 	}
 
-	public int getPid() {
+	public String getPid() {
 		return pid;
 	}
 	
