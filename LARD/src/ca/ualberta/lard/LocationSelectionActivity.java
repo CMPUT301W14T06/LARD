@@ -18,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class LocationSelectionActivity extends Activity {
+	public final static String LOCATION_REQUEST = "LOCATION"; // the value of this can be changed
 	//current GPS location is the default
 	private boolean gpsLocationClicked;
 	private boolean customLocationClicked;
@@ -27,7 +28,6 @@ public class LocationSelectionActivity extends Activity {
 	String slectedLocationString;
 	GeoLocation geoLocation;
 	TextView shownLocation;
-
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

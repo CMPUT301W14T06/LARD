@@ -60,7 +60,7 @@ public class GeoLocation {
 	}
 	
 	//Turns a Gson serialized text into a GeoLocation Object
-	public GeoLocation deserialization(String text) {
+	public static GeoLocation deserialization(String text) {
 		Gson gson = new Gson();
 		GeoLocation new_model = gson.fromJson(text, GeoLocation.class);
 		return new_model;

@@ -1,5 +1,6 @@
 package ca.ualberta.lard;
 
+import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 import android.os.Bundle;
 import android.app.Activity;
@@ -10,10 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class NewCommentActivity extends Activity {
-	static final int REQUEST_ID = 1;  // The request code
+	public final static int LOCATION_REQUEST_ID = 1;
 	private int pid;
 	private Picture picture;
-	// private location?
+	private GeoLocation location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,19 +85,15 @@ public class NewCommentActivity extends Activity {
 	// TODO: Finish this function
 	public void onClickLocationButton(View v) {
 		Intent intent = new Intent(this, LocationSelectionActivity.class);
-		startActivityForResult(intent, REQUEST_ID);
+		startActivityForResult(intent, LOCATION_REQUEST_ID);
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    // Check which request we're responding to
-	    if (requestCode == REQUEST_ID) {
-	        // Make sure the request was successful
+	    if (requestCode == LOCATION_REQUEST_ID) {
 	        if (resultCode == RESULT_OK) {
-	            // The user picked a contact.
-	            // The Intent's data Uri identifies which contact was selected.
-
-	            // Do something with the contact here (bigger example below)
+	        	String locationData = data.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
+	        	location = GeoLocation.deserialization(locationData);
 	        }
 	    }
 	}
@@ -107,6 +104,10 @@ public class NewCommentActivity extends Activity {
 	
 	public Picture getPicture() {
 		return picture;
+	}
+	
+	public GeoLocation getGeoLocation() {
+		return location;
 	}
 
 }
