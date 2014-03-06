@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.lard.R;
 import ca.ualberta.lard.model.Comment;
-import ca.ualberta.lard.model.BarrenComment;
+import ca.ualberta.lard.model.Comment;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -13,9 +13,9 @@ import android.view.MenuInflater;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
-// All instances of BarrenComment should be replaced with Comment once Comment is constructible
+// All instances of Comment should be replaced with Comment once Comment is constructible
 private CommentListBaseAdapter adapter;
-private ArrayList<BarrenComment> allComments;
+private ArrayList<Comment> allComments;
 private ListView commentList;
 
     @Override
@@ -40,12 +40,12 @@ private ListView commentList;
 protected void onStart() {
     	// TODO Auto-generated method stub
     	super.onStart();
-    	allComments = new ArrayList<BarrenComment>();
+    	allComments = new ArrayList<Comment>();
     	for (int i = 0; i < 10; i++) { // This entire loop is just for sample list population, it should be deleted later.
-    		allComments.add(new BarrenComment("Test comment.", "Anonymous", false, 60, 9));
-    		allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true, 1200, 0));
-    		allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false, 10, 9001));
-    		allComments.add(new BarrenComment("LOL MY NAME IS SO LONG AND SO IS THIS POST OMG I HOPE IT DOESNT MESS UP MY BALLER VIEW", "guywithalongnamethatsfartoolongforthisbox", false, 10, 9001));
+    		allComments.add(new Comment("Test comment.", this));
+    		allComments.add(new Comment("Another comment!", this));
+    		allComments.add(new Comment("Dogz suk catz4lyfe", this));
+    		allComments.add(new Comment("LOL THIS POST IS SO LONG OMG I HOPE IT DOESNT MESS UP MY BALLER VIEW", this));
     	}
     	adapter = new CommentListBaseAdapter(this, allComments);
     	commentList.setAdapter(adapter);
