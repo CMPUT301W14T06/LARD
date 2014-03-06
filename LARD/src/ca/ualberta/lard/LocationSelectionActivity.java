@@ -11,10 +11,12 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class LocationSelectionActivity extends Activity {
@@ -23,7 +25,8 @@ public class LocationSelectionActivity extends Activity {
 	private boolean gpsLocationClicked;
 	private boolean customLocationClicked;
 	boolean debug_mode = true;
-	public ListView listView;
+	//public ListView listView;
+	public Spinner spinner;
 	int currentId;
 	String slectedLocationString;
 	GeoLocation geoLocation;
@@ -33,7 +36,6 @@ public class LocationSelectionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location_selection);
-		
 		//default state is gps location is set to true
 		gpsLocationClicked = true;
 		customLocationClicked = false;
@@ -45,10 +47,7 @@ public class LocationSelectionActivity extends Activity {
 		customLocationRadioButton.setClickable(true);
 		
 		//Makes the list clickable
-		listView = (ListView) findViewById(R.id.locationListView);
-		
-		//Readies TextView to show select locations
-		shownLocation = (TextView)findViewById(R.id.locationTextView);
+		spinner = (Spinner) findViewById(R.id.locationSpinner);
 		
 		if (debug_mode) {
 			ArrayList<String> locations = new ArrayList<String>();
@@ -56,18 +55,27 @@ public class LocationSelectionActivity extends Activity {
 			locations.add("rat");
 			locations.add("csc");
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, locations);
-			listView.setAdapter(adapter);
+			spinner.setAdapter(adapter);
 		}
-	
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-		    public void onItemClick(AdapterView parent, View v, int position, long id) {
-				//gets the name of the clicks item
-		        String string = (listView.getItemAtPosition(position)).toString();
+		
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		    @Override
+		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+		        // your code here
+		    	//gets the name of the clicks item
+		    	/*
+		        String string = (spinner.getItemAtPosition(position)).toString();
 		        shownLocation.setText(string);
 		        slectedLocationString = string;
+		        */
 		        //TODO get enumerated location of clicked location
 		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parentView) {
+		        // your code here
+		    }
+
 		});
 		 
 	}
@@ -126,12 +134,7 @@ public class LocationSelectionActivity extends Activity {
 			//finish();
 		}
 		else if (customLocationClicked == true) {
-			//checks if you have selected a location
-			if (slectedLocationString == null ||slectedLocationString.isEmpty() || slectedLocationString == "Please select a location from the list!") {
-				slectedLocationString = "Please select a location from the list!";
-				shownLocation.setText("Please select a location!");
-				return;
-			}
+
 			//TODO enumerated locations
 			//geoLocation = new GeoLocation(id);
 			//Intent resultData = new Intent();
