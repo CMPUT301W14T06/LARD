@@ -96,7 +96,34 @@ public class StretchyClient {
 	}
 	
 	public ArrayList<Comment> search(SearchRequest req) {
-		return null;
+		HttpPost postReq = new HttpPost(ES_LOCATION + "_search?pretty=1");
+		
+		StringEntity json = null;
+		try {
+			json = new StringEntity(req.toString());
+		} catch (UnsupportedEncodingException ex) {
+			ex.printStackTrace(); // TODO
+		}
+		
+		postReq.setHeader("Accept", "application/json");
+		postReq.setEntity(json);
+		
+		HttpResponse response = null;
+		try { 
+			response = client.execute(postReq);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace(); // TODO
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		StretchySearchResult<Comment> result = StretchySearchResult.create(response);
+		if (result.timedOut()) {
+			// TODO
+			//throw new IOException("Timed out");
+		}
+				
+		return result.hits().get();
 	}
 	
 	

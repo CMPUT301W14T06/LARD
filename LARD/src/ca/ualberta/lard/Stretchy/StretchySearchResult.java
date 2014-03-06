@@ -36,7 +36,7 @@ public class StretchySearchResult<T> {
 		return this.hits;
 	}
 	
-	private class StretchySearchHits<T> {
+	public class StretchySearchHits<T> {
 		protected int total;
 		protected double max_score;
 		protected ArrayList<StretchyResult<T>> hits;
@@ -49,8 +49,16 @@ public class StretchySearchResult<T> {
 			return this.max_score;
 		}
 		
-		public ArrayList<StretchyResult<T>> hits() {
+		public ArrayList<StretchyResult<T>> results() {
 			return this.hits;
+		}
+		
+		public ArrayList<T> get() {
+			ArrayList<T> arr = new ArrayList<T>();
+			for (StretchyResult<T> result : this.results()) {
+				arr.add(result.getSource());
+			}
+			return arr;
 		}
 	}
 }

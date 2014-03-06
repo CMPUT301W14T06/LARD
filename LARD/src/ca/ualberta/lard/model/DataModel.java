@@ -77,10 +77,12 @@ public class DataModel {
 			// Todo check local storage as a last resort.
 			return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 		}
+		System.err.println("ID NULL");
 		
 		SearchRequest sReq = new SearchRequest(req);
+		System.err.println(sReq.toString());
 		ArrayList<Comment> comments2 = client.search(sReq); // TODO finish
-		return null;
+		return comments2;
 	}
 	
 	public static boolean isLocal(Comment comment) {
