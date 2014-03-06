@@ -41,12 +41,13 @@ protected void onStart() {
 // TODO Auto-generated method stub
 super.onStart();
 allComments = new ArrayList<BarrenComment>();
-allComments.add(new BarrenComment("Test comment.", "Anonymous", false, 60, 9));
-allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true, 1200, 0));
-allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false, 10, 9001));
-allComments.add(new BarrenComment("LOL MY NAME IS SO LONG AND SO IS THIS POST OMG I HOPE IT DOESNT MESS UP MY BALLER VIEW", "guywithalongnamethatsfartoolongforthisbox", false, 10, 9001));
-adapter = new CommentListBaseAdapter(this,
- allComments);
+for (int i = 0; i < 10; i++) {
+	allComments.add(new BarrenComment("Test comment.", "Anonymous", false, 60, 9));
+	allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true, 1200, 0));
+	allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false, 10, 9001));
+	allComments.add(new BarrenComment("LOL MY NAME IS SO LONG AND SO IS THIS POST OMG I HOPE IT DOESNT MESS UP MY BALLER VIEW", "guywithalongnamethatsfartoolongforthisbox", false, 10, 9001));
+}
+adapter = new CommentListBaseAdapter(this, allComments);
 commentList.setAdapter(adapter);
 }
 
