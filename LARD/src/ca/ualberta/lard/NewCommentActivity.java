@@ -23,7 +23,7 @@ public class NewCommentActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		// get the parent id out of the intent
-		// will be -1 if this is a top level comment
+		// will be null if this is a top level comment
 		Intent intent = getIntent();
 	    pid = intent.getStringExtra("parentID");
 	    
