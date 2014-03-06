@@ -94,7 +94,7 @@ public class NewCommentActivity extends Activity {
 	    if (requestCode == LOCATION_REQUEST_ID) {
 	        if (resultCode == RESULT_OK) {
 	        	String locationData = data.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
-	        	location = GeoLocation.deserialization(locationData);
+	        	location = GeoLocation.fromJSON(locationData);
 	        }
 	    }
 	}

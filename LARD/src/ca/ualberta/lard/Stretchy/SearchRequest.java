@@ -13,6 +13,7 @@ public class SearchRequest {
 	}
 	
 	public SearchRequest(CommentRequest req) {
+		this._size = req.size();
 		this.bodyText = req.getBodyText();
 	}
 	
@@ -21,9 +22,12 @@ public class SearchRequest {
 			"{ "
 			+ "\"size\" : " + this._size + ", "
 			+ "\"query\" : { ";
-		if (this.bodyText != null) {
-			ret += "\"term\" : { \"bodyText\" : \"" + this.bodyText + "\" } "; 
+		if (!this.anyQuery()) {
+			ret += "\"match_all\" : { } ";
+		} else {
+			ret += this.bodyString();
 		}
+
 		ret += "} ";
 		ret += "}";
 		return ret;
@@ -35,6 +39,17 @@ public class SearchRequest {
 	
 	public void parent(String id) {
 		this.parent = id;
+	}
+	
+	public boolean anyQuery() {
+		return !(this.bodyText == null && this.parent == null);
+	}
+	
+	public String bodyString() {
+		if (this.bodyText != null && !this.bodyText.isEmpty()) {
+			return "\"term\" : { \"bodyText\" : \"" + this.bodyText + "\" } "; 
+		}
+		return "";
 	}
 
 }

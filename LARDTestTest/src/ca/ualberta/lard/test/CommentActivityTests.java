@@ -7,6 +7,7 @@ import android.view.View;
 import ca.ualberta.lard.CommentActivity;
 
 public class CommentActivityTests extends ActivityInstrumentationTestCase2<CommentActivity> {
+	//ActivityIsolationTestCaseAndroid
 
 	public CommentActivityTests() {
 		super(CommentActivity.class);
@@ -33,8 +34,9 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.toplevel_and_children_list));
 	}
 	
+	
 	// Test NewCommentActivity is opened when the reply button is clicked, and that the correct id is sent
-	public void testReply() {
+	public void testReply() throws Throwable {
 		String id = "1234";
 		Intent intent = new Intent();
 		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, id);
@@ -43,7 +45,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		
 		// Get the reply button and click it
 	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_reply);
-	    activity.runOnUiThread(new Runnable() {
+	    runTestOnUiThread(new Runnable() {
 	    	@Override
 	    	public void run() {
 	    		view.requestFocus();
