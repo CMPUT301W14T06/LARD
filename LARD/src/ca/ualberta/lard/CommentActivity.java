@@ -1,5 +1,10 @@
 /**
- * When called, the id of the top level comment is received via intent.
+ * This activity is called when a comment is selected.
+ * It displays the comment at the top, followed by a list of its children. 
+ * The selected comment can be replied to, added to favourites, or saved locally.
+ * Selecting a one of the child comments will open another CommentActivity. 
+ *
+ * @param  EXTRA_PARENT_ID	Expects the id of the parent comment as a String
  */
 
 package ca.ualberta.lard;
@@ -48,7 +53,8 @@ public class CommentActivity extends Activity {
 	    
 	    Log.d(TAG, "2. Got id");
 	    /**
-	     * Should work, but commented out for testing.
+	     * Should work once DataModel methods are implemented, 
+	     * currently is commented out for testing.
 	     * 
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);

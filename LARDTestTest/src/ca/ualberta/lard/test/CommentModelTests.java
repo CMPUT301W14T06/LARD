@@ -1,12 +1,8 @@
 package ca.ualberta.lard.test;
 
-import java.util.Date;
-
 import android.test.ActivityInstrumentationTestCase2;
 import ca.ualberta.lard.MainActivity;
 import ca.ualberta.lard.model.Comment;
-import ca.ualberta.lard.model.GeoLocation;
-import ca.ualberta.lard.model.Picture;
 
 public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
 	private ca.ualberta.lard.model.Comment comment;
@@ -19,7 +15,8 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	}
 	
 	public void testConstructors() {
-		fail();
+		Comment comment = new Comment("Kitties", getActivity());
+		
 	}
 	
 	public void testAuthor() {
