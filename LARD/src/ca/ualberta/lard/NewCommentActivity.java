@@ -1,11 +1,16 @@
 package ca.ualberta.lard;
 
+import java.io.ByteArrayOutputStream;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +18,7 @@ import android.widget.TextView;
 
 public class NewCommentActivity extends Activity {
 	public final static int LOCATION_REQUEST_ID = 1;
+	public final static int CAMERA_REQUEST_ID = 2;
 	private String pid;
 	private Picture picture;
 	private GeoLocation location;
@@ -81,10 +87,11 @@ public class NewCommentActivity extends Activity {
 	}
 	
 	// Called when the AttachButton Button is clicked
-	// TODO: Finish this function
+	// Launches an activity with the Intent.ACTION_GET_CONTENT action and sets its type to image, will return an image that was choosen
 	public void onClickAttachButton(View v) {
-		// needs picture model to exist
-		// picture = new Picture();
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		intent.setType("image/*");
+        startActivityForResult(intent, CAMERA_REQUEST_ID); 
 	}
 	
 	// Called when the LocationButton Button is clicked
@@ -94,14 +101,35 @@ public class NewCommentActivity extends Activity {
 		startActivityForResult(intent, LOCATION_REQUEST_ID);
 	}
 	
-	// Called when LocationSelectionActivity returns
-	// Gets the Geolocation data from LocationSelectionActivity
+	// Called when LocationSelectionActivity or Intent.ACTION_GET_CONTENT returns
+	// Will either get the Geolocation data from LocationSelectionActivity
+	// or get the picture data from Intent.ACTION_GET_CONTENT
+	// got: http://stackoverflow.com/questions/7832773/android-how-to-get-the-image-using-intent-data
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == LOCATION_REQUEST_ID) {
 	        if (resultCode == RESULT_OK) {
 	        	String locationData = data.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
 	        	location = GeoLocation.fromJSON(locationData);
+	        }
+	    }
+	    if (requestCode == CAMERA_REQUEST_ID) {
+	        if (resultCode == RESULT_OK) {
+	        	if(data != null)
+	            {
+	        		// gets the image out of the return intent and stores it as a a string in the picture model
+	                Uri uri = data.getData();
+	                String file = uri.getPath();
+	                Bitmap thumbnail = BitmapFactory.decodeFile(file);
+	                ByteArrayOutputStream os = new ByteArrayOutputStream();
+	                thumbnail.compress(Bitmap.CompressFormat.JPEG , 80, os);
+	                picture.setImageString(Base64.encodeToString(os.toByteArray(), Base64.URL_SAFE));
+	            }
+	            else
+	            {
+	            	// should never get here
+	                System.out.println("SDCard have no images");
+	            }
 	        }
 	    }
 	}

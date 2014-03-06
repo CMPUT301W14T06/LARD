@@ -1,11 +1,14 @@
 package ca.ualberta.lard.model;
 
-import android.content.Context;
-
 public class Picture {
+	private String imageString;
+
+	public void setImageString(String string) {
+		imageString = string;
+	}
 	
-	public Picture(Context context) {
-		
+	public String getImageString() {
+		return imageString;
 	}
 
 }
