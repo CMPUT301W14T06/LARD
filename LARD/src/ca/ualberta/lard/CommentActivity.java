@@ -47,7 +47,9 @@ public class CommentActivity extends Activity {
 	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
 	    
 	    Log.d(TAG, "2. Got id");
-	    
+	    /**
+	     * Should work, but commented out for testing.
+	     * 
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);
 	    commentRequest.setId(commentId);
@@ -73,11 +75,12 @@ public class CommentActivity extends Activity {
 	    		intent.putExtra(EXTRA_PARENT_ID, clickedCommentId);
 	    		startActivity(intent);		
 	    	}	    	
-		}); 
+		});
+		*/ 
 		
 	}
 	
-	
+	/**
 	@Override
 	protected void onResume() {
 		super.onResume();	
@@ -100,7 +103,8 @@ public class CommentActivity extends Activity {
 		// Display parent comment and replies
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commentStrList);
 		commentListView.setAdapter(adapter);
-	}
+	} 
+	*/
 	
 	@Override
 	// Display action bar

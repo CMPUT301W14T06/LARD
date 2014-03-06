@@ -4,11 +4,7 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ViewAsserts;
 import android.view.View;
-import android.widget.Button;
 import ca.ualberta.lard.CommentActivity;
-import ca.ualberta.lard.model.Comment;
-import ca.ualberta.lard.model.CommentRequest;
-import ca.ualberta.lard.model.DataModel;
 
 public class CommentActivityTests extends ActivityInstrumentationTestCase2<CommentActivity> {
 
@@ -18,9 +14,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	
 	// Test a parent id is received when the activity is started.
 	public void testReceiveId() {
-		Comment comment = new Comment("This is a comment.", getActivity());
-		String id = comment.getId();
-		DataModel.save(comment);
+		String id = "1234";
 		
 		Intent intent = new Intent();
 		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, id);
@@ -28,7 +22,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		setActivityIntent(intent);
 		CommentActivity activity = getActivity();
 		
-		assertEquals("CommentActivity should receive a parent id from intent.", 
+		assertEquals("CommentActivity should receive a parent id from intent.", id,
 				activity.getIntent().getStringExtra(CommentActivity.EXTRA_PARENT_ID).toString());
 	}
 
@@ -41,23 +35,28 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	
 	// Test NewCommentActivity is opened when the reply button is clicked, and that the correct id is sent
 	public void testReply() {
-		Comment comment = new Comment("This is a comment.", getActivity());
-		String id = comment.getId();
-		DataModel.save(comment);
-		
+		String id = "1234";
 		Intent intent = new Intent();
 		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, id);
 		setActivityIntent(intent);
 		CommentActivity activity = getActivity();
 		
-		// Get the reply button
-	    Button replyButton = (Button) activity.findViewById(ca.ualberta.lard.R.id.action_reply);
-	    replyButton.performClick();
+		// Get the reply button and click it
+	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_reply);
+	    activity.runOnUiThread(new Runnable() {
+	    	@Override
+	    	public void run() {
+	    		view.requestFocus();
+	    		view.performClick();
+	    	}
+	    });
 
 	    assertNotNull("Parent id was not put into intent", intent);
 
+	    // Get the id from the intent
 	    String passedId = intent.getStringExtra(CommentActivity.EXTRA_PARENT_ID).toString();
-	    assertEquals("Passed id should match parent id.", CommentActivity.EXTRA_PARENT_ID, passedId);
+	    
+	    assertEquals("Passed id should match parent id.", id, passedId);
 	}
 	
 	// A favourite should be saved locally and added to the favourites list.
@@ -69,7 +68,8 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	// A saved comment should be saved locally.
 	public void testSave() {
 		fail();
-		/*
+		/* 
+		// Create a new comment
 		Comment comment = new Comment("This is a comment.", getActivity());
 		String id = comment.getId();
 		
@@ -81,8 +81,14 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		assertFalse("Comment originally is not saved locally.", DataModel.isLocal(comment));
 		
 		// Get the save button
-	    Button saveButton = (Button) activity.findViewById(ca.ualberta.lard.R.id.action_save);
-	    saveButton.performClick();
+	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_save);
+	    activity.runOnUiThread(new Runnable() {
+	    	@Override
+	    	public void run() {
+	    		view.requestFocus();
+	    		view.performClick();
+	    	}
+	    });
 	    
 	    DataModel.saveLocal(comment, true);
 	    assertTrue("Comment should be saved locally", DataModel.isLocal(comment));
