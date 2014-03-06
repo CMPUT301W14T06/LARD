@@ -54,7 +54,7 @@ public class NewCommentActivity extends Activity {
 		
 		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
 		if (usernameText.getText().toString().isEmpty()) {
-			//String name = null;
+			//String name = "Anonymous";
 		}
 		else {
 			//String name = usernameText.getText().toString();
@@ -63,11 +63,11 @@ public class NewCommentActivity extends Activity {
 		// needs comment controller to exist
 		if (pid == -1) {
 			// create a top level comment
-			// CreateComment(commentText, name, picture)
+			// CreateComment(commentText.getText().toString(), name, picture, location)
 		}
 		else {
 			// create a reply comment
-			// CreateComment(commentText, name, picture, pid)
+			// CreateComment(commentText.getText().toString(), name, picture, location, pid)
 		}
 		
 		finish();
