@@ -1,7 +1,7 @@
 package ca.ualberta.lard.model;
 
 public class BarrenComment {
-	
+	// BarrenComment is a temporary model for testing purposes because Comments cannot currently be constructed
 	private String body;
 	private String author;
 	private Boolean hasPicture;

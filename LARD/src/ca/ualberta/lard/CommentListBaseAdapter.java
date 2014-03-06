@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CommentListBaseAdapter extends BaseAdapter {
+	// Inflates test_list_item views with the contents of a comment object
 	// Based off https://github.com/krrishnaaaa/CustomListViewDemo/blob/master/src/pcsalt/example/customlistviewdemo/MyBaseAdapter.java
 	// Replace all instances of BarrenComment with Comment when we can get comments to construct properly
 	

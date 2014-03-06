@@ -12,16 +12,6 @@
     <ListView
         android:id="@+id/threadsListView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/threadsTextView" />
-
-    <TextView
-        android:id="@+id/threadsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/threadsListView"
-        android:text="Threads:"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:layout_height="fill_parent" />
 
 </RelativeLayout>

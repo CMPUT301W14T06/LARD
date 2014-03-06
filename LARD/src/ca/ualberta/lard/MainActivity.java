@@ -13,7 +13,7 @@ import android.view.MenuInflater;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
-
+// All instances of BarrenComment should be replaced with Comment once Comment is constructible
 private CommentListBaseAdapter adapter;
 private ArrayList<BarrenComment> allComments;
 private ListView commentList;
@@ -32,24 +32,24 @@ private ListView commentList;
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
      MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
     
     @Override
 protected void onStart() {
-// TODO Auto-generated method stub
-super.onStart();
-allComments = new ArrayList<BarrenComment>();
-for (int i = 0; i < 10; i++) {
-	allComments.add(new BarrenComment("Test comment.", "Anonymous", false, 60, 9));
-	allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true, 1200, 0));
-	allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false, 10, 9001));
-	allComments.add(new BarrenComment("LOL MY NAME IS SO LONG AND SO IS THIS POST OMG I HOPE IT DOESNT MESS UP MY BALLER VIEW", "guywithalongnamethatsfartoolongforthisbox", false, 10, 9001));
-}
-adapter = new CommentListBaseAdapter(this, allComments);
-commentList.setAdapter(adapter);
-}
+    	// TODO Auto-generated method stub
+    	super.onStart();
+    	allComments = new ArrayList<BarrenComment>();
+    	for (int i = 0; i < 10; i++) { // This entire loop is just for sample list population, it should be deleted later.
+    		allComments.add(new BarrenComment("Test comment.", "Anonymous", false, 60, 9));
+    		allComments.add(new BarrenComment("Another comment!", "Sir Maynard", true, 1200, 0));
+    		allComments.add(new BarrenComment("Dogz suk catz4lyfe", "catlover66", false, 10, 9001));
+    		allComments.add(new BarrenComment("LOL MY NAME IS SO LONG AND SO IS THIS POST OMG I HOPE IT DOESNT MESS UP MY BALLER VIEW", "guywithalongnamethatsfartoolongforthisbox", false, 10, 9001));
+    	}
+    	adapter = new CommentListBaseAdapter(this, allComments);
+    	commentList.setAdapter(adapter);
+    }
 
     
     

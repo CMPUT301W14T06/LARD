@@ -16,5 +16,8 @@
     <string name="attach_button">Attach</string>
     <string name="send_button">Send</string>
     <string name="location_button">Location</string>
+    <string name="sort_by">Sort Threads</string>
+    <string name="favorites">Favourites</string>
+    <string name="location_settings">Location Settings</string>
 
 </resources>
