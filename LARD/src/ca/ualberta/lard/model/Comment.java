@@ -157,15 +157,10 @@ public class Comment {
 	}
 	
 	public int numReplies() {
-<<<<<<< HEAD
-		return 8;
-		// return this.children().size(); // children() current returns null
-=======
 		if (this.children() == null) {
 			return 0;
 		}
 		return this.children().size();
->>>>>>> JUnitTests
 	}
 	
 	public boolean isLocal() {
