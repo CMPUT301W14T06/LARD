@@ -103,6 +103,9 @@ public class StretchyClient {
 
 			@Override
 			public void run() {
+				// This function intentionally left blank
+			}
+			public ArrayList<Comment> get() {
 				HttpPost postReq = new HttpPost(ES_LOCATION + "_search?pretty=1");
 
 				StringEntity json = null;
@@ -130,20 +133,11 @@ public class StretchyClient {
 					//throw new IOException("Timed out");
 				}
 
-				returnComments = result.hits().get();
-			}
-			public ArrayList<Comment> get() {
-				return returnComments;
+				return result.hits().get();
 			}
 		}
 		RunSearch s = new RunSearch();
-		try {
 		new Thread(s).start();
-		} catch (Exception e) {
-			Log.d("HELP", "PLZ HALP");
-			e.printStackTrace();
-		}
-
 		return s.get();
 	}
 	
