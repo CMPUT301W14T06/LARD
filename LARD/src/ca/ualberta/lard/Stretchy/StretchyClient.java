@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.text.format.Time;
 import android.util.Log;
 import ca.ualberta.lard.model.Comment;
 
@@ -30,7 +31,7 @@ public class StretchyClient {
 	private static final String ES_LOCATION = "http://cmput301.softwareprocess.es:8080/cmput301w14t06/comment/";
 	private Gson gson;
 	private HttpClient client;
-	
+	private static final int NETWORKTIMEOUT = 5000; // Time in milliseconds to wait for the requested comments
 	public StretchyClient() {
 		gson = new Gson();
 		client = new DefaultHttpClient();
@@ -103,9 +104,6 @@ public class StretchyClient {
 
 			@Override
 			public void run() {
-				// This function intentionally left blank
-			}
-			public ArrayList<Comment> get() {
 				HttpPost postReq = new HttpPost(ES_LOCATION + "_search?pretty=1");
 
 				StringEntity json = null;
@@ -132,8 +130,16 @@ public class StretchyClient {
 					// TODO
 					//throw new IOException("Timed out");
 				}
-
-				return result.hits().get();
+				returnComments = result.hits().get();
+			}
+			public ArrayList<Comment> get() {
+				Long curtime = System.currentTimeMillis();
+				while (returnComments == null) {
+					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
+						break;
+					}
+				}
+				return returnComments;
 			}
 		}
 		RunSearch s = new RunSearch();
