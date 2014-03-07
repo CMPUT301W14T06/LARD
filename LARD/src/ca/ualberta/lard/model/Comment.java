@@ -103,11 +103,21 @@ public class Comment {
 	// Setters
 	
 	public void setBodyText(String bodyText) {
+		// Check the body text is not empty. If it is set to
+		// [Comment Text Removed].
+		if (bodyText == "" || bodyText == null) {
+			bodyText = "[Comment Text Removed]";
+		}
 		this.bodyText = bodyText;
 		this.setUpdated();
 	}
 	
 	public void setAuthor(String username, Context context) {
+		// Check the username is not empty. If it is set to Anonymous.
+		if (username == "" || username == null) {
+			username = "Anonymous";
+		}
+		
 		User user = new User(username, context);
 		this.author = user.getUsername();
 		this.setUpdated();
@@ -147,8 +157,15 @@ public class Comment {
 	}
 	
 	public int numReplies() {
+<<<<<<< HEAD
 		return 8;
 		// return this.children().size(); // children() current returns null
+=======
+		if (this.children() == null) {
+			return 0;
+		}
+		return this.children().size();
+>>>>>>> JUnitTests
 	}
 	
 	public boolean isLocal() {
