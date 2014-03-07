@@ -112,7 +112,7 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	 */
 	public void testLocation() {
 		GeoLocation curLocation = comment.getLocation();
-		GeoLocation newLocation = new GeoLocation(9999);
+		GeoLocation newLocation = new GeoLocation(53.526425, -113.520443);
 		comment.setLocation(newLocation);
 		
 		assertFalse("After updating, new location should not equal old location",
