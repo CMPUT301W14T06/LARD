@@ -1,3 +1,9 @@
+/**
+ * The User model deals with the unique username of the user. Username is 
+ * decided by a component chosen by the user, which can be changed at any time,
+ * and a hash determined by the device id. 
+ */
+
 package ca.ualberta.lard.model;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -11,6 +17,12 @@ public class User {
 	private String username;
 	private String androidId;
 	
+	/**
+	 * Constructor for User. Username is based off a name the user chooses and 
+	 * the id is set based on the users device. 
+	 * @param username
+	 * @param context
+	 */
 	public User(String username, Context context) {
 		this.username = username;
 		this.androidId = Secure.getString(context.getContentResolver(),
@@ -21,7 +33,12 @@ public class User {
 		this.username = username;
 	}
 	
-	// thanks to brendan long on stackoverflow for this: http://stackoverflow.com/a/3103722
+	/**
+	 * Credit: Thanks to Brendan Long on stackoverflow for this: http://stackoverflow.com/a/3103722
+	 * Returns the author name appened with a hash that is based off the id of their device.
+	 * @return Author name followed by a hash
+	 * @author Brendan Long on stackoverflow
+	 */
 	public String getUsername() {
 		try {
 		MessageDigest md = MessageDigest.getInstance("MD5");

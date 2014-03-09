@@ -1,7 +1,8 @@
 /**
  * JUnit tests for Comment model. Tests creation of a new comment, updating
  * elements of the created comment, and helper functions to get useful 
- * information about the comment.
+ * information about the comment such as if it is saved locally.
+ * @author Victoria
  */
 
 package ca.ualberta.lard.test;

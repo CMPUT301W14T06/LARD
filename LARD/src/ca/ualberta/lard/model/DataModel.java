@@ -42,7 +42,7 @@ public class DataModel {
 	 * @param persisitent Is this save explicit or is it to be put in the upload queue 
 	 */
 	public static void saveLocal(Comment comment, boolean persisitent) {
-		
+		// TODO implement this
 	}
 	
 	public static boolean save(Comment comment) {
@@ -74,7 +74,7 @@ public class DataModel {
 				comments.add(c);
 				return comments;
 			}
-			// Todo check local storage as a last resort.
+			// TODO check local storage as a last resort.
 			return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 		}
 		System.err.println("ID NULL");
@@ -86,7 +86,7 @@ public class DataModel {
 	}
 	
 	public static boolean isLocal(Comment comment) {
-		// Todo unimplemented
+		// TODO unimplemented
 		return false;
 	}
 

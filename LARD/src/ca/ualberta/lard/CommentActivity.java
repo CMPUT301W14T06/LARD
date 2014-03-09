@@ -52,10 +52,7 @@ public class CommentActivity extends Activity {
 	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
 	    
 	    Log.d(TAG, "2. Got id");
-	    /**
-	     * Should work once DataModel methods are implemented, 
-	     * currently is commented out for testing.
-	     * 
+
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);
 	    commentRequest.setId(commentId);
@@ -82,11 +79,9 @@ public class CommentActivity extends Activity {
 	    		startActivity(intent);		
 	    	}	    	
 		});
-		*/ 
 		
 	}
 	
-	/**
 	@Override
 	protected void onResume() {
 		super.onResume();	
@@ -110,7 +105,6 @@ public class CommentActivity extends Activity {
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commentStrList);
 		commentListView.setAdapter(adapter);
 	} 
-	*/
 	
 	@Override
 	// Display action bar
@@ -119,10 +113,6 @@ public class CommentActivity extends Activity {
 	    return super.onCreateOptionsMenu(menu);
 	}
 	
-    /** 
-     * The action bar has 3 options: favourite, reply, save.
-     * These options all correspond to the parent comment.
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -139,7 +129,6 @@ public class CommentActivity extends Activity {
             return true;
         case R.id.action_save:
             // Save a comment for later
-        	// TODO: Save
         	DataModel.saveLocal(comment, true);
             return true;
         default:

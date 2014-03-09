@@ -1,3 +1,10 @@
+/**
+ * A GeoLocation is composed of a latitude and a longitude, and as the name
+ * suggests it represents a location in the world. It can be set
+ * using specific coordinates or it can be set by getting the position of 
+ * the users device in the world.
+ */
+
 package ca.ualberta.lard.model;
 
 import java.util.ArrayList;
@@ -17,7 +24,9 @@ public class GeoLocation {
 	public ArrayList<GeoLocation> locations;
 	
 	/**
-	 * 
+	 * Enumeration of preset coordinates for buildings on campus.
+	 * This is for GeoLocationActivity so that the user can choose easily 
+	 * choose a location.
 	 * @author Troy Pavlek
 	 *
 	 */
@@ -42,6 +51,10 @@ public class GeoLocation {
 		}
 	}
 	
+	/**
+	 * Creates a GeoLocation using the position of the device.
+	 * @param context
+	 */
 	public GeoLocation(Context context) {
 		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE); 
 		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -60,8 +73,9 @@ public class GeoLocation {
 		this.lat = pointNo.lat;
 		this.lon = pointNo.lon;
 	}
+	
 	/**
-	 * 
+	 * Creates a GeoLocation using a input latitude and longitude.
 	 * @param lat
 	 * @param lon
 	 */
@@ -95,14 +109,21 @@ public class GeoLocation {
 		return earthRadius * c;
 	}
 	
-	//Returns this model as a Gson serialized text
+	/**
+	 * Returns GeoLocation model as a json object.
+	 * @return The GeoLocation as a json object.
+	 */
 	public String toJSON() {
 		Gson gson = new Gson();
 		String json = gson.toJson(this);
 		return json;
 	}
 	
-	//Turns a Gson serialized text into a GeoLocation Object
+	/**
+	 * Returns a GeoLocation model from a Json object.
+	 * @param text
+	 * @return GeoLocation model
+	 */
 	public static GeoLocation fromJSON(String text) {
 		Gson gson = new Gson();
 		GeoLocation new_model = gson.fromJson(text, GeoLocation.class);
