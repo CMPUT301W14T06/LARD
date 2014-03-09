@@ -48,8 +48,8 @@ public class Comment {
 		User user = new User("Anonymous", context);// TODO put this in preferences
 		this.bodyText = body;
 		c.author = user.getUsername();
-		//c.location = new GeoLocation(context);
-		c.location = new GeoLocation(53.525896, -113.52172);
+		c.location = new GeoLocation(context);
+		// c.location = new GeoLocation(53.525896, -113.52172);
 		c.id = UUID.randomUUID().toString();
 		c.picture = null;
 		c.parent = null;
