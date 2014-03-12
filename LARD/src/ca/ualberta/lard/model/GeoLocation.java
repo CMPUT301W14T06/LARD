@@ -58,8 +58,17 @@ public class GeoLocation {
 	public GeoLocation(Context context) {
 		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE); 
 		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		this.lon = location.getLongitude();
-		this.lat = location.getLatitude();
+		if (location == null) {
+			location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+		// Can't find location. They're in compsci
+		if (location == null) {
+			this.lon = GeoLocation.LOCATIONS.CSC.lon;
+			this.lat = GeoLocation.LOCATIONS.CSC.lat;
+		} else {
+			this.lon = location.getLongitude();
+			this.lat = location.getLatitude();
+		}
 	}
 	
 	/**
