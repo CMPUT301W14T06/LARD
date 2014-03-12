@@ -14,14 +14,6 @@
         android:layout_height="wrap_content"
         android:text="Location Settings" />
 
-    <ListView
-        android:id="@+id/locationListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/saveLocationButton"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/selectLocationRadioButton" />
-
     <Button
         android:id="@+id/saveLocationButton"
         android:layout_width="wrap_content"
@@ -48,12 +40,11 @@
         android:text="Selected Location:"
         android:onClick= "customLocationClick" />
 
-        <TextView
-            android:id="@+id/locationTextView"
+        <Spinner
+            android:id="@+id/locationSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/selectLocationRadioButton"
-            android:layout_alignBottom="@+id/selectLocationRadioButton"
-            android:layout_toRightOf="@+id/selectLocationRadioButton" />
+            android:layout_alignLeft="@+id/selectLocationRadioButton"
+            android:layout_below="@+id/selectLocationRadioButton" />
 
 </RelativeLayout>

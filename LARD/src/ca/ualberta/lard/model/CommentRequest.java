@@ -82,9 +82,7 @@ public class CommentRequest {
 	public void bodyText(String body) {
 		this.bodyText = body;
 	}
-	
-
-	
+		
 	public String getId() {
 		return this.id;
 	}
