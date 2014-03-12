@@ -44,6 +44,9 @@ protected void onStart() {
     	allComments = new ArrayList<Comment>();
     	CommentController controller = new CommentController(this);
     	allComments = controller.get();
+    	if (allComments == null) {
+    		allComments = new ArrayList<Comment>();
+    	}
     	adapter = new CommentListBaseAdapter(this, allComments);
     	commentList.setAdapter(adapter);
     }

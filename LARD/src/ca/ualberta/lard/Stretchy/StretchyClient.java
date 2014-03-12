@@ -102,7 +102,7 @@ public class StretchyClient {
 			private volatile ArrayList<Comment> returnComments;
 
 			@Override
-			public void run() {
+			public synchronized void run() {
 				HttpPost postReq = new HttpPost(ES_LOCATION + "_search?pretty=1");
 
 				StringEntity json = null;
@@ -138,7 +138,7 @@ public class StretchyClient {
 		}
 		RunSearch s = new RunSearch();
 		try {
-		new Thread(s).start();
+			new Thread(s).start();
 		} catch (Exception e) {
 			Log.d("HELP", "PLZ HALP");
 			e.printStackTrace();
