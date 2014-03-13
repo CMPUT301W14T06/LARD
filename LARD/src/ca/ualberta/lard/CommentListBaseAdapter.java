@@ -30,7 +30,11 @@ public class CommentListBaseAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return myList.size();
+		if (myList == null) {
+			return 0;
+		} else {
+			return myList.size();
+		}
 	}
 
 	@Override
