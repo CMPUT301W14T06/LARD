@@ -9,7 +9,7 @@
     <string name="action_fav">Favourite</string>
     <string name="action_reply">Reply</string>
     <string name="action_save">Save</string>
-    <string name="LARD">LARD</string>
+    <string name="Reply"></string>
     <string name="username_text_view">Username:</string>
     <string name="fake_hint">&#8230;</string>
     <string name="username_edittext_view">Anonymous</string>
