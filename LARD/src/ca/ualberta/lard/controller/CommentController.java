@@ -54,7 +54,7 @@ public class CommentController {
 	 * @param comment The comment object that is to be created.
 	 */
 	public static void createComment(Comment comment) {
-		DataModel.saveLocal(comment, false);
+		DataModel.save(comment);
 	}
 	
 	public boolean any() {
