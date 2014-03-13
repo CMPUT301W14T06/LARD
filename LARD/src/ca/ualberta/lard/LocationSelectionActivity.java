@@ -27,7 +27,6 @@ public class LocationSelectionActivity extends Activity {
 	boolean debug_mode = true;
 	//public ListView listView;
 	public Spinner spinner;
-	int currentId;
 	String slectedLocationString;
 	GeoLocation geoLocation;
 	TextView shownLocation;
@@ -51,9 +50,9 @@ public class LocationSelectionActivity extends Activity {
 		
 		if (debug_mode) {
 			ArrayList<String> locations = new ArrayList<String>();
-			locations.add("uacs");
-			locations.add("rat");
-			locations.add("csc");
+			locations.add("CAB");
+			locations.add("CAMERON");
+			locations.add("CCIS");
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, locations);
 			spinner.setAdapter(adapter);
 		}
@@ -61,14 +60,11 @@ public class LocationSelectionActivity extends Activity {
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 		    @Override
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-		        // your code here
-		    	//gets the name of the clicks item
-		    	/*
+		       
+		    	//gets the name of the clicks item	
 		        String string = (spinner.getItemAtPosition(position)).toString();
-		        shownLocation.setText(string);
 		        slectedLocationString = string;
-		        */
-		        //TODO get enumerated location of clicked location
+		        
 		    }
 
 		    @Override
@@ -127,23 +123,32 @@ public class LocationSelectionActivity extends Activity {
 	public void locationSaveClick(View view){		
 		if(gpsLocationClicked == true) {
 			//Create a gps location from current phone context
-			//geoLocation = new GeoLocation(getApplicationContext());
-			//Intent resultData = new Intent();
-			//resultData.putExtra("geoLocation", "valueData");
-			//setResult(Activity.RESULT_OK, resultData);
-			//finish();
+			geoLocation = new GeoLocation(getApplicationContext());
+			//serializes string then send it to previous activity
+			if (geoLocation != null) {
+				String geoString = geoLocation.toJSON();
+				Intent resultData = new Intent();
+				resultData.putExtra("geoLocation", geoString);
+				setResult(Activity.RESULT_OK, resultData);
+			}
+			
+			finish();
 		}
 		else if (customLocationClicked == true) {
-
-			//TODO enumerated locations
-			//geoLocation = new GeoLocation(id);
-			//Intent resultData = new Intent();
-			//resultData.putExtra("geoLocation", "valueData");
-			//setResult(Activity.RESULT_OK, resultData);
-			//finish();
+	
+			if( slectedLocationString != null || slectedLocationString.isEmpty() == false) {
+				//String locString = new String ("GeoLocation.LOCATIONS." + slectedLocationString);
+				//geoLocation = new GeoLocation((GeoLocation.LOCATIONS)locString);
+			
+				//Intent resultData = new Intent();
+				//resultData.putExtra("geoLocation", "valueData");
+				//setResult(Activity.RESULT_OK, resultData);
+			}
+			finish();
 		}
 		else {
 			//We should not of got here
+			finish();
 		}
 	}
 	

@@ -45,19 +45,16 @@ public class CommentActivity extends Activity {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_comment);
         ActionBar actionBar = getActionBar();
-        actionBar.setHomeButtonEnabled(true);  
+        actionBar.setHomeButtonEnabled(true);
         
-        Log.d(TAG, "1. Start");
-	    
 	    // Get the id of the top level comment from intent
 	    Intent intent = getIntent();
 	    commentId = (String)intent.getStringExtra(NewCommentActivity.EXTRA_PARENT_ID);
 	    
-	    Log.d(TAG, "2. Got id");
-
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);
 	    commentRequest.setId(commentId);
+	    
 	    // Check a comment was received 
 	    ArrayList<Comment> temp = DataModel.retrieveComments(commentRequest);
 	    if (temp == null) {
@@ -65,8 +62,6 @@ public class CommentActivity extends Activity {
 	    	finish();
 	    }
 	    comment = temp.get(0);
-	    
-	    Log.d(TAG, "3. Got comment. Id is "+comment.getId());
 	    
 	    // Configure the list view
 	    commentListView = (ListView)findViewById(R.id.toplevel_and_children_list);
@@ -88,18 +83,18 @@ public class CommentActivity extends Activity {
 	protected void onResume() {
 		super.onResume();	
 		
-		Log.d(TAG, "4. Getting children.");
-		
+		// Get the replies to display
 		if (comment.children() == null) {
 			commentList = new ArrayList<Comment>();
 		}
 		else {
 			commentList = comment.children();
 		}
+		
+		// Add the children to the front of the list
 	    commentList.add(0, comment);
 	    
-	    Log.d(TAG, "5. Got Children.");
-	
+	    // Set up the adapter
 	    adapter = new CommentListBaseAdapter(this, commentList);
 	    commentListView.setAdapter(adapter);
 	} 
