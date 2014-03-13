@@ -42,6 +42,8 @@
         android:layout_alignLeft="@+id/usernameTextView"
         android:layout_below="@+id/usernameTextView"
         android:ems="10"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:gravity="center_vertical|left"
         android:hint="@string/username_edittext_view" >
 
@@ -64,6 +66,8 @@
         android:layout_alignLeft="@+id/commentTextView"
         android:layout_below="@+id/commentTextView"
         android:ems="10"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:gravity="center_vertical|left"
         android:hint="@string/fake_hint" >
         
@@ -77,6 +81,7 @@
          android:layout_alignParentBottom="true"
          android:layout_centerHorizontal="true"
          android:text="@string/attach_button"
+         android:onClick="onClickAttachButton"
          android:textColor="#FFFFFF" />
     
      <Button
@@ -86,6 +91,7 @@
          android:layout_toRightOf="@+id/attachButton"
          android:layout_alignBottom="@+id/attachButton"
          android:text="@string/send_button"
+         android:onClick="onClickSendButton"
          android:textColor="#FFFFFF" />
      
       <Button
@@ -95,6 +101,7 @@
          android:layout_toLeftOf="@+id/attachButton"
          android:layout_alignBottom="@+id/attachButton"
          android:text="@string/location_button"
+         android:onClick="onClickLocationButton"
          android:textColor="#FFFFFF" />
 
 </RelativeLayout>
