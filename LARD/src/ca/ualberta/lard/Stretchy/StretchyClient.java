@@ -45,25 +45,47 @@ public class StretchyClient {
 	 * @param id ID of the Comment the client is searching for
 	 * @return Comment if found, null otherwise
 	 */
-	public Comment getById(String id) {
-		HttpGet getReq = new HttpGet(ES_LOCATION + id + "?pretty=1");
-		getReq.addHeader("Accept", "application/json");
-		try {
-			HttpResponse response = client.execute(getReq);
+	public Comment getById(final String id) {
+		class RunGet implements Runnable {
+			private Comment foundComment = null;
+			@Override
+			public void run() {
+				HttpGet getReq = new HttpGet(ES_LOCATION + id + "?pretty=1");
+				getReq.addHeader("Accept", "application/json");
+				try {
+					HttpResponse response = client.execute(getReq);
 
-			StretchyResult<Comment> sResult = StretchyResult.create(response);
-			if (sResult.exists()) {
-				return sResult.getSource();
-				//return sResult.getSource();
+					StretchyResult<Comment> sResult = StretchyResult.create(response);
+					if (sResult.exists()) {
+						foundComment = sResult.getSource();
+						//return sResult.getSource();
+					}
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				// We've come too far, the Comment doesn't exist
 			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			public Comment get() {
+				Long curtime = System.currentTimeMillis();
+				while (foundComment == null) {
+					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
+						break;
+					}
+				}
+				return foundComment;
+			}
+		}
+		RunGet s = new RunGet();
+		try {
+			new Thread(s).start();
+		} catch (Exception e) {
+			Log.d("HELP", "PLZ HALP");
 			e.printStackTrace();
 		}
 
-		// We've come too far, the Comment doesn't exist
-		return null;
+		return s.get();
 	}
 
 	

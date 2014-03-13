@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import ca.ualberta.lard.R;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -74,20 +76,33 @@ private ListView commentList;
       return true;
     } 
     
+    
+    
     @Override
     protected void onStart() {
     	super.onStart();
     	allComments = new ArrayList<Comment>();
-    	CommentController controller = new CommentController(this);
-    	allComments = controller.get(); // fetch all the comments off of the server
-    	if (allComments == null) {
-    		allComments = new ArrayList<Comment>();
-    		// BaseAdapter can't fathom a null, so give it an empty list if there are no comments
-    	}
     	adapter = new CommentListBaseAdapter(this, allComments);
     	commentList.setAdapter(adapter);
+    	FetchComments fetch = new FetchComments();
+    	fetch.execute(this);
     }
 
-    
-    
+    private class FetchComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
+    	@Override
+    	protected ArrayList<Comment> doInBackground(Context... params) {
+    		CommentController controller = new CommentController(params[0]);
+    		return controller.get(); // fetch all the comments off of the server
+    	}
+
+    	protected void onPostExecute(ArrayList<Comment> result) {
+    		allComments.clear();
+    		allComments.addAll(result);
+    		adapter.notifyDataSetChanged();
+    	}
+
+
+
+    }
+
 }
