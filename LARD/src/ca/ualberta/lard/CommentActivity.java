@@ -40,9 +40,6 @@ public class CommentActivity extends Activity {
 	// For debugging purposes
 	private static final String TAG = "Comment Activity";
 	
-	// For getting the parent id from the extra
-	public static final String EXTRA_PARENT_ID = "parentID";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,7 +51,7 @@ public class CommentActivity extends Activity {
 	    
 	    // Get the id of the top level comment from intent
 	    Intent intent = getIntent();
-	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
+	    commentId = (String)intent.getStringExtra(NewCommentActivity.EXTRA_PARENT_ID);
 	    
 	    Log.d(TAG, "2. Got id");
 
@@ -80,7 +77,7 @@ public class CommentActivity extends Activity {
 	    		Intent intent = new Intent(getApplicationContext(),CommentActivity.class);
 	    		// Get the id of the comment that was clicked
 	    		String clickedCommentId = commentList.get(position).getId();
-	    		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, clickedCommentId);
+	    		intent.putExtra(NewCommentActivity.EXTRA_PARENT_ID, clickedCommentId);
 	    		startActivity(intent);		
 	    	}	    	
 		});
@@ -124,7 +121,7 @@ public class CommentActivity extends Activity {
             return true;
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
-    		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, commentId);
+    		intent.putExtra(NewCommentActivity.EXTRA_PARENT_ID, commentId);
     		startActivity(intent);
             return true;
         case R.id.action_save:

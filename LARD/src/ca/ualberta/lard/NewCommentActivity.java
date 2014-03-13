@@ -22,6 +22,7 @@ import android.widget.TextView;
 public class NewCommentActivity extends Activity {
 	public final static int LOCATION_REQUEST_ID = 1;
 	public final static int CAMERA_REQUEST_ID = 2;
+	public final static String EXTRA_PARENT_ID = "parentID";
 	private String pid;
 	private Picture picture;
 	private GeoLocation location;
@@ -34,7 +35,7 @@ public class NewCommentActivity extends Activity {
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
 		Intent intent = getIntent();
-	    pid = intent.getStringExtra(CommentActivity.EXTRA_PARENT_ID);
+	    pid = intent.getStringExtra(EXTRA_PARENT_ID);
 	    
 	    if (pid != null) {
 	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
