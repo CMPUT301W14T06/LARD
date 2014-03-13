@@ -58,8 +58,12 @@ public class NewCommentActivity extends Activity {
 		return true;
 	}
 	
-	// Called when the SendButton Button is clicked
-	// Will do nothing if commentEditText field is empty
+	/**
+	 * Called when the SendButton Button is clicked
+	 * <p>
+	 * Will do nothing if commentEditText field is empty
+	 * @param v A view
+	 */
 	public void onClickSendButton(View v) {
 		EditText commentText = (EditText) findViewById(R.id.commentEditText);
 		if (commentText.getText().toString().isEmpty()) {
@@ -91,16 +95,24 @@ public class NewCommentActivity extends Activity {
 		finish();
 	}
 	
-	// Called when the AttachButton Button is clicked
-	// Launches an activity with the Intent.ACTION_GET_CONTENT action and sets its type to image, will return an image that was choosen
+	/**
+	 * Called when the AttachButton Button is clicked
+	 * <p>
+	 * Launches an activity with the Intent.ACTION_GET_CONTENT action and sets its type to image, will return an image that was choosen
+	 * @param v A view
+	 */
 	public void onClickAttachButton(View v) {
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 		intent.setType("image/*");
         startActivityForResult(intent, CAMERA_REQUEST_ID); 
 	}
 	
-	// Called when the LocationButton Button is clicked
-	// Launches the LocationSelectionActivity activity, which will return a GeoLocation that we chose for this comment
+	/**
+	 * Called when the LocationButton Button is clicked
+	 * <p>
+	 * Launches the LocationSelectionActivity activity, which will return a GeoLocation that we chose for this comment
+	 * @param v A view
+	 */
 	public void onClickLocationButton(View v) {
 		Intent intent = new Intent(this, LocationSelectionActivity.class);
 		startActivityForResult(intent, LOCATION_REQUEST_ID);

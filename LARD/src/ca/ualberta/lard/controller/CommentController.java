@@ -69,6 +69,12 @@ public class CommentController {
 		return buffer;
 	}
 	
+	/**
+	 * Returns the first comment in the CommentController
+	 * <p>
+	 * For use when the CommentController is known to only have one comment object in it
+	 * @return A single Comment object
+	 */
 	public Comment getSingle() {
 		return buffer.get(0);
 	}
