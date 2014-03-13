@@ -48,6 +48,15 @@ public class CommentController {
 		return this;
 	}
 	
+	/**
+	 * Creates a comment and saves it to disk
+	 * </p>
+	 * @param comment The comment object that is to be created.
+	 */
+	public static void createComment(Comment comment) {
+		DataModel.saveLocal(comment, false);
+	}
+	
 	public boolean any() {
 		return buffer.size() > 0;
 	}
@@ -58,6 +67,10 @@ public class CommentController {
 	
 	public ArrayList<Comment> get() {
 		return buffer;
+	}
+	
+	public Comment getSingle() {
+		return buffer.get(0);
 	}
 
 }

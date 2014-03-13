@@ -1,7 +1,10 @@
 package ca.ualberta.lard;
 
 import java.io.ByteArrayOutputStream;
+
+import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
+import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 import android.net.Uri;
@@ -35,9 +38,13 @@ public class NewCommentActivity extends Activity {
 	    
 	    if (pid != null) {
 	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
-	    	// TODO: Fix this
-	    	lardTextView.setText("Reply to: " + pid);
-	    	//lardTextView.setText("Reply to: " + CommentController.getCommentName(pid));
+
+	    	CommentRequest req = new CommentRequest(1);
+	    	req.setParentId(pid);
+	    	CommentController commentController = new CommentController(req);
+	    	Comment comment = commentController.getSingle();
+	    	
+	    	lardTextView.setText("Reply to: " + comment.getAuthor());
 	    }
 	    
 		setContentView(R.layout.activity_new_comment);
@@ -53,7 +60,6 @@ public class NewCommentActivity extends Activity {
 	
 	// Called when the SendButton Button is clicked
 	// Will do nothing if commentEditText field is empty
-	// TODO: Finish this function
 	public void onClickSendButton(View v) {
 		EditText commentText = (EditText) findViewById(R.id.commentEditText);
 		if (commentText.getText().toString().isEmpty()) {
@@ -80,8 +86,7 @@ public class NewCommentActivity extends Activity {
 			comment.setPicture(picture);
 		}
 		
-		// TODO:
-		// provide the comment to the comment controller
+		CommentController.createComment(comment);
 		
 		finish();
 	}
@@ -134,14 +139,23 @@ public class NewCommentActivity extends Activity {
 	    }
 	}
 
+	/**
+	 * Returns the Parent ID of the comment as a string
+	 */
 	public String getPid() {
 		return pid;
 	}
 	
+	/**
+	 * Returns the Picture of the comment
+	 */
 	public Picture getPicture() {
 		return picture;
 	}
 	
+	/**
+	 * Returns the GeoLocation of the comment
+	 */
 	public GeoLocation getGeoLocation() {
 		return location;
 	}
