@@ -34,7 +34,7 @@ public class NewCommentActivity extends Activity {
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
 		Intent intent = getIntent();
-	    pid = intent.getStringExtra("parentID");
+	    pid = intent.getStringExtra(CommentActivity.EXTRA_PARENT_ID);
 	    
 	    if (pid != null) {
 	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
