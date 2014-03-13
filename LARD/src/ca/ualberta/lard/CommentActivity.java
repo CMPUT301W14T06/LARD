@@ -40,7 +40,7 @@ public class CommentActivity extends Activity {
 	private static final String TAG = "Comment Activity";
 	
 	// For getting the parent id from the extra
-	public static final String EXTRA_PARENT_ID = "TEXT";
+	public static final String EXTRA_PARENT_ID = "PARENT_ID";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

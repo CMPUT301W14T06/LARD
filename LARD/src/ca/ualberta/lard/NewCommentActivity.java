@@ -27,10 +27,13 @@ public class NewCommentActivity extends Activity {
 	private Picture picture;
 	private GeoLocation location;
 	private Comment comment;
+	private TextView lardTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.activity_new_comment);
 		
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
@@ -38,17 +41,21 @@ public class NewCommentActivity extends Activity {
 	    pid = intent.getStringExtra(PARENT_ID);
 	    
 	    if (pid != null) {
-	    	TextView lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
+	    	lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
 
 	    	CommentRequest req = new CommentRequest(1);
 	    	req.setParentId(pid);
 	    	CommentController commentController = new CommentController(req);
-	    	Comment comment = commentController.getSingle();
-	    	
-	    	lardTextView.setText("Reply to: " + comment.getAuthor());
+	    	if (commentController.any()) {
+	    		Comment comment = commentController.getSingle();
+	    		lardTextView.setText("Reply to: " + comment.getAuthor().toString());
+	    	}
+	    	else {
+	    		// should not get here
+	    	}
 	    }
 	    
-		setContentView(R.layout.activity_new_comment);
+		
 	}
 
 	// Not sure if we even need this function

@@ -42,7 +42,7 @@ private ListView commentList;
 				// Select a top level comment, pass its id to CommentActivity to view it and its children
 				Intent i = new Intent(getBaseContext(), CommentActivity.class);
 				Comment selection = allComments.get(position);
-				i.putExtra("EXTRA_PARENT_ID", selection.getId());
+				i.putExtra(CommentActivity.EXTRA_PARENT_ID, selection.getId());
 				startActivity(i);
 			}
 			
