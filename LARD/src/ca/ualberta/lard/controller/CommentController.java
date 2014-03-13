@@ -14,6 +14,7 @@ import ca.ualberta.lard.model.GeoLocation;
  *
  */
 public class CommentController {
+	private static Context context; // Needed for saveLocal
 	
 	private ArrayList<Comment> buffer;
 	
@@ -32,6 +33,7 @@ public class CommentController {
 	public CommentController(Context context) {
 		CommentRequest req = new CommentRequest(10); //TODO pull this from configuration.
 		req.setLocation(new GeoLocation(context));
+		this.context = context;
 		init(req);
 	}
 	
@@ -54,7 +56,7 @@ public class CommentController {
 	 * @param comment The comment object that is to be created.
 	 */
 	public static void createComment(Comment comment) {
-		DataModel.saveLocal(comment, false);
+		DataModel.saveLocal(comment, false, context);
 	}
 	
 	public boolean any() {

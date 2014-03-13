@@ -11,6 +11,7 @@
         android:layout_weight="1"
         android:textSize="12sp"
         android:divider="#ACD1E9"
-        android:dividerHeight="1sp" />
+        android:dividerHeight="1sp"
+        android:background="#000000" />
     
 </LinearLayout>

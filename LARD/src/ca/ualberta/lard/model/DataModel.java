@@ -1,20 +1,12 @@
 package ca.ualberta.lard.model;
 
-import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.content.Context;
 import android.util.Log;
@@ -23,6 +15,7 @@ import ca.ualberta.lard.Stretchy.StretchyClient;
 import ca.ualberta.lard.Stretchy.StretchyResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * DataModel is the data abstraction layer of the application. It handles the querying and retrieving of all comments for the applicaiton.
@@ -35,6 +28,8 @@ import com.google.gson.Gson;
  *
  */
 public class DataModel {
+	// File to use for saving
+	private static final String FILENAME = "Comments.sav";
 	
 	/**
 	 * Saves a comment to local storage
@@ -45,9 +40,63 @@ public class DataModel {
 	 * @param comment The comment object that is to be saved to disk.
 	 * @param persisitent Is this save explicit or is it to be put in the upload queue 
 	 */
-	public static void saveLocal(Comment comment, boolean persisitent) {
-		// TODO
+	public static void saveLocal(Comment comment, boolean persisitent, Context context) {
+		ArrayList<Comment> comments = readLocal(context);
+		
+		// Serialization using Gson.
+		Gson gson = new Gson();
+		String json = gson.toJson(comments);
+		
+		try {
+			FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(json);
+			oos.close();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return;
+	}
+	
+	/**
+	 * Reads a comment from local storage.
+	 * Assume you are passed a context.
+	 * Reading from local storage will only be used if stretchy comment returns null.
+	 * @return
+	 */
+	public static ArrayList<Comment> readLocal(Context context) {
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		
+		// Check if save file exists.
+		File file = context.getFileStreamPath(FILENAME);
+		if (!file.exists()) {
+			// Get the file path and create a new file.
+			String filePath = context.getFilesDir().getPath().toString()+FILENAME;
+			file = new File(filePath);
+			
+			// Since the save file doesn't exist, there is nothing to read
+			return comments;
+		}
+		try {
+			// Retrieve json object from memory
+			FileInputStream fis = context.openFileInput(FILENAME);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			String allCountersTemp = (String) ois.readObject();
+			ois.close();
+			fis.close();
+			
+			// Convert back to type ArrayList<Counter>
+			Gson gson = new Gson();			
+			Type listOfComments = new TypeToken<ArrayList<Comment>>(){}.getType();
+			comments = gson.fromJson(allCountersTemp, listOfComments);
+			return comments;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+			
+		return comments;
 	}
 	
 	public static boolean save(Comment comment) {
