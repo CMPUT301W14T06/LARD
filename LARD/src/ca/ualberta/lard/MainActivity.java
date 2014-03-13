@@ -22,6 +22,11 @@ private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
 private ListView commentList;
 
+/**
+ * 
+ * @author Eldon Lake
+ * The main activity is the main page where we view top level comments.
+ */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +34,10 @@ private ListView commentList;
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
         commentList = (ListView) findViewById(R.id.threadsListView);
-        
-        
         commentList.setOnItemClickListener(new OnItemClickListener() {
 
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long id) {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+				// Select a top level comment, pass its id to CommentActivity to view it and its children
 				Intent i = new Intent(getBaseContext(), CommentActivity.class);
 				Comment selection = allComments.get(position);
 				i.putExtra("EXTRA_PARENT_ID", selection.getId());
@@ -48,8 +51,8 @@ private ListView commentList;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-     MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+    	MenuInflater inflater = getMenuInflater();	
+       	inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
     
@@ -57,7 +60,7 @@ private ListView commentList;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
-      // action with ID action_refresh was selected
+      // These are the menu options in the action bar menu
       	case R.id.action_new:
       		Intent i = new Intent(getBaseContext(), NewCommentActivity.class);
       		startActivity(i);
@@ -76,7 +79,7 @@ private ListView commentList;
     	super.onStart();
     	allComments = new ArrayList<Comment>();
     	CommentController controller = new CommentController(this);
-    	allComments = controller.get();
+    	allComments = controller.get(); // fetch all the comments off of the server
     	if (allComments == null) {
     		allComments = new ArrayList<Comment>();
     		// BaseAdapter can't fathom a null, so give it an empty list if there are no comments
