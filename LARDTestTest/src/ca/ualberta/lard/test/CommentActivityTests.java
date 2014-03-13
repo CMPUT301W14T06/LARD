@@ -117,7 +117,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	    	}
 	    });
 	    
-	    DataModel.saveLocal(comment, false);
+	    DataModel.saveLocal(comment, false, getActivity().getBaseContext());
 	    assertTrue("Comment should be saved locally", DataModel.isLocal(comment));
 	}
 }
