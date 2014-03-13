@@ -52,6 +52,8 @@ public class CommentActivity extends Activity {
 	    // Get the id of the top level comment from intent
 	    Intent intent = getIntent();
 	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
+	    
+	    Log.d(TAG, "Comment id is: "+commentId);
 
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);

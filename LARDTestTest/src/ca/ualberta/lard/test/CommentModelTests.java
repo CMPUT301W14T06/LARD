@@ -166,7 +166,7 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	 */
 	public void testIsLocal() {
 		assertFalse(comment.isLocal());
-		DataModel.saveLocal(comment, false);
+		DataModel.saveLocal(comment, false, getActivity().getBaseContext());
 		assertTrue(comment.isLocal());
 	}
 	
