@@ -11,6 +11,7 @@ package ca.ualberta.lard;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
@@ -32,7 +35,7 @@ public class CommentActivity extends Activity {
 	private Comment comment;
 	private ArrayList<Comment> commentList;
 	private ArrayList<String> commentStrList;
-	private ArrayAdapter<String> adapter;
+	private CommentListBaseAdapter adapter;
 	
 	// For debugging purposes
 	private static final String TAG = "Comment Activity";
@@ -44,8 +47,10 @@ public class CommentActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_comment);
-	    
-	    Log.d(TAG, "1. Start");
+        ActionBar actionBar = getActionBar();
+        actionBar.setHomeButtonEnabled(true);  
+        
+        Log.d(TAG, "1. Start");
 	    
 	    // Get the id of the top level comment from intent
 	    Intent intent = getIntent();
@@ -64,7 +69,7 @@ public class CommentActivity extends Activity {
 	    }
 	    comment = temp.get(0);
 	    
-	    Log.d(TAG, "3. Got comment");
+	    Log.d(TAG, "3. Got comment. Id is "+comment.getId());
 	    
 	    // Configure the list view
 	    commentListView = (ListView)findViewById(R.id.toplevel_and_children_list);
@@ -75,7 +80,7 @@ public class CommentActivity extends Activity {
 	    		Intent intent = new Intent(getApplicationContext(),CommentActivity.class);
 	    		// Get the id of the comment that was clicked
 	    		String clickedCommentId = commentList.get(position).getId();
-	    		intent.putExtra(EXTRA_PARENT_ID, clickedCommentId);
+	    		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, clickedCommentId);
 	    		startActivity(intent);		
 	    	}	    	
 		});
@@ -85,7 +90,9 @@ public class CommentActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();	
-		// TODO: Create list of comments to display based off parentId.
+		
+		Log.d(TAG, "4. Getting children.");
+		
 		if (comment.children() == null) {
 			commentList = new ArrayList<Comment>();
 		}
@@ -93,17 +100,11 @@ public class CommentActivity extends Activity {
 			commentList = comment.children();
 		}
 	    commentList.add(0, comment);
-		
-		// Create a list of strings for the adapter
-		// TODO: Decide what part of comment to display. Currently only shows bodyText.
-		commentStrList = new ArrayList<String>();
-		for(Comment item: commentList) {
-			commentStrList.add(item.getBodyText());
-		}
-		
-		// Display parent comment and replies
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commentStrList);
-		commentListView.setAdapter(adapter);
+	    
+	    Log.d(TAG, "5. Got Children.");
+	
+	    adapter = new CommentListBaseAdapter(this, commentList);
+	    commentListView.setAdapter(adapter);
 	} 
 	
 	@Override
@@ -117,19 +118,18 @@ public class CommentActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.action_fav:
-            // Favourite a comment
         	// TODO: Add comment to favourites
+        	Toast.makeText(getApplicationContext(), "Comment Favourited.", Toast.LENGTH_SHORT).show();
         	DataModel.saveLocal(comment, true);
             return true;
         case R.id.action_reply:
-            // Reply to a comment (open NewCommentActivity)
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
     		intent.putExtra(CommentActivity.EXTRA_PARENT_ID, commentId);
     		startActivity(intent);
             return true;
         case R.id.action_save:
-            // Save a comment for later
         	DataModel.saveLocal(comment, true);
+        	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
             return true;
         default:
             return super.onOptionsItemSelected(item);

@@ -1,8 +1,10 @@
 package ca.ualberta.lard.model;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -14,6 +16,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
+import android.util.Log;
 import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.Stretchy.StretchyClient;
 import ca.ualberta.lard.Stretchy.StretchyResponse;
@@ -42,7 +46,7 @@ public class DataModel {
 	 * @param persisitent Is this save explicit or is it to be put in the upload queue 
 	 */
 	public static void saveLocal(Comment comment, boolean persisitent) {
-		// TODO implement this
+		// TODO
 		return;
 	}
 	
