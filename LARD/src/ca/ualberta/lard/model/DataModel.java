@@ -43,6 +43,7 @@ public class DataModel {
 	 */
 	public static void saveLocal(Comment comment, boolean persisitent) {
 		// TODO implement this
+		return;
 	}
 	
 	public static boolean save(Comment comment) {
