@@ -27,7 +27,6 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	
 	protected void setUp() {
 		comment = new Comment("I like kitties", getActivity());
-		date = new Date();
 	}
 	
 	/**
@@ -38,6 +37,7 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	public void testConstructors() {
 		assertNotNull("An id should be created.", comment.getId());
 		assertNotNull("Comment text should exist.", comment.getBodyText());
+		date = new Date();
 		assertNotNull("A date should be created.", comment.getCreatedDate());
 		assertEquals("Created date should be the actual date.", date, comment.getCreatedDate());
 		assertEquals("Updated date should match created date.", comment.getCreatedDate(), comment.getUpdatedDate());
@@ -83,7 +83,7 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		String curText = comment.getBodyText();
 		comment.setBodyText(curText);
 		assertEquals("Updating with the same body text should make no changes.",
-				curText, comment.getAuthor());
+				curText, comment.getBodyText());
 		
 		// Try to update the text to something new.
 		String newText = "I like puppies.";
@@ -151,12 +151,12 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	public void testParent() {
 		// By default parent = null
 		assertFalse("A newly created comment has no parent by default.", comment.hasParent());
-		assertNull(comment.getParent());
+		assertNull("No parent means parent is set to null.", comment.getParent());
 		
 		// Update to have a parent
 		String parentId = "1111";
 		comment.setParent("1111");
-		assertTrue(comment.hasParent());
+		assertTrue("Has parent should return true if you have a parent.", comment.hasParent());
 		assertEquals("Id should be same as parent id", parentId, comment.getParent());
 	}
 	
