@@ -5,6 +5,7 @@
  * Selecting a one of the child comments will open another CommentActivity. 
  *
  * @param  EXTRA_PARENT_ID	Expects the id of the parent comment as a String
+ * @author Victoria
  */
 
 package ca.ualberta.lard;
@@ -21,10 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
@@ -35,10 +36,15 @@ public class CommentActivity extends Activity {
 	private Comment comment;
 	private ArrayList<Comment> commentList;
 	private CommentListBaseAdapter adapter;
+	private TextView parentAuthorView;
+	private TextView parentCommentTextView;
+	private TextView parentNumRepliesView;
+	private ImageView parentPicView;
+	private TextView parentLocationView;
 	
 	// For debugging purposes
 	private static final String TAG = "Comment Activity";
-	
+
 	// For getting the parent id from the extra
 	public static final String EXTRA_PARENT_ID = "PARENT_ID";
 	
@@ -49,11 +55,20 @@ public class CommentActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);  
 	    
+        // Get view parts to display parent comment 
+        parentAuthorView = (TextView)findViewById(R.id.parent_author);
+        parentCommentTextView = (TextView)findViewById(R.id.parent_comment_body);
+        parentNumRepliesView = (TextView)findViewById(R.id.parent_num_replies);
+        parentPicView = (ImageView)findViewById(R.id.parent_picture);
+        parentLocationView = (TextView)findViewById(R.id.parent_location);
+        
 	    // Get the id of the top level comment from intent
 	    Intent intent = getIntent();
 	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
-	    
-	    Log.d(TAG, "Comment id is: "+commentId);
+	    if (commentId == null) {
+        	Toast.makeText(getApplicationContext(), "Parent id was null.", Toast.LENGTH_SHORT).show();
+        	finish();
+	    }
 
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);
@@ -67,7 +82,7 @@ public class CommentActivity extends Activity {
 	    comment = temp.get(0);
 	    
 	    // Configure the list view
-	    commentListView = (ListView)findViewById(R.id.toplevel_and_children_list);
+	    commentListView = (ListView)findViewById(R.id.children_list);
 	    commentListView.setOnItemClickListener(new OnItemClickListener() {
 	    	@Override
 	    	// Opens another CommentActivity when a comment on the list is clicked
@@ -94,8 +109,18 @@ public class CommentActivity extends Activity {
 			commentList = comment.children();
 		}
 		
-		// Add the parent to the front of the list
-	    commentList.add(0, comment);
+		// Set the parent comment info in the view
+		// Make sure comment body isn't empty
+		if (comment.getBodyText() == null || comment.getBodyText() == "") {
+			parentCommentTextView.setText("[Comment Text Removed]");
+		}
+		else {
+			parentCommentTextView.setText(comment.getBodyText());			
+		}
+		parentAuthorView.setText("By: "+comment.getAuthor());
+		//TODO: parentLocationView.setText(comment.);
+		parentNumRepliesView.setText(Integer.toString(comment.numReplies())+" replies");
+		//TODO: parentPicView.setP
 	
 	    adapter = new CommentListBaseAdapter(this, commentList);
 	    commentListView.setAdapter(adapter);
@@ -112,18 +137,17 @@ public class CommentActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.action_fav:
-        	// TODO: Add comment to favourites
         	Toast.makeText(getApplicationContext(), "Comment Favourited.", Toast.LENGTH_SHORT).show();
         	DataModel.saveLocal(comment, true, this);
+            return true;
+        case R.id.action_save:
+        	DataModel.saveLocal(comment, true, this);
+        	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
             return true;
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
     		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
     		startActivity(intent);
-            return true;
-        case R.id.action_save:
-        	DataModel.saveLocal(comment, true, this);
-        	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
             return true;
         default:
             return super.onOptionsItemSelected(item);
