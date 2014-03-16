@@ -46,7 +46,6 @@ public class NewCommentActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.activity_new_comment);
 		
 		// get the parent id out of the intent
