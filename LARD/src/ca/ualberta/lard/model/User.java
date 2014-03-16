@@ -1,9 +1,8 @@
 package ca.ualberta.lard.model;
-import java.io.UnsupportedEncodingException;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import android.content.Context;
 import android.provider.Settings.Secure;
 

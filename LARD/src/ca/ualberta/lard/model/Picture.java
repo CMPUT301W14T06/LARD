@@ -4,6 +4,7 @@ import android.util.Base64;
 
 /**
  * Simple picture model
+ * <p>
  * Stores a string which is a Base64 encoded Byte Array
  *
  * @author Dylan
