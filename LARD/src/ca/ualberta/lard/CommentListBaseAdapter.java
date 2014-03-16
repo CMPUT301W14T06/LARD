@@ -1,26 +1,29 @@
 package ca.ualberta.lard;
 
 import java.util.ArrayList;
-
-//import ca.ualberta.lard.model.Comment;
-import ca.ualberta.lard.model.Comment; // Will use real comments when they're constructable
-
+import ca.ualberta.lard.model.Comment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Inflates test_list_item views with the contents of a comment object
+ * Based off https://github.com/krrishnaaaa/CustomListViewDemo/blob/master/src/pcsalt/example/customlistviewdemo/MyBaseAdapter.java
+ * <p>
+ * STILL UNDER CONSTRUCTION
+ *
+ * @author Unknown (Eldon?)
+ */
+
+// TODO: Replace all instances of Comment with Comment when we can get comments to construct properly (???)
+
 public class CommentListBaseAdapter extends BaseAdapter {
-	// Inflates test_list_item views with the contents of a comment object
-	// Based off https://github.com/krrishnaaaa/CustomListViewDemo/blob/master/src/pcsalt/example/customlistviewdemo/MyBaseAdapter.java
-	// Replace all instances of Comment with Comment when we can get comments to construct properly
-	
-	ArrayList<Comment> myList = new ArrayList<Comment>(); 
-	LayoutInflater inflater;
-	Context context;
+	private ArrayList<Comment> myList = new ArrayList<Comment>(); 
+	private LayoutInflater inflater;
+	private Context context;
 	
 	public CommentListBaseAdapter(Context context, ArrayList<Comment> myList) {
 		this.myList = myList;
@@ -32,7 +35,8 @@ public class CommentListBaseAdapter extends BaseAdapter {
 	public int getCount() {
 		if (myList == null) {
 			return 0;
-		} else {
+		}
+		else {
 			return myList.size();
 		}
 	}
@@ -76,6 +80,7 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		tv.setText(text);
 		return tv;
 	}
+	
 	/*
 	private ImageView detail(View v, int resId, int icon) {
 		ImageView iv = (ImageView) v.findViewById(resId);
@@ -84,7 +89,9 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		return iv;
 	}
 	*/
+	
 	private class MyViewHolder {
+		@SuppressWarnings("unused") // TODO: Remove
 		TextView itemPreview, itemAuthor, itemDistance, itemNumChildren;
 		//ImageView itemIcon;
 	}

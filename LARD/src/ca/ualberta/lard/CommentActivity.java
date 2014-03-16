@@ -1,7 +1,6 @@
 package ca.ualberta.lard;
 
 import java.util.ArrayList;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -145,6 +144,7 @@ public class CommentActivity extends Activity {
 	    commentListView.setAdapter(adapter);
 	} 
 	
+	// TODO: Not sure if we even need this function
 	@Override
 	// Display action bar
 	public boolean onCreateOptionsMenu(Menu menu) {
