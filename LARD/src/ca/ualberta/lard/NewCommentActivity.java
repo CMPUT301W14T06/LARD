@@ -30,11 +30,11 @@ import android.widget.TextView;
  */
 
 public class NewCommentActivity extends Activity {
-	public final static int LOCATION_REQUEST_ID = 1;
-	public final static int CAMERA_REQUEST_ID = 2;
+	public static final int LOCATION_REQUEST_ID = 1;
+	public static final int CAMERA_REQUEST_ID = 2;
 	
 	// For getting the id of the parent comment of this new comment
-	public final static String PARENT_ID = "PID";
+	public static final String PARENT_ID = "PID";
 	
 	private String pid;
 	private Picture picture;
