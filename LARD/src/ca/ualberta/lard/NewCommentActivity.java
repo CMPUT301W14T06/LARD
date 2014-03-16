@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * NewCommentActivity is called when a CreateComment button is pushed (Either from MainActivity or CommentActivity).
@@ -56,6 +57,7 @@ public class NewCommentActivity extends Activity {
 	    if (pid != null) {
 	    	lardTextView = (TextView) findViewById(R.id.lardTextView);
 
+	    	// request the comment that has an id equal to the current pid
 	    	CommentRequest req = new CommentRequest(1);
 	    	req.setParentId(pid);
 	    	CommentController commentController = new CommentController(req);
@@ -64,7 +66,9 @@ public class NewCommentActivity extends Activity {
 	    		lardTextView.setText("Reply to: " + comment.getAuthor().toString());
 	    	}
 	    	else {
-	    		// should not get here
+	    		// should this return?
+	    		Toast.makeText(getApplicationContext(), "CommentController did not return a comment with that parent id.", Toast.LENGTH_SHORT).show();
+	        	finish();
 	    	}
 	    }
 	}
@@ -81,7 +85,7 @@ public class NewCommentActivity extends Activity {
 	 * Called when the SendButton Button is clicked
 	 * <p>
 	 * Creates the comment and sends it to CommentController. Will do nothing if commentEditText field is empty
-	 * @param v A view
+	 * @param v A View
 	 */
 	public void onClickSendButton(View v) {
 		EditText commentText = (EditText) findViewById(R.id.commentEditText);
@@ -124,7 +128,7 @@ public class NewCommentActivity extends Activity {
 	 * Called when the AttachButton Button is clicked
 	 * <p>
 	 * Launches an activity with the Intent.ACTION_GET_CONTENT action and sets its type to image, will return an image that was choosen
-	 * @param v A view
+	 * @param v A View
 	 */
 	public void onClickAttachButton(View v) {
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -136,7 +140,7 @@ public class NewCommentActivity extends Activity {
 	 * Called when the LocationButton Button is clicked
 	 * <p>
 	 * Launches the LocationSelectionActivity activity, which will return a GeoLocation that we chose for this comment
-	 * @param v A view
+	 * @param v A View
 	 */
 	public void onClickLocationButton(View v) {
 		Intent intent = new Intent(this, LocationSelectionActivity.class);
@@ -169,6 +173,7 @@ public class NewCommentActivity extends Activity {
 	            else
 	            {
 	            	// should never get here
+	            	Toast.makeText(getApplicationContext(), "Failed to get picture (data was null).", Toast.LENGTH_SHORT).show();
 	            }
 	        }
 	    }

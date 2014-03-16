@@ -6,7 +6,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
@@ -39,7 +39,10 @@ public class CommentActivity extends Activity {
 	private TextView parentAuthorView;
 	private TextView parentCommentTextView;
 	private TextView parentNumRepliesView;
+	
+	@SuppressWarnings("unused") // TODO: Remove
 	private ImageView parentPicView;
+	@SuppressWarnings("unused") // TODO: Remove
 	private TextView parentLocationView;
 
 	// For getting the id of clicked comment in MainActivity
@@ -61,7 +64,7 @@ public class CommentActivity extends Activity {
         
 	    // Get the id of the comment from intent
 	    Intent intent = getIntent();
-	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
+	    commentId = intent.getStringExtra(EXTRA_PARENT_ID);
 	    if (commentId == null) {
         	Toast.makeText(getApplicationContext(), "Parent id was null.", Toast.LENGTH_SHORT).show();
         	finish();
@@ -71,6 +74,21 @@ public class CommentActivity extends Activity {
 	    CommentRequest commentRequest = new CommentRequest(1);
 	    commentRequest.setId(commentId);
 	    
+	    // ----------------------------------------------------------------------------
+	    
+	    // TODO: Dylan changed this. I think that we are supposed to access the comments through CommentController
+	    
+	    // Check a comment was received 
+	    CommentController commentController = new CommentController(commentRequest);
+    	if (commentController.any()) {
+    		comment = commentController.getSingle();
+    	}
+    	else {
+    		// Couldn't find the comment, should never get here though.
+	    	finish();
+    	}
+    	
+    	/*
 	    // Check a comment was received 
 	    ArrayList<Comment> temp = DataModel.retrieveComments(commentRequest);
 	    if (temp == null) {
@@ -78,6 +96,9 @@ public class CommentActivity extends Activity {
 	    	finish();
 	    }
 	    comment = temp.get(0);
+	    */
+    	
+    	// ----------------------------------------------------------------------------
 	    
 	    // Configure the list view
 	    commentListView = (ListView)findViewById(R.id.children_list);
@@ -136,6 +157,7 @@ public class CommentActivity extends Activity {
 	 * is saved locally and added to favourites. When the floppy disk icon is clicked the parent
 	 * comment is saved locally. When the reply icon is clicked NewCommentActivity is opened
 	 * and is passed the id of the parent comment.
+	 * @param item A MenuItem
 	 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
