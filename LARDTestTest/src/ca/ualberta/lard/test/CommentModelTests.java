@@ -1,10 +1,3 @@
-/**
- * JUnit tests for Comment model. Tests creation of a new comment, updating
- * elements of the created comment, and helper functions to get useful 
- * information about the comment such as if it is saved locally.
- * @author Victoria
- */
-
 package ca.ualberta.lard.test;
 
 import java.util.ArrayList;
@@ -16,6 +9,13 @@ import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.DataModel;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
+
+/**
+ * JUnit tests for Comment model. Tests creation of a new comment, updating
+ * elements of the created comment, and helper functions to get useful 
+ * information about the comment such as if it is saved locally.
+ * @author Victoria
+ */
 
 public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
 	private ca.ualberta.lard.model.Comment comment;
@@ -165,9 +165,9 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	 * is told to save it locally.
 	 */
 	public void testIsLocal() {
-		assertFalse(comment.isLocal());
+		assertFalse(comment.isLocal(getActivity().getBaseContext()));
 		DataModel.saveLocal(comment, false, getActivity().getBaseContext());
-		assertTrue(comment.isLocal());
+		assertTrue(comment.isLocal(getActivity().getBaseContext()));
 	}
 	
 	/**

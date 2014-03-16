@@ -1,3 +1,11 @@
+package ca.ualberta.lard.model;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
+
+import android.content.Context;
+
 /**
  * An instance of Comment represents a comment a user creates to share
  * her thoughts about a particular location. Every comment has a generated
@@ -9,14 +17,6 @@
  * request information about it, such as if it has children or if it is saved locally.
  * @author Victoria
  */
-
-package ca.ualberta.lard.model;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
-
-import android.content.Context;
 
 public class Comment {
 	
@@ -221,7 +221,7 @@ public class Comment {
 	 * it is not.
 	 * @return true or false
 	 */
-	public boolean isLocal() {
+	public boolean isLocal(Context context) {
 		CommentRequest req = new CommentRequest(1);
 		req.setId(this.id);
 		ArrayList<Comment> results = DataModel.retrieveComments(req);
@@ -229,7 +229,7 @@ public class Comment {
 			// We should never be in here?
 			return false;
 		}
-		return DataModel.isLocal(results.get(0));
+		return DataModel.isLocal(results.get(0), context);
 	}
 }
 

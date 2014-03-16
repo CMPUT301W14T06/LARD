@@ -27,18 +27,4 @@ public class GeoLocationModelTests extends
 	public void testDistanceFrom() {
 		fail();
 	}
-	
-	/*  I commented this out because GeoLocation(9999) breaks the code
-	public void testSerialization() {
-		GeoLocation geoLocation = new GeoLocation(9999);
-		String string = geoLocation.toJSON();
-		GeoLocation newGeoLocation = geoLocation.fromJSON(string);
-		
-		assertEquals("newGeoLocation lat should be the same", geoLocation.getLatitude(), newGeoLocation.getLatitude());
-		assertEquals("newGeoLocation lon should be the same", geoLocation.getLongitude(), newGeoLocation.getLongitude());
-		assertEquals("newGeoLocation long should be 60.0", 60.0, newGeoLocation.getLongitude());
-		assertEquals("newGeoLocation lat should be 60.0", 60.0, newGeoLocation.getLatitude());
-	}
-	*/
-	
 }

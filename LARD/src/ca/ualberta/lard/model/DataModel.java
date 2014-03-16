@@ -61,7 +61,7 @@ public class DataModel {
 	
 	/**
 	 * Reads a comment from local storage.
-	 * Assume you are passed a context.
+	 * Assumes you are passed a context.
 	 * Reading from local storage will only be used if stretchy comment returns null.
 	 * @return
 	 */
@@ -99,6 +99,12 @@ public class DataModel {
 		return comments;
 	}
 	
+	/**
+	 * Saves a comment to stretchy client. Returns a boolean which specifies 
+	 * if the save was successful or not.
+	 * @param comment
+	 * @return true if save was successful, otherwise false
+	 */
 	public static boolean save(Comment comment) {
 		StretchyClient client = new StretchyClient();
 		StretchyResponse response = client.save(comment);
@@ -139,9 +145,15 @@ public class DataModel {
 		return comments2;
 	}
 	
-	public static boolean isLocal(Comment comment) {
-		// TODO unimplemented
-		return false;
+	/**
+	 * Checks if a comment is saved locally. Returns a boolean which specifies if it
+	 * is saved locally or not.
+	 * @param comment
+	 * @return true if saved locally, otherwise false
+	 */
+	public static boolean isLocal(Comment comment, Context context) {
+		ArrayList<Comment> localComments = readLocal(context);
+		return localComments.contains(comment);
 	}
 
 }

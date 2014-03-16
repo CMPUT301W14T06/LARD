@@ -9,12 +9,20 @@ import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
 import android.test.ActivityInstrumentationTestCase2;
 
+/**
+ * JUnit tests for the Datamodel. Tests handling requests from Comment model and saving
+ * locally and to stretchy client.
+ */
+
 public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
 	public DataModelTests() {
 		super(MainActivity.class);
 	}
 	
+	/**
+	 * Tests that a comment can successfully be saved to stretchy client.
+	 */
 	// This test will be a little bit handwavey, I suppose. We're involving external infrastructure.
 	public void testSave() {
 		Comment c = new Comment("Super comment wow, such comment amaze", getActivity());
@@ -22,7 +30,11 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 		assertTrue(result); // this is a finnicky not-a-test
 	}
 	
-	// For the time being we're using a hardcoded ID that we know exists
+	/**
+	 * Tests making a request to the Datamodel for an existing comment returns the correct
+	 * comment and returns only 1 comment.
+	 * Currently uses a hard-coded id that we know exists.
+	 */
 	public void testGetByIdExists() {
 		final String id = "64e5d2c9-97f3-42d4-844e-911ebbfdd2e5"; 
 		
@@ -37,6 +49,10 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 		assertEquals(c.getId(), id);
 	}
 	
+	/**
+	 * Tests that trying to make a request to the Datamodel for a non-existent comment
+	 * returns null.
+	 */
 	public void testGetByIdNotExists() {
 		final String id = "farts-and-tarts";
 		
@@ -47,11 +63,17 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 		assertNull(arr);
 	}
 	
+	/**
+	 * Tests that the Datamodel is able to check if a comment is saved locally.
+	 */
 	public void testIsLocal() {
 		fail();
 	}
 	
 	/**
+	 * Tests that the Datamodel can pull at least 1 comment from the server
+	 * when a request is made for any comments.
+	 * 
 	 * Precondition: Elastic search has at least one comment.
 	 */
 	public void testEmptySearch() {
@@ -60,13 +82,15 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 		
 		
 		assertTrue(comments.size() > 1);
-		System.err.println(comments.get(0));
-		
-		
+		System.err.println(comments.get(0));	
 	}
 	
+	/**
+	 * Tests that the Datamodel can search for a comment using only body text.
+	 */
 	public void testSearchByBody() {
 		CommentRequest req = new CommentRequest(5);
+		// TODO
 		fail();
 	}
 

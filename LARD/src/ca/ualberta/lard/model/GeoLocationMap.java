@@ -1,12 +1,14 @@
 package ca.ualberta.lard.model;
 
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
 
 import android.util.Pair;
+
+/**
+ * A GeoLocation map of specific latitude, longitude pairs of locations on
+ * the University of Alberta campus.
+ */
 
 public class GeoLocationMap {
 	

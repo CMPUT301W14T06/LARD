@@ -1,13 +1,3 @@
-/**
- * This activity is called when a comment is selected.
- * It displays the comment at the top, followed by a list of its children. 
- * The selected comment can be replied to, added to favourites, or saved locally.
- * Selecting a one of the child comments will open another CommentActivity. 
- *
- * @param  EXTRA_PARENT_ID	Expects the id of the parent comment as a String
- * @author Victoria
- */
-
 package ca.ualberta.lard;
 
 import java.util.ArrayList;
@@ -30,6 +20,16 @@ import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
 
+/**
+ * CommentActivity is called when a comment is selected.
+ * It displays the comment at the top, followed by a list of its children. 
+ * The selected comment can be replied to, added to favourites, or saved locally.
+ * Selecting a one of the child comments will open another CommentActivity. 
+ *
+ * @param  EXTRA_PARENT_ID	Expects the id of the parent comment as a String
+ * @author Victoria
+ */
+
 public class CommentActivity extends Activity {
 	private String commentId;
 	private ListView commentListView;
@@ -41,11 +41,8 @@ public class CommentActivity extends Activity {
 	private TextView parentNumRepliesView;
 	private ImageView parentPicView;
 	private TextView parentLocationView;
-	
-	// For debugging purposes
-	private static final String TAG = "Comment Activity";
 
-	// For getting the parent id from the extra
+	// For getting the id of clicked comment in MainActivity
 	public static final String EXTRA_PARENT_ID = "PARENT_ID";
 	
 	@Override
@@ -55,14 +52,14 @@ public class CommentActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);  
 	    
-        // Get view parts to display parent comment 
+        // Get ids of parts of view used to display parent comment
         parentAuthorView = (TextView)findViewById(R.id.parent_author);
         parentCommentTextView = (TextView)findViewById(R.id.parent_comment_body);
         parentNumRepliesView = (TextView)findViewById(R.id.parent_num_replies);
         parentPicView = (ImageView)findViewById(R.id.parent_picture);
         parentLocationView = (TextView)findViewById(R.id.parent_location);
         
-	    // Get the id of the top level comment from intent
+	    // Get the id of the comment from intent
 	    Intent intent = getIntent();
 	    commentId = (String)intent.getStringExtra(EXTRA_PARENT_ID);
 	    if (commentId == null) {
@@ -73,6 +70,7 @@ public class CommentActivity extends Activity {
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);
 	    commentRequest.setId(commentId);
+	    
 	    // Check a comment was received 
 	    ArrayList<Comment> temp = DataModel.retrieveComments(commentRequest);
 	    if (temp == null) {
@@ -133,6 +131,12 @@ public class CommentActivity extends Activity {
 	    return super.onCreateOptionsMenu(menu);
 	}
 	
+	/**
+	 * Deals with items in the action bar. When the heart icon is clicked the parent comment
+	 * is saved locally and added to favourites. When the floppy disk icon is clicked the parent
+	 * comment is saved locally. When the reply icon is clicked NewCommentActivity is opened
+	 * and is passed the id of the parent comment.
+	 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

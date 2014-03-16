@@ -1,10 +1,3 @@
-/**
- * A GeoLocation is composed of a latitude and a longitude, and as the name
- * suggests it represents a location in the world. It can be set
- * using specific coordinates or it can be set by getting the position of 
- * the users device in the world.
- */
-
 package ca.ualberta.lard.model;
 
 import java.util.ArrayList;
@@ -15,6 +8,13 @@ import com.google.gson.Gson;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+
+/**
+ * A GeoLocation is composed of a latitude and a longitude, and as the name
+ * suggests it represents a location in the world. It can be set
+ * using specific coordinates or it can be set by getting the position of 
+ * the users device in the world.
+ */
 
 public class GeoLocation {
 	
@@ -102,8 +102,14 @@ public class GeoLocation {
 		return this.lon;
 	}
 	
-	
-	// Thanks for the base code for the haversine formula here: http://www.movable-type.co.uk/scripts/latlong.html
+	/**
+	 * Finds the distance from current location to a specified GeoLocation.
+	 * 
+	 * Credit: base code for the haversine formula here: http://www.movable-type.co.uk/scripts/latlong.html
+	 * 
+	 * @param loc1
+	 * @return the distance as a double
+	 */
 	public double distanceFrom(GeoLocation loc1) {
 		
 		int earthRadius = 6371; // earth's radius in KM - constant in source code because we don't expect this to change - ever.

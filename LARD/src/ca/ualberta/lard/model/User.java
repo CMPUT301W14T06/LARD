@@ -1,9 +1,3 @@
-/**
- * The User model deals with the unique username of the user. Username is 
- * decided by a component chosen by the user, which can be changed at any time,
- * and a hash determined by the device id. 
- */
-
 package ca.ualberta.lard.model;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -12,6 +6,12 @@ import java.security.NoSuchAlgorithmException;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
+
+/**
+ * The User model deals with the unique username of the user. Username is 
+ * decided by a component chosen by the user, which can be changed at any time,
+ * and a hash determined by the device id. 
+ */
 
 public class User {
 	private String username;
@@ -34,8 +34,10 @@ public class User {
 	}
 	
 	/**
+	 * Returns the author name appended with a hash that is based off the id of their device.
+	 * 
 	 * Credit: Thanks to Brendan Long on stackoverflow for this: http://stackoverflow.com/a/3103722
-	 * Returns the author name appened with a hash that is based off the id of their device.
+	 * 
 	 * @return Author name followed by a hash
 	 * @author Brendan Long on stackoverflow
 	 */

@@ -4,6 +4,12 @@ import ca.ualberta.lard.NewCommentActivity;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 
+/**
+ * JUnit tests for NewCommentActivity. Tests that the correct parent id is received. Also
+ * tests user interaction with the UI (attaching a picture, changing location, inputting
+ * text for the comment).
+ */
+
 public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<NewCommentActivity> {
 	
 	public NewCommentActivityTests() {
@@ -28,10 +34,12 @@ public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<Ne
 	
 	public void testPicture() {
 		// can not test yet
+		fail();
 	}
 	
 	public void testGeoLocation() {
 		// can not test yet
+		fail();
 	}
 
 }
