@@ -19,10 +19,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * NewCommentActivity is called when a CreateComment button is pushed (Either from MainActivity or CommentActivity).
+ * This activity is used to create a new comment (Either top level or reply).
+ * The new comment can be given a picture or a location (from LocationSelectionActivity).
+ * A valid new comment must have some body text. Everything else is optional.
+ *
+ * @param  PARENT_ID	Expects the id of the parent comment as a String
+ * @author Dylan
+ */
+
 public class NewCommentActivity extends Activity {
 	public final static int LOCATION_REQUEST_ID = 1;
 	public final static int CAMERA_REQUEST_ID = 2;
+	
+	// For getting the id of the parent comment of this new comment
 	public final static String PARENT_ID = "PID";
+	
 	private String pid;
 	private Picture picture;
 	private GeoLocation location;
