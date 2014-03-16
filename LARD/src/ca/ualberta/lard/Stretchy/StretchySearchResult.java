@@ -36,6 +36,7 @@ public class StretchySearchResult<T> {
 		return this.hits;
 	}
 	
+	@SuppressWarnings("hiding") // TODO: Something?
 	public class StretchySearchHits<T> {
 		protected int total;
 		protected double max_score;

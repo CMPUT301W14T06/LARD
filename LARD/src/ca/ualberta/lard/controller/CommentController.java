@@ -14,8 +14,8 @@ import ca.ualberta.lard.model.GeoLocation;
  *
  */
 public class CommentController {
+	@SuppressWarnings("unused") // TODO: Remove
 	private static Context context; // Needed for saveLocal
-	
 	private ArrayList<Comment> buffer;
 	
 	/**
@@ -33,7 +33,7 @@ public class CommentController {
 	public CommentController(Context context) {
 		CommentRequest req = new CommentRequest(10); //TODO pull this from configuration.
 		req.setLocation(new GeoLocation(context));
-		this.context = context;
+		CommentController.context = context;
 		init(req);
 	}
 	

@@ -1,16 +1,9 @@
 package ca.ualberta.lard.Stretchy;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.utility.File;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -21,12 +14,17 @@ import com.google.gson.reflect.TypeToken;
  * @param <T>
  */
 public class StretchyResult<T> {
-	private String _index;
-	private String _type;
-	private String _id;
-	private int _version;
 	private boolean exists;
 	private T _source;
+	
+	@SuppressWarnings("unused") // TODO: Remove
+	private String _index;
+	@SuppressWarnings("unused") // TODO: Remove
+	private String _type;
+	@SuppressWarnings("unused") // TODO: Remove
+	private String _id;
+	@SuppressWarnings("unused") // TODO: Remove
+	private int _version;
 	
 	public static StretchyResult<Comment> create(HttpResponse response) {
 		Gson gson = new Gson();
