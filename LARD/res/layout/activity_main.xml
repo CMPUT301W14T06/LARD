@@ -12,6 +12,8 @@
     <ListView
         android:id="@+id/threadsListView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:divider="#ACD1E9"
+        android:dividerHeight="1sp" />
 
 </RelativeLayout>
