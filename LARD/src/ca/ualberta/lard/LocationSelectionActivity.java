@@ -134,7 +134,6 @@ public class LocationSelectionActivity extends Activity {
 		else if (customLocationClicked == true) {
 	
 			if (slectedLocationString != null || slectedLocationString.isEmpty() == false) {
-			
 				GeoLocationMap geoMap = new GeoLocationMap();
 				double lat = (geoMap.getMap()).get(slectedLocationString).first;
 				double lon = (geoMap.getMap()).get(slectedLocationString).second;
