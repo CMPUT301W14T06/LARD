@@ -88,7 +88,6 @@ public class LocationSelectionActivity extends Activity {
 		return true;
 	}
 	
-	
 	// Gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
 	public void gpsLocationClick(View view) {
 		gpsLocationClicked = true;

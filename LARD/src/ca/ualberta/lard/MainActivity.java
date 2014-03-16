@@ -19,16 +19,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * The main activity is the main page where we view top level comments.
+ * 
+ * @author Eldon Lake
+ */
+
 public class MainActivity extends Activity {
 private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
 private ListView commentList;
 
-/**
- * 
- * @author Eldon Lake
- * The main activity is the main page where we view top level comments.
- */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,6 @@ private ListView commentList;
         actionBar.setHomeButtonEnabled(true);
         commentList = (ListView) findViewById(R.id.threadsListView);
         commentList.setOnItemClickListener(new OnItemClickListener() {
-
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
 				// Select a top level comment, pass its id to CommentActivity to view it and its children
 				Intent i = new Intent(getBaseContext(), CommentActivity.class);
@@ -45,10 +45,8 @@ private ListView commentList;
 				i.putExtra(CommentActivity.EXTRA_PARENT_ID, selection.getId());
 				startActivity(i);
 			}
-			
 		});
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,7 +55,6 @@ private ListView commentList;
        	inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
-    
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -75,8 +72,6 @@ private ListView commentList;
 
       return true;
     } 
-    
-    
     
     @Override
     protected void onStart() {
@@ -100,9 +95,5 @@ private ListView commentList;
     		allComments.addAll(result);
     		adapter.notifyDataSetChanged();
     	}
-
-
-
     }
-
 }
