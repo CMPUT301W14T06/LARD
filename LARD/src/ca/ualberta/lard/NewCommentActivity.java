@@ -30,17 +30,18 @@ import android.widget.TextView;
  */
 
 public class NewCommentActivity extends Activity {
-	public static final int LOCATION_REQUEST_ID = 1;
-	public static final int CAMERA_REQUEST_ID = 2;
-	
-	// For getting the id of the parent comment of this new comment
-	public static final String PARENT_ID = "PID";
-	
 	private String pid;
 	private Picture picture;
 	private GeoLocation location;
 	private Comment comment;
 	private TextView lardTextView;
+	
+	// These probably dont need to be public, may change in future
+	public static final int LOCATION_REQUEST_ID = 1;
+	public static final int CAMERA_REQUEST_ID = 2;
+	
+	// For getting the id of the parent comment of this new comment
+	public static final String PARENT_ID = "PID";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
