@@ -1,8 +1,11 @@
 package ca.ualberta.lard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 
 import ca.ualberta.lard.model.GeoLocation;
+import ca.ualberta.lard.model.GeoLocationMap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -45,17 +48,17 @@ public class LocationSelectionActivity extends Activity {
 		gpsLocationRadioButton.setClickable(false);
 		customLocationRadioButton.setClickable(true);
 		
-		//Makes the list clickable
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
 		
-		if (debug_mode) {
-			ArrayList<String> locations = new ArrayList<String>();
-			locations.add("CAB");
-			locations.add("CAMERON");
-			locations.add("CCIS");
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, locations);
-			spinner.setAdapter(adapter);
-		}
+		//Gets a list of locations from the GeoLocation map then converts it to a string array
+		GeoLocationMap geoMap = new GeoLocationMap();
+		Set<String> nameSet = geoMap.getMap().keySet();
+		String[] stringArray = Arrays.copyOf(nameSet.toArray(), nameSet.toArray().length, String[].class);
+		
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, stringArray);
+		spinner.setAdapter(adapter);
+		
 		
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 		    @Override
