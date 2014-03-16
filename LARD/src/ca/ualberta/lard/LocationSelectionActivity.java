@@ -140,12 +140,19 @@ public class LocationSelectionActivity extends Activity {
 		else if (customLocationClicked == true) {
 	
 			if( slectedLocationString != null || slectedLocationString.isEmpty() == false) {
-				//String locString = new String ("GeoLocation.LOCATIONS." + slectedLocationString);
-				//geoLocation = new GeoLocation((GeoLocation.LOCATIONS)locString);
 			
-				//Intent resultData = new Intent();
-				//resultData.putExtra("geoLocation", "valueData");
-				//setResult(Activity.RESULT_OK, resultData);
+				GeoLocationMap geoMap = new GeoLocationMap();
+				double lat = (geoMap.getMap()).get(slectedLocationString).first;
+				double lon = (geoMap.getMap()).get(slectedLocationString).second;
+				geoLocation = new GeoLocation(lat,lon);
+			
+				String geoString = geoLocation.toJSON();
+				Intent resultData = new Intent();
+				resultData.putExtra("geoLocation", geoString);
+				setResult(Activity.RESULT_OK, resultData);
+
+				System.out.println(lat);
+				System.out.println(lon);
 			}
 			finish();
 		}
