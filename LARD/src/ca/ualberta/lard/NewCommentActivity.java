@@ -41,7 +41,7 @@ public class NewCommentActivity extends Activity {
 	    pid = intent.getStringExtra(PARENT_ID);
 	    
 	    if (pid != null) {
-	    	lardTextView = (TextView) findViewById(R.id.lardTextView); // I am assuming that this is where the "Reply to:" goes
+	    	lardTextView = (TextView) findViewById(R.id.lardTextView);
 
 	    	CommentRequest req = new CommentRequest(1);
 	    	req.setParentId(pid);
@@ -54,8 +54,6 @@ public class NewCommentActivity extends Activity {
 	    		// should not get here
 	    	}
 	    }
-	    
-		
 	}
 
 	// Not sure if we even need this function
@@ -69,15 +67,17 @@ public class NewCommentActivity extends Activity {
 	/**
 	 * Called when the SendButton Button is clicked
 	 * <p>
-	 * Will do nothing if commentEditText field is empty
+	 * Creates the comment and sends it to CommentController. Will do nothing if commentEditText field is empty
 	 * @param v A view
 	 */
 	public void onClickSendButton(View v) {
 		EditText commentText = (EditText) findViewById(R.id.commentEditText);
+		// There must be text in the commentEditText field for the comment to be valid
 		if (commentText.getText().toString().isEmpty()) {
 			return;
 		}
 
+		// Create the comment either with a pid or without
 		if (pid == null) {
 			comment = new Comment(commentText.getText().toString(), this);
 		}
@@ -85,19 +85,23 @@ public class NewCommentActivity extends Activity {
 			comment = new Comment(commentText.getText().toString(), pid, this);
 		}
 		
+		// Set an author for the comment if you can
 		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
 		if (!usernameText.getText().toString().isEmpty()) {
 			comment.setAuthor(usernameText.getText().toString(), this);
 		}
 		
+		// Set a location for the comment if you can
 		if (location != null) {
 			comment.setLocation(location);
 		}
 		
+		// Set a picture for the comment if you can
 		if (picture != null) {
 			comment.setPicture(picture);
 		}
 		
+		// Send the completed comment to the CommentController
 		CommentController.createComment(comment);
 		
 		finish();
@@ -129,7 +133,6 @@ public class NewCommentActivity extends Activity {
 	// Called when LocationSelectionActivity or Intent.ACTION_GET_CONTENT returns
 	// Will either get the Geolocation data from LocationSelectionActivity
 	// or get the picture data from Intent.ACTION_GET_CONTENT
-	// got: http://stackoverflow.com/questions/7832773/android-how-to-get-the-image-using-intent-data
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == LOCATION_REQUEST_ID) {
@@ -153,7 +156,6 @@ public class NewCommentActivity extends Activity {
 	            else
 	            {
 	            	// should never get here
-	                System.out.println("SDCard have no images");
 	            }
 	        }
 	    }
