@@ -52,7 +52,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	 */
 	public void testListViewIsVisable() throws Throwable {
 		View view = activity.getWindow().getDecorView();
-		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.toplevel_and_children_list));
+		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.children_list));
 	}
 	
 	/**
