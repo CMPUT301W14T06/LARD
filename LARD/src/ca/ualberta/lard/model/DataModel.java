@@ -7,13 +7,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
 import android.content.Context;
-import android.util.Log;
 import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.Stretchy.StretchyClient;
 import ca.ualberta.lard.Stretchy.StretchyResponse;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

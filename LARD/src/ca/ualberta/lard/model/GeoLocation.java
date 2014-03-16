@@ -1,10 +1,7 @@
 package ca.ualberta.lard.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.google.gson.Gson;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;

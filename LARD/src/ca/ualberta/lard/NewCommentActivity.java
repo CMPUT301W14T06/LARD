@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -167,7 +166,7 @@ public class NewCommentActivity extends Activity {
 	                Bitmap thumbnail = BitmapFactory.decodeFile(file);
 	                ByteArrayOutputStream os = new ByteArrayOutputStream();
 	                thumbnail.compress(Bitmap.CompressFormat.JPEG , 80, os);
-	                picture.setImageString(Base64.encodeToString(os.toByteArray(), Base64.URL_SAFE));
+	                picture.setImageByte(os.toByteArray());
 	            }
 	            else
 	            {

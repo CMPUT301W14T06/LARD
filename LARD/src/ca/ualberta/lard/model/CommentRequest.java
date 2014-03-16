@@ -17,23 +17,32 @@ public class CommentRequest {
 	/**
 	 * We can specify that the comment must be a child of a particular comment.
 	 */
+	@SuppressWarnings("unused") // TODO: Remove
 	private String parentId;
+	
 	/**
 	 * If the location property is set, Comments nearest this location will be returned over those further from this location.
 	 */
+	@SuppressWarnings("unused") // TODO: Remove
 	private GeoLocation location;
+	
 	/**
 	 * Do we only want to search threads, or are replies acceptable also?
 	 */
+	@SuppressWarnings("unused") // TODO: Remove
 	private boolean topLevel;
+	
 	/**
 	 * Do we only want comments with pictures?
 	 */
+	@SuppressWarnings("unused") // TODO: Remove
 	private boolean hasPicture;
+	
 	/**
 	 * The number of results we want returned
 	 */
 	private int resultSize;
+	
 	/**
 	 * Key words to search the body text for
 	 */
