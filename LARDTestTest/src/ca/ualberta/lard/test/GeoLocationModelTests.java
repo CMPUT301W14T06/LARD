@@ -20,8 +20,10 @@ public class GeoLocationModelTests extends
 	}
 	
 	public void testPreconditions() {
-		fail();
+		GeoLocation geoLocation = new GeoLocation(60.0, 80.0);
 		
+		assertNotNull("getLatitude should give a return", geoLocation.getLatitude());
+		assertNotNull("getLongitude should give a return", geoLocation.getLongitude());
 	}
 	
 	public void testDistanceFrom() {

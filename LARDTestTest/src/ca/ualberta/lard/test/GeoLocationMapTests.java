@@ -21,11 +21,8 @@ public class GeoLocationMapTests extends ActivityInstrumentationTestCase2<MainAc
 	
 	public void testConstructor() {
 		GeoLocationMap geoLocationMap = new GeoLocationMap();
-		
 		assertNotNull(geoLocationMap.getMap());
-		
 		Pair<Double, Double> cab = new Pair<Double, Double>(53.526572, -113.524734);
-		
 		assertEquals("The lon and lat of CAB should be the same", cab, geoLocationMap.getMap().get("CAB") );
 	}
 	
