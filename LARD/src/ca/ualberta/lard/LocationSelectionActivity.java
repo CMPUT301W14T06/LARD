@@ -81,21 +81,30 @@ public class LocationSelectionActivity extends Activity {
 		getMenuInflater().inflate(R.menu.location_selection, menu);
 		return true;
 	}
-	
-	// Gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
+	/**
+	 * Gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
+	 * @param view
+	 */
 	public void gpsLocationClick(View view) {
 		gpsLocationClicked = true;
 		customLocationClicked = false;
 		radioButtonSelector(view);
 	}
 	
-	// gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
+	/**
+	 * Gets the clicked RadioButton then unchecks the other RadioButton, also sets the bools
+	 * @param view
+	 */
 	public void customLocationClick(View view) {
 		gpsLocationClicked = false;
 		customLocationClicked = true;
 		radioButtonSelector(view);
 	}
 	
+	/**
+	 * Makes sure you cant have both RadioButtons selected at the same time
+	 * @param view
+	 */
 	private void radioButtonSelector(View view) {
 		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
 		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
@@ -109,6 +118,12 @@ public class LocationSelectionActivity extends Activity {
 		customLocationRadioButton.setClickable(gpsLocationClicked);
 	}
 	
+	/**
+	 * Will return a GeoLocation when you press the save button, what GeoLocation
+	 * You get will depend on what RadioButtons are selected and what Location
+	 * you have selected on the spinner.
+	 * @param view
+	 */
 	public void locationSaveClick(View view){		
 		if(gpsLocationClicked == true) {
 			// Create a gps location from current phone context

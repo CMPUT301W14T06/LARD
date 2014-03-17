@@ -13,6 +13,10 @@ public class GeoLocationMap {
 	
 	Map<String, Pair<Double, Double>> geoDict = new HashMap<String,  Pair<Double, Double>>();
 	
+	/**
+	 * Populates the GeoLocationMap's Hashmap with locations from 
+	 * Univeristy of Alberta and their latitude and longitude 
+	 */
 	public GeoLocationMap() {
 		super();
 		//populates GeoLocationMap
@@ -39,6 +43,11 @@ public class GeoLocationMap {
 		geoDict.put("SUB", SUB);
 		geoDict.put("TORY", TORY);	
 	}
+	
+	/**
+	 * returns the HashMap Attribute
+	 * @return GeoLocationMap's HashMap
+	 */
 	
 	public Map<String, Pair<Double, Double>> getMap() {
 		return geoDict;
