@@ -125,7 +125,6 @@ public class LocationSelectionActivity extends Activity {
 			finish();
 		}
 		else if (customLocationClicked == true) {
-	
 			if (slectedLocationString != null || slectedLocationString.isEmpty() == false) {
 				//Creates a new GeoLocation based on what location was selected
 				GeoLocationMap geoMap = new GeoLocationMap();
