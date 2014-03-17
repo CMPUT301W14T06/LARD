@@ -22,10 +22,20 @@ import com.google.gson.Gson;
  *
  */
 public class StretchyClient {
+	/**
+	 * Hardcoded location of the strechy client repository. We only work with objects of type Comment.
+	 */
 	private static final String ES_LOCATION = "http://cmput301.softwareprocess.es:8080/cmput301w14t06/comment/";
 	private Gson gson;
 	private HttpClient client;
-	private static final int NETWORKTIMEOUT = 5000; // Time in milliseconds to wait for the requested comments
+	/**
+	 * Time in milliseconds to wait for the requested comments
+	 */
+	private static final int NETWORKTIMEOUT = 5000;
+	
+	/**
+	 * Constructor to intialize the Gson worker and the Apache HttpClient.
+	 */
 	public StretchyClient() {
 		gson = new Gson();
 		client = new DefaultHttpClient();
@@ -114,6 +124,11 @@ public class StretchyClient {
 		return StretchyResponse.create(response);
 	}
 	
+	/**
+	 * Search elastic search and find an ArrayList of Comments.
+	 * @param req A SearchRequest whose fields specify the objects and values that the user wishes to search for
+	 * @return ArrayList of Comments embodying the results. May be empty, which should be checked on the client side.
+	 */
 	public ArrayList<Comment> search(final SearchRequest req) {
 		class RunSearch implements Runnable {
 			private volatile ArrayList<Comment> returnComments;
