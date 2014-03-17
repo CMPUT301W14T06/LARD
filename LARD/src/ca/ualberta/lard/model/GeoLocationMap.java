@@ -9,18 +9,17 @@ import android.util.Pair;
  * A GeoLocation map of specific latitude, longitude pairs of locations on
  * the University of Alberta campus.
  */
-
 public class GeoLocationMap {
 	
-	//private Map<String, Pair(int, int)> geoMap = new HashMap<String, Pair(int, int)>;
-	//private Map<String, String> geoDict = new Hashtable();
-	
 	Map<String, Pair<Double, Double>> geoDict = new HashMap<String,  Pair<Double, Double>>();
-
-
+	
+	/**
+	 * Populates the GeoLocationMap's Hashmap with locations from 
+	 * Univeristy of Alberta and their latitude and longitude 
+	 */
 	public GeoLocationMap() {
 		super();
-		
+		//populates GeoLocationMap
 		Pair<Double, Double> CAB = new Pair<Double, Double>(53.526572, -113.524734);
 		Pair<Double, Double> CAMERON = new Pair<Double, Double>(53.52677, -113.523672);
 		Pair<Double, Double> CCIS = new Pair<Double, Double>(53.528243, -113.525657);
@@ -32,7 +31,6 @@ public class GeoLocationMap {
 		Pair<Double, Double> STJOSPEH = new Pair<Double, Double>(53.524486, -113.524541);
 		Pair<Double, Double> SUB = new Pair<Double, Double>(53.525322, -113.52732);
 		Pair<Double, Double> TORY = new Pair<Double, Double>(53.528185,  -113.521462);
-		
 		geoDict.put("CAB", CAB);
 		geoDict.put("CAMERON", CAMERON);
 		geoDict.put("CCIS", CCIS);
@@ -43,15 +41,15 @@ public class GeoLocationMap {
 		geoDict.put("RUTHERFORD", RUTHERFORD);
 		geoDict.put("STJOSPEH", STJOSPEH);
 		geoDict.put("SUB", SUB);
-		geoDict.put("TORY", TORY);
-		
+		geoDict.put("TORY", TORY);	
 	}
 	
+	/**
+	 * returns the HashMap Attribute
+	 * @return GeoLocationMap's HashMap
+	 */
 	
 	public Map<String, Pair<Double, Double>> getMap() {
 		return geoDict;
-	}
-	
-	
-	
+	}	
 }
