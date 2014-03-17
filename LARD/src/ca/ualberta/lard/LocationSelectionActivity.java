@@ -14,12 +14,11 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * [ADD DESCRIPTION]
- *
+ * Returns A GeoLocation through intents. Can create a GeoLocation with your current
+ * gps location or a location based on a list of pre-created locations on campus
  * @author Thomas
  */
 
@@ -30,14 +29,8 @@ public class LocationSelectionActivity extends Activity {
 	private String slectedLocationString;
 	private GeoLocation geoLocation;
 	
-	@SuppressWarnings("unused")
-	private TextView shownLocation; // TODO: Something?
-	
 	// For getting the location set by this activity
 	public static final String LOCATION_REQUEST = "LOCATION";
-	
-	@SuppressWarnings("unused")
-	private boolean debug_mode = true; // TODO: Remove
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +66,10 @@ public class LocationSelectionActivity extends Activity {
 		        slectedLocationString = string;
 		    }
 
+		    
 		    @Override
 		    public void onNothingSelected(AdapterView<?> parentView) {
-		        // TODO: Something?
+		        // does nothing, but needed for Listener
 		    }
 		});
 	}
@@ -92,18 +86,17 @@ public class LocationSelectionActivity extends Activity {
 	public void gpsLocationClick(View view) {
 		gpsLocationClicked = true;
 		customLocationClicked = false;
-		commonCode(view);
+		radioButtonSelector(view);
 	}
 	
 	// gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
 	public void customLocationClick(View view) {
 		gpsLocationClicked = false;
 		customLocationClicked = true;
-		commonCode(view);
+		radioButtonSelector(view);
 	}
 	
-	// TODO: Rename this
-	private void commonCode(View view) {
+	private void radioButtonSelector(View view) {
 		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
 		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
 		
@@ -121,31 +114,30 @@ public class LocationSelectionActivity extends Activity {
 			// Create a gps location from current phone context
 			geoLocation = new GeoLocation(getApplicationContext());
 			
-			// serializes string then send it to previous activity
 			if (geoLocation != null) {
+				// serializes string 
 				String geoString = geoLocation.toJSON();
+				// sends serialized string to parent activity
 				Intent resultData = new Intent();
 				resultData.putExtra(LOCATION_REQUEST, geoString);
 				setResult(Activity.RESULT_OK, resultData);
 			}
-			
 			finish();
 		}
 		else if (customLocationClicked == true) {
 	
 			if (slectedLocationString != null || slectedLocationString.isEmpty() == false) {
+				//Creates a new GeoLocation based on what location was selected
 				GeoLocationMap geoMap = new GeoLocationMap();
 				double lat = (geoMap.getMap()).get(slectedLocationString).first;
 				double lon = (geoMap.getMap()).get(slectedLocationString).second;
 				geoLocation = new GeoLocation(lat,lon);
-			
+				//serializes the GeoLocation
 				String geoString = geoLocation.toJSON();
+				//Sends the serialized GeoLocation to the parent activity
 				Intent resultData = new Intent();
 				resultData.putExtra(LOCATION_REQUEST, geoString);
 				setResult(Activity.RESULT_OK, resultData);
-
-				System.out.println(lat); // TODO: Remove?
-				System.out.println(lon); // TODO: Remove?
 			}
 			
 			finish();
