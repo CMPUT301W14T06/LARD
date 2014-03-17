@@ -1,14 +1,19 @@
 package ca.ualberta.lard;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+
+
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,16 +63,8 @@ public class NewCommentActivity extends Activity {
 	    	// request the comment that has an id equal to the current pid
 	    	CommentRequest req = new CommentRequest(1);
 	    	req.setParentId(pid);
-	    	CommentController commentController = new CommentController(req);
-	    	if (commentController.any()) {
-	    		Comment comment = commentController.getSingle();
-	    		lardTextView.setText("Reply to: " + comment.getAuthor().toString());
-	    	}
-	    	else {
-	    		// should this return?
-	    		Toast.makeText(getApplicationContext(), "CommentController did not return a comment with that parent id.", Toast.LENGTH_SHORT).show();
-	        	finish();
-	    	}
+	    	GetParent getParent = new GetParent();
+	    	getParent.execute(req);
 	    }
 	}
 
@@ -117,7 +114,8 @@ public class NewCommentActivity extends Activity {
 		}
 		
 		// Send the completed comment to the CommentController
-		CommentController.createComment(comment);
+		MakeComment makeComment = new MakeComment();
+		makeComment.execute(comment);
 		
 		finish();
 	}
@@ -198,4 +196,37 @@ public class NewCommentActivity extends Activity {
 		return location;
 	}
 
+	private class GetParent extends AsyncTask<CommentRequest, Integer, String> {
+		@Override
+		protected String doInBackground(CommentRequest... params) {
+			CommentController commentController = new CommentController(params[0]);
+			if (commentController.any()) {
+				Comment comment = commentController.getSingle();
+				return comment.getAuthor().toString();
+			}
+			else {
+				// should this return?
+				// Toast.makeText(getApplicationContext(), "CommentController did not return a comment with that parent id.", Toast.LENGTH_SHORT).show();
+				//finish();
+				return "Error! Parent comment not found!";
+			}
+		}
+
+		protected void onPostExecute(String result) {
+			lardTextView.setText("Reply to: " + result);
+		}
+    }
+	
+	private class MakeComment extends AsyncTask<Comment, Integer, Boolean> {
+		@Override
+		protected Boolean doInBackground(Comment... params) {
+			CommentController.createComment(comment);
+			return true;
+		}
+
+		protected void onPostExecute(Boolean result) {
+			System.out.println(result);
+		}
+    }
+	
 }
