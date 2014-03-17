@@ -4,6 +4,10 @@ import ca.ualberta.lard.MainActivity;
 import ca.ualberta.lard.model.GeoLocation;
 import android.test.ActivityInstrumentationTestCase2;
 
+/**
+ * Junit tests for GeoLocation model. Tests the constructor, lat and lon
+ * getters, distanceFrom function and JSON serialization. 
+ */
 public class GeoLocationModelTests extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 

@@ -5,6 +5,12 @@ import ca.ualberta.lard.model.GeoLocationMap;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Pair;
 
+/**
+ * Junit tests for GeoLocationMap model. Tests the constructor, getter
+ * and its attributes.
+ * @author Thomas
+ *
+ */
 public class GeoLocationMapTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
 	public GeoLocationMapTests() {
