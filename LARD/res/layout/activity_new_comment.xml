@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".NewCommentActivity" >
+
+    <TextView
+        android:id="@+id/lardTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Reply"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/usernameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lardTextView"
+        android:text="@string/username_text_view"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/usernameTextView"
+        android:layout_below="@+id/usernameTextView"
+        android:ems="10"
+        android:gravity="center_vertical|left"
+        android:hint="@string/username_edittext_view"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/commentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/usernameEditText"
+        android:layout_below="@+id/usernameEditText"
+        android:text="@string/comment_text_view"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/commentEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/commentTextView"
+        android:layout_below="@+id/commentTextView"
+        android:ems="10"
+        android:gravity="center_vertical|left"
+        android:hint="@string/fake_hint"
+        android:inputType="textMultiLine"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/attachButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickAttachButton"
+        android:text="@string/attach_button"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/attachButton"
+        android:layout_toRightOf="@+id/attachButton"
+        android:onClick="onClickSendButton"
+        android:text="@string/send_button"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/locationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/attachButton"
+        android:layout_toLeftOf="@+id/attachButton"
+        android:onClick="onClickLocationButton"
+        android:text="@string/location_button"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>

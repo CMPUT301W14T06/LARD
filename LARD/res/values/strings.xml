@@ -4,5 +4,22 @@
     <string name="app_name">LARD</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_new_comment">NewCommentActivity</string>
+    <string name="title_activity_location_selection">LocationSelectionActivity</string>
+    <string name="action_fav">Favourite</string>
+    <string name="action_reply">Reply</string>
+    <string name="action_save">Save</string>
+    <string name="Reply"></string>
+    <string name="username_text_view">Username:</string>
+    <string name="fake_hint">&#8230;</string>
+    <string name="username_edittext_view">Anonymous</string>
+    <string name="comment_text_view">Comment:</string>
+    <string name="attach_button">Attach</string>
+    <string name="send_button">Send</string>
+    <string name="location_button">Location</string>
+	<string name="title_activity_comment">Comment</string>
+    <string name="sort_by">Sort Threads</string>
+    <string name="favorites">Favourites</string>
+    <string name="location_settings">Location Settings</string>
 
 </resources>

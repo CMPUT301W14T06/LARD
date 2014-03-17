@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- Favourite -->
+    <item android:id="@+id/action_fav"
+          android:icon="@drawable/ic_action_favorite"
+          android:title="@string/action_fav"
+          android:showAsAction="ifRoom"/>
+    
+    <!-- Save -->
+    <item android:id="@+id/action_save"
+          android:icon="@drawable/ic_action_save"
+          android:title="@string/action_save"
+          android:showAsAction="ifRoom" />
+     
+    <!-- Reply-->
+    <item android:id="@+id/action_reply"
+          android:icon="@drawable/ic_action_reply"
+          android:title="@string/action_reply"
+          android:showAsAction="ifRoom" />
+   
+</menu>

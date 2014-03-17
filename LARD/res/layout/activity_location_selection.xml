@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".LocationSelectionActivity" >
+
+    <TextView
+        android:id="@+id/locationSettingsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location Settings" />
+
+    <Button
+        android:id="@+id/saveLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="locationSaveClick"
+        android:text="Save" />
+
+    <RadioButton
+        android:id="@+id/gpsRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/locationSettingsTextView"
+        android:text="GPS Location" 
+        android:onClick= "gpsLocationClick"/>
+
+    <RadioButton
+        android:id="@+id/selectLocationRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/locationSettingsTextView"
+        android:layout_below="@+id/gpsRadioButton"
+        android:text="Selected Location:"
+        android:onClick= "customLocationClick" />
+
+        <Spinner
+            android:id="@+id/locationSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/selectLocationRadioButton"
+            android:layout_below="@+id/selectLocationRadioButton" />
+
+</RelativeLayout>
