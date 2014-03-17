@@ -48,7 +48,20 @@ public class SearchRequestTests extends
 		SearchRequest s = new SearchRequest(1);
 		s.parent("1234");
 
-		String json = "{ \"size\" : 1, \"query\" : { \"term\" : { \"parnet\" : \"1234\" } } }";
+		String json = "{ \"size\" : 1, \"query\" : { \"term\" : { \"parent\" : \"1234\" } } }";
+		System.err.println(json);
+		System.err.println(s.toString());
+		assertEquals(json, s.toString());
+	}
+	
+	/**
+	 * Test that search request creates the json string literal in the correct format 
+	 * when no information is provided.
+	 */
+	public void testNoInfo() {
+		SearchRequest s = new SearchRequest(1);
+
+		String json = "{ \"size\" : 1, \"query\" : { \"term\" : { \"bodyText\" : \"\" } } }";
 		System.err.println(json);
 		System.err.println(s.toString());
 		assertEquals(json, s.toString());
