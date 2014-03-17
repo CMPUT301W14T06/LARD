@@ -54,6 +54,7 @@ public class UserModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	}
 	
 	protected void tearDown() throws Exception {
+		this.user = null;
 	}
 
 }
