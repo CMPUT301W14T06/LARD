@@ -25,6 +25,9 @@ public class GeoLocationMapTests extends ActivityInstrumentationTestCase2<MainAc
 		super.tearDown();
 	}
 	
+	/**
+	 * Tests to make sure the map is populated correctly
+	 */
 	public void testConstructor() {
 		GeoLocationMap geoLocationMap = new GeoLocationMap();
 		assertNotNull(geoLocationMap.getMap());
