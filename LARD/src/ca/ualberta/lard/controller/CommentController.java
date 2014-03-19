@@ -92,6 +92,10 @@ public class CommentController {
 				pairs.add(Pair.create(distance, comment));
 			}
 			Collections.sort(pairs, new LocationComparator());
+			comments = new ArrayList<Comment>();
+			for(Pair<Double, Comment> pair: pairs) {
+				comments.add(pair.second);
+			}
 		}
 		else if (req.isBySpecificLocation()) {
 			// Create a list of (distance from current location, comment) pairs.
@@ -101,6 +105,10 @@ public class CommentController {
 				pairs.add(Pair.create(distance, comment));
 			}
 			Collections.sort(pairs, new LocationComparator());
+			comments = new ArrayList<Comment>();
+			for(Pair<Double, Comment> pair: pairs) {
+				comments.add(pair.second);
+			}
 		}
 		else if (req.isByPicturesFirst()) {
 			Collections.sort(comments, new PictureComparator());
