@@ -21,7 +21,7 @@
             android:id="@+id/itemPreview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="Fetching comment..."
             android:textColor="@android:color/white"
             android:scrollHorizontally="true"
 			android:ellipsize="end" 
@@ -42,7 +42,7 @@
                 android:gravity="left"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
-                android:text="TextView"
+                android:text="Fetching author..."
                 android:textAlignment="gravity"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="12sp" />
@@ -64,7 +64,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="TextView"
+                android:text="# replies"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="12sp" />
 

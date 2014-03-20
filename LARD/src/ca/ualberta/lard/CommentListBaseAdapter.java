@@ -112,9 +112,10 @@ public class CommentListBaseAdapter extends BaseAdapter {
     	}
 
     	protected void onPostExecute(String result) {
-    		TextView textView = (TextView) textViewReference.get();
-    		textView.setText(result); // TODO: Concatenate distance, num replies, author, etc
-    		
+    		if (result != null) {
+    			TextView textView = (TextView) textViewReference.get();
+    			textView.setText(result); // TODO: Concatenate distance, num replies, author, etc
+    		}
     	}
     }
 }
