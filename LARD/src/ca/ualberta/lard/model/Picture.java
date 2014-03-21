@@ -12,17 +12,15 @@ import android.util.Base64;
 
 public class Picture {
 	private String imageString;
-	
-	public Picture() {
-		super();
-		imageString = null;
-	}
 
 	/**
 	 * Returns true if the picture is null (ie not set)
 	 */
 	public boolean isNull() {
-		return imageString.isEmpty();
+		if (imageString != null) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**
