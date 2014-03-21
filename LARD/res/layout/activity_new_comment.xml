@@ -32,7 +32,7 @@
         android:layout_below="@+id/usernameTextView"
         android:ems="10"
         android:gravity="center_vertical|left"
-        android:hint="@string/username_edittext_view"
+        android:text="@string/username_edittext_view"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" >
 
@@ -93,5 +93,23 @@
         android:onClick="onClickLocationButton"
         android:text="@string/location_button"
         android:textColor="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/currentPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/locationButton"
+        android:layout_below="@+id/commentEditText"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/ic_action_save" />
+
+    <EditText
+        android:id="@+id/currentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/attachButton"
+        android:layout_alignLeft="@+id/locationButton"
+        android:layout_marginBottom="50dp"
+        android:ems="10" />
 
 </RelativeLayout>

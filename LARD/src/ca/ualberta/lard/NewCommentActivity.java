@@ -1,9 +1,6 @@
 package ca.ualberta.lard;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-
-
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
@@ -13,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -51,6 +47,8 @@ public class NewCommentActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_comment);
+		
+		location = new GeoLocation(getApplicationContext());
 		
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
