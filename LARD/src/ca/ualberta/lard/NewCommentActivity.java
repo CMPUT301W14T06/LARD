@@ -75,13 +75,15 @@ public class NewCommentActivity extends Activity {
 		TextView locationTextView = (TextView) findViewById(R.id.currentLocation);
 		locationTextView.setText("Lat: " + location.getLatitude() + " Long: " +  location.getLongitude());
 		
-		ImageView pictureImageView = (ImageView) findViewById(R.id.currentPicture);
-		Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
-		if (bm != null) {
-			pictureImageView.setImageBitmap(bm);
-		}
-		else {
-			Toast.makeText(getApplicationContext(), "Picture Bitmap was null.", Toast.LENGTH_SHORT).show();
+		if (picture != null) {
+			ImageView pictureImageView = (ImageView) findViewById(R.id.currentPicture);
+			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
+			if (bm != null) {
+				pictureImageView.setImageBitmap(bm);
+			}
+			else {
+				Toast.makeText(getApplicationContext(), "Picture Bitmap was null.", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
