@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +49,8 @@ public class NewCommentActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_comment);
 		
-		location = new GeoLocation(getApplicationContext());
+		location = new GeoLocation(getApplicationContext()); // TODO: look at users settings first
+		picture = new Picture();
 		
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
@@ -64,6 +66,23 @@ public class NewCommentActivity extends Activity {
 	    	GetParent getParent = new GetParent();
 	    	getParent.execute(req);
 	    }
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		TextView locationTextView = (TextView) findViewById(R.id.currentLocation);
+		locationTextView.setText("Lat: " + location.getLatitude() + " Long: " +  location.getLongitude());
+		
+		ImageView pictureImageView = (ImageView) findViewById(R.id.currentPicture);
+		Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
+		if (bm != null) {
+			pictureImageView.setImageBitmap(bm);
+		}
+		else {
+			Toast.makeText(getApplicationContext(), "Picture Bitmap was null.", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	// TODO: Not sure if we even need this function
