@@ -75,7 +75,7 @@ public class NewCommentActivity extends Activity {
 		TextView locationTextView = (TextView) findViewById(R.id.currentLocation);
 		locationTextView.setText("Lat: " + location.getLatitude() + " Long: " +  location.getLongitude());
 		
-		if (picture != null) {
+		if (!picture.isNull()) {
 			ImageView pictureImageView = (ImageView) findViewById(R.id.currentPicture);
 			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
 			if (bm != null) {
