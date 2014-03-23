@@ -185,6 +185,11 @@ public class Comment {
 		this.setUpdated();
 	}
 	
+	// For testing comparators
+	public void setCreationDate(Date date) {
+		this.createdAt = date;
+	}
+	
 	
 	// Helper functions
 	

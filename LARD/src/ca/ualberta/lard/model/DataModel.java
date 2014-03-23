@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import android.content.Context;
+import android.util.Pair;
 import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.Stretchy.StretchyClient;
 import ca.ualberta.lard.Stretchy.StretchyResponse;
@@ -39,6 +40,39 @@ public class DataModel {
 	 */
 	public static void saveLocal(Comment comment, boolean persisitent, Context context) {
 		ArrayList<Comment> comments = readLocal(context);
+		comments.add(comment);
+		
+		// Serialization using Gson.
+		Gson gson = new Gson();
+		String json = gson.toJson(comments);
+		
+		try {
+			FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(json);
+			oos.close();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return;
+	}
+	
+	/**
+	 * Saves a list of children to local storage. This is necessary because saving a favourited
+	 * comments children individually would require as many saveLocals as there are children.
+	 * @param children
+	 * @param context
+	 */
+	public static void saveChildrenLocal(ArrayList<Comment> children, Context context) {
+		ArrayList<Comment> comments = readLocal(context);
+		
+		// Only add children that are not saved locally
+		for(Comment child: children) {
+			if (!comments.contains(child)) {
+				comments.add(child);
+			}
+		}
 		
 		// Serialization using Gson.
 		Gson gson = new Gson();

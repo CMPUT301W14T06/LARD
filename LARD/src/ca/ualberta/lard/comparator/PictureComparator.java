@@ -14,13 +14,16 @@ public class PictureComparator implements Comparator<Comment>{
 
 	@Override
 	public int compare(Comment lhs, Comment rhs) {
-		Integer lhsHasPic = 0; // 0 if no pic, 1 if has pic
-		Integer rhsHasPic = 0; 
+		/* If there is no picture set value to one, because we want
+		* comments with pictures to be put in front, and comparators
+		* use ascending order. */
+		Integer lhsHasPic = 1; // 1 if no pic, 0 if has pic
+		Integer rhsHasPic = 1; 
 		if (lhs.hasPicture()) {
-			lhsHasPic = 1;
+			lhsHasPic = 0;
 		}
 		if (rhs.hasPicture()) {
-			rhsHasPic = 1;
+			rhsHasPic = 0;
 		}
 		return lhsHasPic.compareTo(rhsHasPic);
 	}

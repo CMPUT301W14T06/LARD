@@ -24,6 +24,7 @@ public class User {
 	 */
 	public User(String username, Context context) {
 		this.username = username;
+		// TODO: Make user Android_id a singleton
 		this.androidId = Secure.getString(context.getContentResolver(),
 	            Secure.ANDROID_ID);
 	}
