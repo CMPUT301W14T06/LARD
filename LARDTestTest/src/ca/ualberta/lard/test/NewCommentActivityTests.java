@@ -1,6 +1,7 @@
 package ca.ualberta.lard.test;
 
 import ca.ualberta.lard.NewCommentActivity;
+import ca.ualberta.lard.model.GeoLocation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -18,8 +19,8 @@ public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<Ne
 	
 	public void testParentIDExists() {
 		Intent intent = new Intent();
-		int value = 1;
-		intent.putExtra("parentID", value);
+		String value = "Test";
+		intent.putExtra(NewCommentActivity.PARENT_ID, value);
 		setActivityIntent(intent);
 		NewCommentActivity activity = getActivity();
 		assertEquals("NewCommentActivity should get the value from intent", value, activity.getPid());
@@ -32,14 +33,20 @@ public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<Ne
 		assertEquals("NewCommentActivity should get the value from intent", null, activity.getPid());
 	}
 	
-	public void testPicture() {
-		// can not test yet, will implement later
-		fail();
+	public void testPictureDefault() {
+		Intent intent = new Intent();
+		setActivityIntent(intent);
+		NewCommentActivity activity = getActivity();
+		assertTrue("NewCommentActivity should by default have no picture", activity.getPicture().isNull());
 	}
 	
-	public void testGeoLocation() {
-		// can not test yet, will implement later
-		fail();
+	public void testGeoLocationDefault() {
+		Intent intent = new Intent();
+		setActivityIntent(intent);
+		NewCommentActivity activity = getActivity();
+		GeoLocation loc = new GeoLocation(activity);
+		assertEquals("NewCommentActivity should by default have a default location", loc.getLatitude(), activity.getGeoLocation().getLatitude());
+		assertEquals("NewCommentActivity should by default have a default location", loc.getLongitude(), activity.getGeoLocation().getLongitude());
 	}
 
 }
