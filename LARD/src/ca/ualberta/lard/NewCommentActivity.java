@@ -1,6 +1,8 @@
 package ca.ualberta.lard;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
@@ -10,7 +12,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.Menu;
@@ -148,9 +152,32 @@ public class NewCommentActivity extends Activity {
 	 * @param v A View
 	 */
 	public void onClickAttachButton(View v) {
-		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		// for taking pics
+        /*Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
+        startActivityForResult(intent, CAMERA_REQUEST_ID);*/
+        
+		// original
+		/*Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType("image/*");
-        startActivityForResult(intent, CAMERA_REQUEST_ID); 
+		startActivityForResult(intent, CAMERA_REQUEST_ID);*/
+		
+		// better?
+		/*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, CAMERA_REQUEST_ID);*/
+        
+        /*Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), CAMERA_REQUEST_ID);*/
+		
+		/*Intent intent = new Intent(Intent.ACTION_GET_CONTENT, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), CAMERA_REQUEST_ID);*/
+		
+		// best?
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, CAMERA_REQUEST_ID);
 	}
 	
 	/**
@@ -180,12 +207,27 @@ public class NewCommentActivity extends Activity {
 	        	if(data != null)
 	            {
 	        		// gets the image out of the return intent and stores it as a a string in the picture model
-	                Uri uri = data.getData();
-	                String file = uri.getPath();
-	                Bitmap thumbnail = BitmapFactory.decodeFile(file);
-	                ByteArrayOutputStream os = new ByteArrayOutputStream();
-	                thumbnail.compress(Bitmap.CompressFormat.JPEG , 80, os);
-	                picture.setImageByte(os.toByteArray());
+	        		Uri uri = data.getData();
+	        		
+					try {
+						String file = getPath(this, uri);
+		        		Bitmap bitmap = BitmapFactory.decodeFile(file);
+		        		
+						/*InputStream is = getContentResolver().openInputStream(uri);
+						Bitmap bitmap = BitmapFactory.decodeStream(is);
+		                is.close();*/
+		        		
+		                ByteArrayOutputStream os = new ByteArrayOutputStream();
+		                bitmap.compress(Bitmap.CompressFormat.JPEG , 80, os);
+		                picture.setImageByte(os.toByteArray());
+		                os.close();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 	            }
 	            else
 	            {
@@ -194,6 +236,40 @@ public class NewCommentActivity extends Activity {
 	            }
 	        }
 	    }
+	}
+
+	/**
+	 * Get a file path from a Content Uri.
+	 * <p>
+	 * MAJOR EDITS WERE MADE TO THIS FUNCTION. 
+	 * ORIGINAL AUTHOR was paulburke. 
+	 * ORIGINAL FUNCTION NAME WAS getDataColumn. 
+	 * <p>
+	 * Source: https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+	 *
+	 * @param context The context.
+	 * @param uri The Uri to query.
+	 * @author paulburke
+	 */
+	public static String getPath(final Context context, Uri uri) {
+
+	    Cursor cursor = null;
+	    final String column = "_data";
+	    final String[] projection = {
+	            column
+	    };
+
+	    try {
+	        cursor = context.getContentResolver().query(uri, projection, null, null, null);
+	        if (cursor != null && cursor.moveToFirst()) {
+	            final int column_index = cursor.getColumnIndexOrThrow(column);
+	            return cursor.getString(column_index);
+	        }
+	    } finally {
+	        if (cursor != null)
+	            cursor.close();
+	    }
+	    return null;
 	}
 
 	/**
