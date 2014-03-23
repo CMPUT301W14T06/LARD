@@ -1,0 +1,118 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".EditCommentActivity" >
+	
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+	    <TextView
+	        android:id="@+id/usernameTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/username_text_view"
+		    android:textColor="@android:color/holo_blue_light" />
+	
+	    <EditText
+	        android:id="@+id/edit_username_textview"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_vertical|left"
+	        android:text="Current body author goes here."
+	        android:textColor="#FFFFFF" >
+	        <requestFocus />
+	    </EditText>
+	
+	    <TextView
+	        android:id="@+id/commentTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/comment_text_view"
+		    android:textColor="@android:color/holo_blue_light" />
+	
+	    <EditText
+	        android:id="@+id/edit_bodytext_textview"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_vertical|left"
+	        android:text="Current body text goes here."
+	        android:inputType="textMultiLine"
+	        android:textColor="#FFFFFF" >
+	        <requestFocus />
+	    </EditText>
+
+	    <TextView
+	        android:id="@+id/current_pic_title_textview"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="10dp"
+	        android:layout_marginTop="10dp"
+	        android:text="@string/cur_pic_title"
+		    android:textColor="@android:color/holo_blue_light"/>
+	    
+	    <ImageView
+	        android:id="@+id/edit_pic_view"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:layout_marginBottom="10dp"
+	        android:src="@android:drawable/ic_menu_camera" />
+	    
+        <TextView
+            android:id="@+id/edit_lat_textview"
+            android:layout_width="fill_parent"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content"
+            android:text="Lat goes here" />
+
+        <TextView
+            android:id="@+id/edit_long_textview"
+            android:layout_width="fill_parent"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content"
+            android:text="Long goes here" />
+	    
+	</LinearLayout>
+	
+    <LinearLayout 
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+ 
+	    <Button
+	        android:id="@+id/edit_pic_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onClickAttachButton"
+	        android:text="@string/attach_button"
+	        android:textColor="#FFFFFF" />
+	
+	    <Button
+	        android:id="@+id/edit_location_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onClickLocationButton"
+	        android:text="@string/location_button"
+	        android:textColor="#FFFFFF"/>
+	    
+	    <Button
+	        android:id="@+id/edit_save_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onClickSaveChanges"
+	        android:text="@string/save_button"
+	        android:textColor="#FFFFFF" />
+        
+    </LinearLayout>
+
+</RelativeLayout>

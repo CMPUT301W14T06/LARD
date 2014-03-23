@@ -43,13 +43,20 @@
     	    android:src="@android:drawable/ic_menu_camera" />
     	
     	<!-- Parent Comment Text  -->
-    	<TextView
+    	<ScrollView 
+    	    android:id="@+id/scroller"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content"
+    	    android:scrollbars="vertical" >
+    	    
+	    	<TextView
     	    android:id="@+id/parent_comment_body"
     	    android:layout_width="match_parent"
-    	    android:layout_height="match_parent"
+    	    android:layout_height="wrap_content"
     	    android:text="TextView"
     	    android:textColor="#FFFFFF"
-    	    android:textSize="20sp" />
+    	    android:textSize="20sp" />    	    
+    	</ScrollView>
 
     </LinearLayout>
     

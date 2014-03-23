@@ -73,10 +73,6 @@ public class CommentActivity extends Activity {
 	    CommentRequest commentRequest = new CommentRequest(1);
 	    commentRequest.setId(commentId);
 	    
-	    // ----------------------------------------------------------------------------
-	    
-	    // TODO: Dylan changed this. I think that we are supposed to access the comments through CommentController
-	    
 	    // Check a comment was received 
 	    CommentController commentController = new CommentController(commentRequest);
     	if (commentController.any()) {
@@ -86,18 +82,6 @@ public class CommentActivity extends Activity {
     		// Couldn't find the comment, should never get here though.
 	    	finish();
     	}
-    	
-    	/*
-	    // Check a comment was received 
-	    ArrayList<Comment> temp = DataModel.retrieveComments(commentRequest);
-	    if (temp == null) {
-	    	// Couldn't find the comment, should never get here though.
-	    	finish();
-	    }
-	    comment = temp.get(0);
-	    */
-    	
-    	// ----------------------------------------------------------------------------
 	    
 	    // Configure the list view
 	    commentListView = (ListView)findViewById(R.id.children_list);

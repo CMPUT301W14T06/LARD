@@ -1,12 +1,9 @@
 package ca.ualberta.lard.test;
 
-import java.util.Date;
-
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.InstrumentationTestCase;
 import android.test.ViewAsserts;
 import android.view.View;
 import ca.ualberta.lard.CommentActivity;
@@ -48,6 +45,15 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		
 		setActivityIntent(intent);
 		activity = getActivity();
+		instru = getInstrumentation();
+	}
+	
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		comment = null;
+		id = null;
+		activity = null;
+		intent = null;
 	}
 	
 	/**

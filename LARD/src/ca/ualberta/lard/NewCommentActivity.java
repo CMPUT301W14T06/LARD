@@ -176,7 +176,7 @@ public class NewCommentActivity extends Activity {
 	}
 	
 	// Called when LocationSelectionActivity or Intent.ACTION_GET_CONTENT returns
-	// Will either get the Geolocation data from LocationSelectionActivity
+	// Will either get the GeoLocation data from LocationSelectionActivity
 	// or get the picture data from Intent.ACTION_GET_CONTENT
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -184,6 +184,7 @@ public class NewCommentActivity extends Activity {
 	        if (resultCode == RESULT_OK) {
 	        	String locationData = data.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
 	        	location = GeoLocation.fromJSON(locationData);
+	        	
 	        }
 	    }
 	    if (requestCode == CAMERA_REQUEST_ID) {

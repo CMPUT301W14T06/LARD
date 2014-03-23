@@ -40,6 +40,11 @@ public class DataModel {
 	 */
 	public static void saveLocal(Comment comment, boolean persisitent, Context context) {
 		ArrayList<Comment> comments = readLocal(context);
+		
+		// Check comment isn't saved locally already.
+		if (comment.isLocal(context)) {
+			return;
+		}
 		comments.add(comment);
 		
 		// Serialization using Gson.
@@ -66,11 +71,16 @@ public class DataModel {
 	 */
 	public static void saveChildrenLocal(ArrayList<Comment> children, Context context) {
 		ArrayList<Comment> comments = readLocal(context);
+		ArrayList<Comment> allComments = comments;
+		allComments.addAll(children);
 		
-		// Only add children that are not saved locally
-		for(Comment child: children) {
-			if (!comments.contains(child)) {
-				comments.add(child);
+		// Only want children that are not already saved locally.
+		for (Comment c: comments) {
+			for (Comment child: children) {
+				if (child.isCommentIdEqual(c)) {
+					allComments.remove(child);
+					break;
+				}
 			}
 		}
 		
@@ -179,12 +189,19 @@ public class DataModel {
 	/**
 	 * Checks if a comment is saved locally. Returns a boolean which specifies if it
 	 * is saved locally or not.
+	 * When determining if a comment is saved locally, only compare comment IDs since
+	 * other fields may have been edited.
 	 * @param comment
 	 * @return true if saved locally, otherwise false
 	 */
 	public static boolean isLocal(Comment comment, Context context) {
 		ArrayList<Comment> localComments = readLocal(context);
-		return localComments.contains(comment);
+		for (Comment c: localComments) {
+			if (c.isCommentIdEqual(comment)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

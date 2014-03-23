@@ -37,6 +37,10 @@
             android:name="ca.ualberta.lard.CommentActivity"
             android:label="@string/title_activity_comment" >
         </activity>
+        <activity
+            android:name="ca.ualberta.lard.EditCommentActivity"
+            android:label="@string/title_activity_edit_comment" >
+        </activity>
     </application>
 
 </manifest>

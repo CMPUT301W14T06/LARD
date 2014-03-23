@@ -227,14 +227,25 @@ public class Comment {
 	 * @return true or false
 	 */
 	public boolean isLocal(Context context) {
-		CommentRequest req = new CommentRequest(1);
-		req.setId(this.id);
-		ArrayList<Comment> results = DataModel.retrieveComments(req);
-		if (results == null) {
-			// We should never be in here?
+		return DataModel.isLocal(this, context);
+	}
+	
+	/**
+	 * Checks whether the id's of 2 comments are the same. This is
+	 * used by DataModel to decide if a comment has been saved locally
+	 * but might have had it's fields edited.
+	 * @param comment
+	 * @return true if IDs are same, false otherwise
+	 */
+	public boolean isCommentIdEqual(Comment comment) {
+		if (this == comment)
+			return true;
+		if (comment == null)
+			return false;
+		if (comment.getId() != this.getId()) {
 			return false;
 		}
-		return DataModel.isLocal(results.get(0), context);
+		return true;
 	}
 }
 
