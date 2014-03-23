@@ -1,7 +1,5 @@
 package ca.ualberta.lard.test;
 
-import java.util.Random;
-
 import ca.ualberta.lard.MainActivity;
 import ca.ualberta.lard.model.Picture;
 import android.test.ActivityInstrumentationTestCase2;
