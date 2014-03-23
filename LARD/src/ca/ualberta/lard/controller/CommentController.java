@@ -12,7 +12,6 @@ import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
 import ca.ualberta.lard.model.GeoLocation;
-import ca.ualberta.lard.model.SortRequest;
 
 /**
  * 
@@ -70,54 +69,59 @@ public class CommentController {
 	}
 	
 	/**
-	 * Sorts a given list of comments by a specified sort order. This information is contained
-	 * in the SortRequest. Returns the sorted comments.
-	 * @param req A SortRequest that contains the comments to be sorted and how to sort them.
-	 * @return Comments in the sorted order
+	 * Sorts a given list of comments by creation date. If an empty list is provided as the
+	 * list to be sorted, an empty list is returned.
+	 * @param comments The list of comments to be sorted
+	 * @return The list of comments sorted by creation date
 	 */
-	public ArrayList<Comment> sort(SortRequest req) {
-		ArrayList<Comment> comments = req.getComments();
-		
-		if (req.isByCreationDate()) {
-			Collections.sort(comments, new CreationDateComparator());
+	public ArrayList<Comment> sortByCreationDate(ArrayList<Comment> comments) {
+		// Check the list has at least 2 elements
+		if (comments.size() < 2) {
+			return comments;
 		}
-		else if (req.isByCurrentLocation()) {
-			// Get the current location of the device
-			GeoLocation curLoc = new GeoLocation(context);
-			
-			// Create a list of (distance from current location, comment) pairs.
-			ArrayList<Pair<Double, Comment>> pairs = new ArrayList<Pair<Double, Comment>>();
-			for(Comment comment: comments) {
-				Double distance = curLoc.distanceFrom(comment.getLocation());
-				pairs.add(Pair.create(distance, comment));
-			}
-			Collections.sort(pairs, new LocationComparator());
-			comments = new ArrayList<Comment>();
-			for(Pair<Double, Comment> pair: pairs) {
-				comments.add(pair.second);
-			}
-		}
-		else if (req.isBySpecificLocation()) {
-			// Create a list of (distance from current location, comment) pairs.
-			ArrayList<Pair<Double, Comment>> pairs = new ArrayList<Pair<Double, Comment>>();
-			for(Comment comment: comments) {
-				Double distance = req.getSpecificLocation().distanceFrom(comment.getLocation());
-				pairs.add(Pair.create(distance, comment));
-			}
-			Collections.sort(pairs, new LocationComparator());
-			comments = new ArrayList<Comment>();
-			for(Pair<Double, Comment> pair: pairs) {
-				comments.add(pair.second);
-			}
-		}
-		else if (req.isByPicturesFirst()) {
-			Collections.sort(comments, new PictureComparator());
-		}
-		else {
-			// Pass, if we get in here it means no sorting option was selected.
-			// Return the list as is.
-		}
+		Collections.sort(comments, new CreationDateComparator());
 		return comments;
+	}
+	
+	/**
+	 * Sorts a given list of comments by pictures first. If an empty list is provided as the
+	 * list to be sorted, an empty list is returned.
+	 * @param comments The list of comments to be sorted.
+	 * @return The list of comments sorted by pictures first.
+	 */
+	public ArrayList<Comment> sortPicturesFirst(ArrayList<Comment> comments) {
+		// Check the list has at least 2 elements
+		if (comments.size() < 2) {
+			return comments;
+		}
+		Collections.sort(comments, new PictureComparator());
+		return comments;
+	}
+	
+	/**
+	 * Sorts a given list of comments by a specified location. If an empty list is provided as the
+	 * list to be sorted, an empty list is returned.
+	 * @param comments The list of comments to be sorted
+	 * @param location The location to sort in proximity to
+	 * @return The list of comments sorted by provided location
+	 */
+	public ArrayList<Comment> sortByLocation(ArrayList<Comment> comments, GeoLocation location) {
+		// Check the list has at least 2 elements
+		if (comments.size() < 2) {
+			return comments;
+		}
+		// Create a list of (distance from current location, comment) pairs.
+		ArrayList<Pair<Double, Comment>> pairs = new ArrayList<Pair<Double, Comment>>();
+		for(Comment comment: comments) {
+			Double distance = location.distanceFrom(comment.getLocation());
+			pairs.add(Pair.create(distance, comment));
+		}
+		Collections.sort(pairs, new LocationComparator());
+		comments = new ArrayList<Comment>();
+		for(Pair<Double, Comment> pair: pairs) {
+			comments.add(pair.second);
+		}
+		return comments;	
 	}
 	
 	public ArrayList<Comment> get() {

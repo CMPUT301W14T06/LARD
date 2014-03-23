@@ -3,6 +3,7 @@ package ca.ualberta.lard.test;
 import java.util.Date;
 
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.InstrumentationTestCase;
@@ -35,11 +36,10 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-        setActivityInitialTouchMode(true);
         
         // Get the id of the comment
-		comment = new Comment("This is a comment", getActivity());
+        Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
+		comment = new Comment("This is a comment", context);
 		id = comment.getId();
 		
 		// Pass the activity the id
@@ -48,7 +48,6 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		
 		setActivityIntent(intent);
 		activity = getActivity();
-		instru = getInstrumentation();
 	}
 	
 	/**
