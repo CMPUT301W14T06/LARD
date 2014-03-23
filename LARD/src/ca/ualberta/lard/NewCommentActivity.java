@@ -3,6 +3,8 @@ package ca.ualberta.lard;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
@@ -152,32 +154,14 @@ public class NewCommentActivity extends Activity {
 	 * @param v A View
 	 */
 	public void onClickAttachButton(View v) {
+		// TODO: REMOVE
 		// for taking pics
         /*Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
         startActivityForResult(intent, CAMERA_REQUEST_ID);*/
-        
-		// original
-		/*Intent intent = new Intent(Intent.ACTION_PICK);
-		intent.setType("image/*");
-		startActivityForResult(intent, CAMERA_REQUEST_ID);*/
 		
-		// better?
-		/*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        startActivityForResult(intent, CAMERA_REQUEST_ID);*/
-        
-        /*Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,
-                "Select Picture"), CAMERA_REQUEST_ID);*/
-		
-		/*Intent intent = new Intent(Intent.ACTION_GET_CONTENT, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), CAMERA_REQUEST_ID);*/
-		
-		// best?
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, CAMERA_REQUEST_ID);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), CAMERA_REQUEST_ID);
 	}
 	
 	/**
@@ -210,22 +194,20 @@ public class NewCommentActivity extends Activity {
 	        		Uri uri = data.getData();
 	        		
 					try {
-						String file = getPath(this, uri);
-		        		Bitmap bitmap = BitmapFactory.decodeFile(file);
-		        		
-						/*InputStream is = getContentResolver().openInputStream(uri);
+						// TODO: REMOVE
+						/*String file = getPath(this, uri);
+		        		Bitmap bitmap = BitmapFactory.decodeFile(file);*/
+						InputStream is = getContentResolver().openInputStream(uri);
 						Bitmap bitmap = BitmapFactory.decodeStream(is);
-		                is.close();*/
-		        		
+		                is.close();
+		                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
 		                ByteArrayOutputStream os = new ByteArrayOutputStream();
-		                bitmap.compress(Bitmap.CompressFormat.JPEG , 80, os);
+		                scaled.compress(Bitmap.CompressFormat.JPEG , 80, os);
 		                picture.setImageByte(os.toByteArray());
 		                os.close();
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 	            }
@@ -238,6 +220,8 @@ public class NewCommentActivity extends Activity {
 	    }
 	}
 
+	// TODO: REMOVE
+	// Remeber to de-credit paulburke on wiki
 	/**
 	 * Get a file path from a Content Uri.
 	 * <p>
