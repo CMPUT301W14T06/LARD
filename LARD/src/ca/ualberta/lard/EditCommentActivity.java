@@ -102,8 +102,10 @@ public class EditCommentActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		// Set current author and body text
+		// TODO: wont these overwrite the the editview fields? if a change is made to the editviews then onResume is called the changes will be overwriten
 		curBodyText = comment.getBodyText();
 		curUsername = comment.getAuthor();
+		// TODO: this will overwrite a newly edited location in the view
 		curLocation = comment.getLocation();
 		
 		// Display the comments current author, body text, location, picture
@@ -112,6 +114,8 @@ public class EditCommentActivity extends Activity {
 		editLatView.setText("Current Latitude: "+String.valueOf(curLocation.getLatitude()));
 		editLonView.setText("Current Longitude: "+String.valueOf(curLocation.getLongitude()));
 		
+		// TODO: if a comment had no picture but then had one attached throught editing, this check would not catch it.
+		//       the newly added pic would not be displayed
 		// Check if there is a picture attached to the comment to display.
 		if (comment.hasPicture()) {
 			picture = comment.getPicture();
@@ -165,10 +169,11 @@ public class EditCommentActivity extends Activity {
 		}
 		
 		// Set Picture only there is one.
-		if (picture != null) {
+		if (!picture.isNull()) {
 			comment.setPicture(picture);
 		}
 		
+		// TODO: activities should not directly access models. use CommentController (i dont currently know how to do this)
 		// Check if the comment was saved locally
 		if (comment.isLocal(getBaseContext())) {
 			// TODO interact with the comment controller somehow here?
@@ -218,6 +223,7 @@ public class EditCommentActivity extends Activity {
 	        	newLocation = GeoLocation.fromJSON(locationData);
 	        	
 	        	// Display the new coordinates
+	        	// TODO: This is not needed. onActivityResult is called before onResume. Setting these values in onResume is good enough
 	    		editLatView.setText("Current Latitude: "+String.valueOf(curLocation.getLatitude()));
 	    		editLonView.setText("Current Longitude: "+String.valueOf(curLocation.getLongitude()));
 	        }

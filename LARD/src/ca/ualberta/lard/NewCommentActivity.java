@@ -130,13 +130,11 @@ public class NewCommentActivity extends Activity {
 			comment.setAuthor(usernameText.getText().toString(), this);
 		}
 		
-		// Set a location for the comment if you can
-		if (location != null) {
-			comment.setLocation(location);
-		}
+		// Set a location for the comment
+		comment.setLocation(location);
 		
 		// Set a picture for the comment if you can
-		if (picture != null) {
+		if (!picture.isNull()) {
 			comment.setPicture(picture);
 		}
 		
