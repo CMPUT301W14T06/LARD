@@ -154,9 +154,9 @@ public class CommentActivity extends Activity {
 	
 	/**
 	 * Deals with items in the action bar. When the heart icon is clicked the parent comment
-	 * is saved locally and added to favourites. When the floppy disk icon is clicked the parent
-	 * comment is saved locally. When the reply icon is clicked NewCommentActivity is opened
-	 * and is passed the id of the parent comment.
+	 * and it's children is saved locally and added to favourites. When the floppy disk icon 
+	 * is clicked the parent comment is saved locally. When the reply icon is clicked NewCommentActivity
+	 * is opened and is passed the id of the parent comment.
 	 * @param item A MenuItem
 	 */
     @Override
@@ -164,11 +164,16 @@ public class CommentActivity extends Activity {
         switch (item.getItemId()) {
         case R.id.action_fav:
         	Toast.makeText(getApplicationContext(), "Comment Favourited.", Toast.LENGTH_SHORT).show();
-        	DataModel.saveLocal(comment, true, this);
+        	// Save all the comments replies as well
+        	ArrayList<Comment> favChildren = comment.children();
+        	favChildren.add(comment);
+        	DataModel.saveChildrenLocal(favChildren, getBaseContext());
             return true;
         case R.id.action_save:
-        	DataModel.saveLocal(comment, true, this);
         	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
+        	if (!comment.isLocal(getBaseContext())) {
+            	DataModel.saveLocal(comment, true, this); 
+        	}
             return true;
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
