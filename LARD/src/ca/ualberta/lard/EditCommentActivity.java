@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +41,6 @@ public class EditCommentActivity extends Activity {
 	private ImageView editPictureView;
 	private TextView editLatView;
 	private TextView editLonView;
-	private Button saveButton;
-	private Button locationButton;
-	private Button pictureButton;
 	private String commentId;
 	private Comment comment;
 	private String curUsername;
@@ -71,9 +66,6 @@ public class EditCommentActivity extends Activity {
         editPictureView = (ImageView)findViewById(R.id.edit_pic_view);
         editLatView = (TextView)findViewById(R.id.edit_lat_textview);
         editLonView = (TextView)findViewById(R.id.edit_long_textview);
-        saveButton = (Button)findViewById(R.id.edit_save_button);
-        locationButton = (Button)findViewById(R.id.edit_location_button);
-        pictureButton = (Button)findViewById(R.id.edit_pic_button);
         
 	    // Get the id of the comment from intent
 	    Intent intent = getIntent();
@@ -99,26 +91,26 @@ public class EditCommentActivity extends Activity {
 	}
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart(){
+		super.onStart();
 		// Set current author and body text
-		// TODO: wont these overwrite the the editview fields? if a change is made to the editviews then onResume is called the changes will be overwriten
 		curBodyText = comment.getBodyText();
 		curUsername = comment.getAuthor();
-		// TODO: this will overwrite a newly edited location in the view
 		curLocation = comment.getLocation();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		
-		// Display the comments current author, body text, location, picture
+		// Always update display to current author, body text, location
 		editUsernameView.setText(curUsername);
 		editBodyTextView.setText(curBodyText);
-		editLatView.setText("Current Latitude: "+String.valueOf(curLocation.getLatitude()));
-		editLonView.setText("Current Longitude: "+String.valueOf(curLocation.getLongitude()));
+		editLatView.setText("Current Latitude: "+String.valueOf(comment.getLocation().getLatitude()));
+		editLonView.setText("Current Longitude: "+String.valueOf(comment.getLocation().getLongitude()));
 		
-		// TODO: if a comment had no picture but then had one attached throught editing, this check would not catch it.
-		//       the newly added pic would not be displayed
-		// Check if there is a picture attached to the comment to display.
-		if (comment.hasPicture()) {
-			picture = comment.getPicture();
+		// Should always check if there is a picture to display
+		if (!picture.isNull()) {
 			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
 			if (bm != null) {
 				editPictureView.setImageBitmap(bm);
@@ -127,9 +119,7 @@ public class EditCommentActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "Picture Bitmap was null.", Toast.LENGTH_SHORT).show();
 			}
 		}
-		else {
-			picture = null;
-		}
+
 	}
 	
 	/**
@@ -221,11 +211,6 @@ public class EditCommentActivity extends Activity {
 	        if (resultCode == RESULT_OK) {
 	        	String locationData = data.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
 	        	newLocation = GeoLocation.fromJSON(locationData);
-	        	
-	        	// Display the new coordinates
-	        	// TODO: This is not needed. onActivityResult is called before onResume. Setting these values in onResume is good enough
-	    		editLatView.setText("Current Latitude: "+String.valueOf(curLocation.getLatitude()));
-	    		editLonView.setText("Current Longitude: "+String.valueOf(curLocation.getLongitude()));
 	        }
 	    }
 	    if (requestCode == CAMERA_REQUEST_ID) {
