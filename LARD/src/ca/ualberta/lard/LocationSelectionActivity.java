@@ -7,13 +7,16 @@ import ca.ualberta.lard.model.GeoLocationMap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.Menu;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -50,6 +53,8 @@ public class LocationSelectionActivity extends Activity {
 		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
 		
+		
+		
 		// Gets a list of locations from the GeoLocation map then converts it to a string array
 		GeoLocationMap geoMap = new GeoLocationMap();
 		Set<String> nameSet = geoMap.getMap().keySet();
@@ -64,6 +69,10 @@ public class LocationSelectionActivity extends Activity {
 		    	// Gets the name of the clicks item	
 		        String string = (spinner.getItemAtPosition(position)).toString();
 		        slectedLocationString = string;
+		        
+		        //sets text color of spinner to white
+				TextView textView = (TextView) spinner.getSelectedView();
+				textView.setTextColor(Color.WHITE);
 		    }
 
 		    
