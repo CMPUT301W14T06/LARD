@@ -67,7 +67,11 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	 * Tests that the Datamodel is able to check if a comment is saved locally.
 	 */
 	public void testIsLocal() {
-		fail();
+		//creates a comment then tests to see if it is saved local
+		Comment localComment = new Comment("Super comment wow, such comment amaze", getActivity());
+		DataModel.save(localComment);
+		boolean isLocal = DataModel.isLocal(localComment, getActivity());
+		assertTrue("Comment should of been saved locally", isLocal);
 	}
 	
 	/**
