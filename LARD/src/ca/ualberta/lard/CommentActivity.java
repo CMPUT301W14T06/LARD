@@ -1,6 +1,7 @@
 package ca.ualberta.lard;
 
 import java.util.ArrayList;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
-import ca.ualberta.lard.model.DataModel;
 
 /**
  * CommentActivity is called when a comment is selected.

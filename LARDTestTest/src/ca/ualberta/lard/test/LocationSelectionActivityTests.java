@@ -1,8 +1,14 @@
 package ca.ualberta.lard.test;
 
+import ca.ualberta.lard.EditCommentActivity;
 import ca.ualberta.lard.LocationSelectionActivity;
+import ca.ualberta.lard.R;
+import ca.ualberta.lard.model.Comment;
+import android.content.Context;
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 
 /**
  * JUnit tests for LocationSettingsActivity. Tests widgets like the buttons and
@@ -11,29 +17,38 @@ import android.widget.RadioButton;
  *
  */
 public class LocationSelectionActivityTests extends ActivityInstrumentationTestCase2<LocationSelectionActivity> {
-
+	private Intent intent;
+	private LocationSelectionActivity activity;
+	private RadioButton gpsLocationRadioButton;
+	private RadioButton customLocationRadioButton;
+	private Spinner spinner;
+	
 	public LocationSelectionActivityTests() {
 		super(LocationSelectionActivity.class);
 	}
 
+	protected void setUp() throws Exception {
+		super.setUp();
+		Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
+		activity = this.getActivity();
+		
+		gpsLocationRadioButton = (RadioButton) activity.findViewById(R.id.gpsRadioButton);
+		customLocationRadioButton = (RadioButton) activity.findViewById(R.id.selectLocationRadioButton);
+		spinner = (Spinner) activity.findViewById(R.id.locationSpinner);
+	}
+	
 	/**
-	 * Tests to see if RadioButtons are clickable
+	 * Tests to see if RadioButtons are null
 	 */
 	public void testRadioButtons() {
-		fail();
+		assertNotNull(gpsLocationRadioButton);
+		assertNotNull(customLocationRadioButton);
 	}
 	
 	/**
-	 * Tests to see if the Spinner is clickable
+	 * Tests to see if the Spinner is not null
 	 */
 	public void testSpinner() {
-		fail();
-	}
-	
-	/**
-	 * Tests to see if LocationSettingsActivity can create a Geolocation
-	 */
-	public void testGeoLocationConstructor() {
-		fail();
+		assertNotNull(spinner);
 	}
 }
