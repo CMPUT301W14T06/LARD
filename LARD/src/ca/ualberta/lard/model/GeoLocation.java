@@ -20,33 +20,6 @@ public class GeoLocation {
 	
 	public ArrayList<GeoLocation> locations;
 	
-	/**
-	 * Enumeration of preset coordinates for buildings on campus.
-	 * This is for GeoLocationActivity so that the user can choose easily 
-	 * choose a location.
-	 * @author Troy Pavlek
-	 *
-	 */
-	public static enum LOCATIONS {
-		CAB (53.526572, -113.524734), 
-		CAMERON (53.52677, -113.523672), 
-		CCIS (53.528243, -113.525657), 
-		CSC (53.526808, -113.527127), 
-		DEWEYS (53.526049, -113.523318), 
-		ETLC (53.527382,  -113.529509), 
-		HUB (53.526425, -113.520443), 
-		RUTHERFORD (53.525896, -113.52172), 
-		STJOSPEH (53.524486, -113.524541), 
-		SUB (53.525322, -113.52732), 
-		TORY (53.528185,  -113.521462);
-		
-		private double lat;
-		private double lon;
-		private LOCATIONS(double latt, double lonn) {
-			lat = latt;
-			lon = lonn;
-		}
-	}
 	
 	/**
 	 * Creates a GeoLocation using the position of the device.
@@ -60,24 +33,12 @@ public class GeoLocation {
 		}
 		// Can't find location. They're in compsci
 		if (location == null) {
-			this.lon = GeoLocation.LOCATIONS.CSC.lon;
-			this.lat = GeoLocation.LOCATIONS.CSC.lat;
+			this.lon = 53.526808 ;
+			this.lat = -113.527127;
 		} else {
 			this.lon = location.getLongitude();
 			this.lat = location.getLatitude();
 		}
-	}
-	
-	/**
-	 * Constructor for instantiating default locations.
-	 * <p>
-	 * Example Usage: GeoLoation loc1 = new GeoLocation(GeoLocation.CSC);
-	 * </p>
-	 * @param pointNo
-	 */
-	public GeoLocation(GeoLocation.LOCATIONS pointNo) {
-		this.lat = pointNo.lat;
-		this.lon = pointNo.lon;
 	}
 	
 	/**
