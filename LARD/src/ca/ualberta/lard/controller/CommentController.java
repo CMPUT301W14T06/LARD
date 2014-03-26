@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Pair;
 import ca.ualberta.lard.comparator.CreationDateComparator;
 import ca.ualberta.lard.comparator.LocationComparator;
@@ -11,6 +12,7 @@ import ca.ualberta.lard.comparator.PictureComparator;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
+import ca.ualberta.lard.model.Favourites;
 import ca.ualberta.lard.model.GeoLocation;
 
 /**
@@ -20,7 +22,7 @@ import ca.ualberta.lard.model.GeoLocation;
  */
 public class CommentController {
 	@SuppressWarnings("unused") // TODO: Remove
-	private static Context context; // Needed for saveLocal
+	private Context context; // Needed for saveLocal
 	private ArrayList<Comment> buffer;
 	
 	/**
@@ -38,7 +40,7 @@ public class CommentController {
 	public CommentController(Context context) {
 		CommentRequest req = new CommentRequest(10); //TODO pull this from configuration.
 		req.setLocation(new GeoLocation(context));
-		CommentController.context = context;
+		this.context = context;
 		init(req);
 	}
 	
@@ -46,7 +48,7 @@ public class CommentController {
 	 * 
 	 * @param req
 	 */
-	public CommentController(CommentRequest req) {
+	public CommentController(CommentRequest req, Context context) {
 		init(req);
 	}
 	
@@ -143,11 +145,21 @@ public class CommentController {
 	}
 	
 	public void favourite(Comment comment) {
-		// Todo fill out method
+		Favourites favourites = this.getFavourites();
+		favourites.addFavourite(comment.getId());
+		DataModel.saveLocal(comment, true, this.context, true);
 	}
 	
 	public void paper(Comment comment) {
 		//Todo fill out method
+	}
+	
+	public Favourites getFavourites() {
+		SharedPreferences prefs = context.getSharedPreferences(Favourites.PREFS_NAME, Context.MODE_PRIVATE);
+		if (prefs == null) {
+			System.err.println("Unable to retrieve shared preferences");
+		}
+		return new Favourites(prefs);
 	}
 
 }

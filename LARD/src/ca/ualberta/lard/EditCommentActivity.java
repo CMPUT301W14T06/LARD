@@ -82,7 +82,7 @@ public class EditCommentActivity extends Activity {
 	    commentRequest.setId(commentId);
 	    
 	    // Check a comment was received 
-	    CommentController commentController = new CommentController(commentRequest);
+	    CommentController commentController = new CommentController(commentRequest, this);
     	if (commentController.any()) {
     		comment = commentController.getSingle();
     	}
@@ -175,7 +175,6 @@ public class EditCommentActivity extends Activity {
 		// Check if the comment was saved locally
 		if (comment.isLocal(getBaseContext())) {
 			// TODO interact with the comment controller somehow here?
-			DataModel.saveLocal(comment, true, getBaseContext());
 		}
 		DataModel.save(comment);
 		

@@ -75,7 +75,7 @@ public class CommentActivity extends Activity {
 	    commentRequest.setId(commentId);
 	    
 	    // Check a comment was received 
-	    commentController = new CommentController(commentRequest);
+	    commentController = new CommentController(commentRequest, this);
     	if (!commentController.isEmpty()) {
     		comment = commentController.getSingle();
     	}

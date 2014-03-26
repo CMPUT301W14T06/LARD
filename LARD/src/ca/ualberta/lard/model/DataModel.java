@@ -42,7 +42,7 @@ public class DataModel {
 	 * @param comment Comment The comment object that is to be saved to disk.
 	 * @param persisitent boolean Is this save explicit or is it to be put in the upload queue 
 	 */
-	public static void saveLocal(Comment comment, boolean persistent, Context context) {
+	public static void saveLocal(Comment comment, boolean persistent, Context context, boolean withChildren) {
 		// Calls the saveLocal override using ArrayList
 		ArrayList<Comment> comments = new ArrayList<Comment>();
 		comments.add(comment);
@@ -187,7 +187,9 @@ public class DataModel {
 	public static boolean isLocal(Comment comment, Context context) {
 		ArrayList<Comment> localComments = readLocal(context);
 		for (Comment c: localComments) {
-			return c.equals(comment);
+			if(c.equals(comment)) {
+				return true;
+			}
 		}
 		return false;
 	}

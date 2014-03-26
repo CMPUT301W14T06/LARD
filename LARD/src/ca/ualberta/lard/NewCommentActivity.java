@@ -237,7 +237,7 @@ public class NewCommentActivity extends Activity {
 	private class GetParent extends AsyncTask<CommentRequest, Integer, String> {
 		@Override
 		protected String doInBackground(CommentRequest... params) {
-			CommentController commentController = new CommentController(params[0]);
+			CommentController commentController = new CommentController(params[0], getBaseContext());
 			if (commentController.any()) {
 				Comment comment = commentController.getSingle();
 				return comment.getAuthor().toString();
