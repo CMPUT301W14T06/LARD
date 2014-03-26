@@ -74,6 +74,8 @@ public class EditCommentActivity extends Activity {
         	Toast.makeText(getApplicationContext(), "Parent id was null.", Toast.LENGTH_SHORT).show();
         	finish();
 	    }
+	    
+	    newLocation = null;
 
 	    // Get the comment by passing the id to the controller
 	    CommentRequest commentRequest = new CommentRequest(1);
@@ -97,17 +99,23 @@ public class EditCommentActivity extends Activity {
 		curBodyText = comment.getBodyText();
 		curUsername = comment.getAuthor();
 		curLocation = comment.getLocation();
+		
+		editUsernameView.setText(curUsername);
+		editBodyTextView.setText(curBodyText);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		// Always update display to current author, body text, location
-		editUsernameView.setText(curUsername);
-		editBodyTextView.setText(curBodyText);
-		editLatView.setText("Current Latitude: "+String.valueOf(comment.getLocation().getLatitude()));
-		editLonView.setText("Current Longitude: "+String.valueOf(comment.getLocation().getLongitude()));
+		if (newLocation != null) {
+			editLatView.setText("Current Latitude: "+String.valueOf(newLocation.getLatitude()));
+			editLonView.setText("Current Longitude: "+String.valueOf(newLocation.getLongitude()));
+		}
+		else {
+			editLatView.setText("Current Latitude: "+String.valueOf(curLocation.getLatitude()));
+			editLonView.setText("Current Longitude: "+String.valueOf(curLocation.getLongitude()));
+		}
 		
 		// Should always check if there is a picture to display
 		if (!picture.isNull()) {
