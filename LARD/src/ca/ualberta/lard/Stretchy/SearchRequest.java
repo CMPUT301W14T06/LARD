@@ -1,6 +1,7 @@
 package ca.ualberta.lard.Stretchy;
 
 import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.GeoLocation;
 
 /**
  * Elastic search uses specific string literal formatting. SearchRequest
@@ -13,6 +14,7 @@ public class SearchRequest {
 	private int _size;
 	private String bodyText;
 	private String parent;
+	private GeoLocation location;
 	
 	public SearchRequest(int size) {
 		this._size = size;
@@ -22,6 +24,7 @@ public class SearchRequest {
 		this._size = req.size();
 		this.bodyText = req.getBodyText();
 		this.parent = req.getParentId();
+		this.location = req.getLocation();
 	}
 	
 	/**
@@ -36,8 +39,12 @@ public class SearchRequest {
 			+ "\"query\" : { ";
 		if (!this.anyQuery()) {
 			ret += "\"match_all\" : { } ";
-		} else {
+		} else if (this.bodyText != null) {
 			ret += this.bodyString();
+		} else if (this.parent != null) {
+			ret += this.parentString();
+		} else if (this.location != null) {
+			ret += this.locationString();
 		}
 
 		ret += "} ";
@@ -70,8 +77,23 @@ public class SearchRequest {
 	public String bodyString() {
 		if (this.bodyText != null && !this.bodyText.isEmpty()) {
 			return "\"term\" : { \"bodyText\" : \"" + this.bodyText + "\" } "; 
-		} else if (this.parent != null && !this.parent.isEmpty()) {
+		}
+		return "";
+	}
+	
+	public String parentString() {
+		if (this.parent != null && !this.parent.isEmpty()) {
 			return "\"query_string\" : { \"query\" : \"" + this.parent + "\" , \"fields\": [\"parent\"] } ";
+		}
+		return "";
+	}
+	
+	public String locationString() {
+		if (this.location != null) {
+			return "{ \"sort\" : [ { \"_geo_distance\" : { \"comment.location\" : { \"lat\" : " +
+					Double.toString(location.getLatitude()) + " , \"lon\" : " +
+					Double.toString(location.getLongitude()) +
+					", \"order\" : \"asc\", \"unit\" : \"km\" } } ], \"query\" : { \"match_all\" : {} }}";
 		}
 		return "";
 	}
