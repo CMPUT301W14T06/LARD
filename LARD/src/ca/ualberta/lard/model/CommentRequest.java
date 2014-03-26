@@ -20,6 +20,10 @@ public class CommentRequest {
 	@SuppressWarnings("unused") // TODO: Remove
 	private String parentId;
 	
+	public String getParentId() {
+		return parentId;
+	}
+
 	/**
 	 * If the location property is set, Comments nearest this location will be returned over those further from this location.
 	 */

@@ -68,7 +68,7 @@ public class NewCommentActivity extends Activity {
 
 	    	// request the comment that has an id equal to the current pid
 	    	CommentRequest req = new CommentRequest(1);
-	    	req.setParentId(pid);
+	    	req.setId(pid);
 	    	GetParent getParent = new GetParent();
 	    	getParent.execute(req);
 	    }

@@ -21,6 +21,7 @@ public class SearchRequest {
 	public SearchRequest(CommentRequest req) {
 		this._size = req.size();
 		this.bodyText = req.getBodyText();
+		this.parent = req.getParentId();
 	}
 	
 	/**
@@ -69,6 +70,8 @@ public class SearchRequest {
 	public String bodyString() {
 		if (this.bodyText != null && !this.bodyText.isEmpty()) {
 			return "\"term\" : { \"bodyText\" : \"" + this.bodyText + "\" } "; 
+		} else if (this.parent != null && !this.parent.isEmpty()) {
+			return "\"query_string\" : { \"query\" : \"" + this.parent + "\" , \"fields\": [\"parent\"] } ";
 		}
 		return "";
 	}
