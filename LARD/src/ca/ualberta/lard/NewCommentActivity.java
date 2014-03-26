@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
@@ -14,9 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.Menu;
@@ -31,8 +28,8 @@ import android.widget.Toast;
  * This activity is used to create a new comment (Either top level or reply).
  * The new comment can be given a picture or a location (from LocationSelectionActivity).
  * A valid new comment must have some body text. Everything else is optional.
- *
- * @param  PARENT_ID	Expects the id of the parent comment as a String
+ * <p>
+ * PARENT_ID:	Expects the id of the parent comment as a String
  * @author Dylan
  */
 
@@ -193,9 +190,6 @@ public class NewCommentActivity extends Activity {
 	        		Uri uri = data.getData();
 	        		
 					try {
-						// TODO: REMOVE
-						/*String file = getPath(this, uri);
-		        		Bitmap bitmap = BitmapFactory.decodeFile(file);*/
 						InputStream is = getContentResolver().openInputStream(uri);
 						Bitmap bitmap = BitmapFactory.decodeStream(is);
 		                is.close();
@@ -217,42 +211,6 @@ public class NewCommentActivity extends Activity {
 	            }
 	        }
 	    }
-	}
-
-	// TODO: REMOVE
-	// Remeber to de-credit paulburke on wiki
-	/**
-	 * Get a file path from a Content Uri.
-	 * <p>
-	 * MAJOR EDITS WERE MADE TO THIS FUNCTION. 
-	 * ORIGINAL AUTHOR was paulburke. 
-	 * ORIGINAL FUNCTION NAME WAS getDataColumn. 
-	 * <p>
-	 * Source: https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
-	 *
-	 * @param context The context.
-	 * @param uri The Uri to query.
-	 * @author paulburke
-	 */
-	public static String getPath(final Context context, Uri uri) {
-
-	    Cursor cursor = null;
-	    final String column = "_data";
-	    final String[] projection = {
-	            column
-	    };
-
-	    try {
-	        cursor = context.getContentResolver().query(uri, projection, null, null, null);
-	        if (cursor != null && cursor.moveToFirst()) {
-	            final int column_index = cursor.getColumnIndexOrThrow(column);
-	            return cursor.getString(column_index);
-	        }
-	    } finally {
-	        if (cursor != null)
-	            cursor.close();
-	    }
-	    return null;
 	}
 
 	/**
