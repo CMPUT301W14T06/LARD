@@ -30,6 +30,10 @@ public class CommentRequest {
 	@SuppressWarnings("unused") // TODO: Remove
 	private GeoLocation location;
 	
+	public GeoLocation getLocation() {
+		return location;
+	}
+
 	/**
 	 * Do we only want to search threads, or are replies acceptable also?
 	 */
