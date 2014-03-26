@@ -4,24 +4,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import ca.ualberta.lard.controller.CommentController;
-import ca.ualberta.lard.model.Comment;
-import ca.ualberta.lard.model.CommentRequest;
-import ca.ualberta.lard.model.GeoLocation;
-import ca.ualberta.lard.model.Picture;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import ca.ualberta.lard.controller.CommentController;
+import ca.ualberta.lard.model.Comment;
+import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.GeoLocation;
+import ca.ualberta.lard.model.Picture;
 
 /**
  * NewCommentActivity is called when a CreateComment button is pushed (Either from MainActivity or CommentActivity).
@@ -34,11 +35,13 @@ import android.widget.Toast;
  */
 
 public class NewCommentActivity extends Activity {
-	private String pid;
+	private String id;
 	private Picture picture;
 	private GeoLocation location;
 	private Comment comment;
 	private TextView lardTextView;
+	private String caller;
+	public Comment editComment;
 	
 	// These probably dont need to be public, may change in future
 	public static final int LOCATION_REQUEST_ID = 1;
@@ -46,7 +49,10 @@ public class NewCommentActivity extends Activity {
 	
 	// For getting the id of the parent comment of this new comment
 	public static final String PARENT_ID = "PID";
-
+	// Specify if the comment is a reply or a new comment;
+	// Set flag to NEW or EDIT.
+	public static final String FLAG = "FLAG";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,16 +64,40 @@ public class NewCommentActivity extends Activity {
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
 		Intent intent = getIntent();
-	    pid = intent.getStringExtra(PARENT_ID);
-	    
-	    if (pid != null) {
+	    id = intent.getStringExtra(PARENT_ID);
+	    caller = intent.getStringExtra(FLAG);
+
+	    if (id != null && caller == "NEW") {
 	    	lardTextView = (TextView) findViewById(R.id.lardTextView);
 
 	    	// request the comment that has an id equal to the current pid
 	    	CommentRequest req = new CommentRequest(1);
-	    	req.setId(pid);
+	    	req.setId(id);
 	    	GetParent getParent = new GetParent();
 	    	getParent.execute(req);
+	    }
+	    else if (id == null && caller == "NEW") {
+	    	// this is fine
+	    }
+	    else if (id != null && caller == "EDIT") {
+	    	CommentRequest req = new CommentRequest(1);
+	    	req.setId(id);
+	    	GetComment getComment = new GetComment();
+	    	getComment.execute(req);
+	    	
+			TextView usernameTextView = (TextView) findViewById(R.id.usernameEditText);
+			TextView bodtTextTextView = (TextView) findViewById(R.id.commentEditText);	
+			
+			// Display the comments current information
+			usernameTextView.setText(editComment.getAuthor());
+			bodtTextTextView.setText(editComment.getBodyText());
+			location.setLatitude(editComment.getLocation().getLatitude());
+			location.setLongitude(editComment.getLocation().getLongitude());
+			picture = editComment.getPicture();
+	    }
+	    else {
+	    	// If we get here the flag was sent incorrectly or id was null and flag was EDIT
+	    	finish();
 	    }
 	}
 
@@ -114,11 +144,11 @@ public class NewCommentActivity extends Activity {
 		}
 
 		// Create the comment either with a pid or without
-		if (pid == null) {
+		if (id == null) {
 			comment = new Comment(commentText.getText().toString(), this);
 		}
 		else {
-			comment = new Comment(commentText.getText().toString(), pid, this);
+			comment = new Comment(commentText.getText().toString(), id, this);
 		}
 		
 		// Set an author for the comment if you can
@@ -217,7 +247,7 @@ public class NewCommentActivity extends Activity {
 	 * Returns the Parent ID of the comment as a string
 	 */
 	public String getPid() {
-		return pid;
+		return id;
 	}
 	
 	/**
@@ -238,7 +268,7 @@ public class NewCommentActivity extends Activity {
 		@Override
 		protected String doInBackground(CommentRequest... params) {
 			CommentController commentController = new CommentController(params[0]);
-			if (commentController.any()) {
+			if (commentController.isEmpty()) {
 				Comment comment = commentController.getSingle();
 				return comment.getAuthor().toString();
 			}
@@ -252,6 +282,23 @@ public class NewCommentActivity extends Activity {
 
 		protected void onPostExecute(String result) {
 			lardTextView.setText("Reply to: " + result);
+		}
+    }
+	
+	private class GetComment extends AsyncTask<CommentRequest, Integer, String> {
+		
+		@Override
+		protected String doInBackground(CommentRequest... params) {
+			CommentController commentController = new CommentController(params[0]);
+			if (commentController.isEmpty()) {
+				Comment comment = commentController.getSingle();
+				// Make a copy of the comment.
+				editComment = comment;
+				return "Successful!";
+			}
+			else {
+				return "Error! Parent comment not found!";
+			}
 		}
     }
 	

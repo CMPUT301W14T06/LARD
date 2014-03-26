@@ -1,11 +1,13 @@
 package ca.ualberta.lard.test;
 
+import android.annotation.SuppressLint;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ViewAsserts;
 import android.view.View;
+import android.widget.Button;
 import ca.ualberta.lard.CommentActivity;
 import ca.ualberta.lard.NewCommentActivity;
 import ca.ualberta.lard.model.Comment;
@@ -35,9 +37,11 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		super.setUp();
         
         // Get the id of the comment
-        Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
-		comment = new Comment("This is a comment", context);
-		id = comment.getId();
+        //Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
+		//comment = new Comment("This is a comment", context);
+		//id = comment.getId();
+		//DataModel.save(comment);
+		id = "1234";
 		
 		// Pass the activity the id
 		intent = new Intent();
@@ -71,6 +75,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	 */
 	public void testListViewIsVisable() throws Throwable {
 		View view = activity.getWindow().getDecorView();
+		
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.children_list));
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.parent_author));
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.parent_comment_body));
@@ -87,6 +92,8 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	public void testReply() throws Throwable {
 		// Get the reply button and click it
 	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_reply);
+	    assertNotNull("Reply button should not be null.", view);
+	    
 	    runTestOnUiThread(new Runnable() {
 	    	@Override
 	    	public void run() {
@@ -94,6 +101,17 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	    		view.performClick();
 	    	}
 	    });
+	    
+	    /*
+	      activity.runOnUiThread(new Runnable() {
+	          @SuppressLint("NewApi")
+			public void run() {
+		    		view.requestFocus();
+		    		//view.performClick();
+		    		view.callOnClick();
+	          }
+	      });
+	      */
 
 	    instru.waitForIdleSync();
 	    
@@ -108,13 +126,10 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	 * @throws Throwable
 	 */
 	public void testFavourites() throws Throwable {
-		// Fails automatically
-		fail();
-		
-		// TODO: Add the comment to the favourites list
-		
 		// Get the save button
-	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_fav);
+	    final Button view = (Button) activity.findViewById(ca.ualberta.lard.R.id.action_fav);
+	    assertNotNull("Reply favourite should not be null.", view);
+	    
 	    runTestOnUiThread(new Runnable() {
 	    	@Override
 	    	public void run() {
@@ -133,9 +148,11 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	 */
 	public void testSave() throws Throwable {	
 		assertFalse("Comment originally is not saved locally.", DataModel.isLocal(comment, activity.getBaseContext()));
-		
+	    
 		// Get the save button
 	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_save);
+	    assertNotNull("Save button should not be null.", view);
+	    
 	    runTestOnUiThread(new Runnable() {
 	    	@Override
 	    	public void run() {
@@ -145,8 +162,6 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	    });
 	    
 	    instru.waitForIdleSync();
-	    
-	    DataModel.saveLocal(comment, false, getActivity().getBaseContext());
 	    assertTrue("Comment should be saved locally", DataModel.isLocal(comment, activity.getBaseContext()));
 	}
 }

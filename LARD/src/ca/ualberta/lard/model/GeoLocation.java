@@ -60,6 +60,14 @@ public class GeoLocation {
 		return this.lon;
 	}
 	
+	public void setLatitude(double lat) {
+		this.lat = lat;
+	}
+	
+	public void setLongitude(double lon) {
+		this.lon = lon;
+	}
+	
 	/**
 	 * Finds the distance from current location to a specified GeoLocation.
 	 * 
