@@ -61,6 +61,7 @@ public class LocationSelectionActivity extends Activity {
 		String[] stringArray = Arrays.copyOf(nameSet.toArray(), nameSet.toArray().length, String[].class);
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, stringArray);
+		adapter.setDropDownViewResource(R.layout.spinner_item);
 		spinner.setAdapter(adapter);
 		
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
