@@ -71,18 +71,19 @@ public class DataModel {
 	 */
 	public static void saveChildrenLocal(ArrayList<Comment> children, Context context) {
 		ArrayList<Comment> comments = readLocal(context);
-		ArrayList<Comment> allComments = comments;
-		allComments.addAll(children);
 		
 		// Only want children that are not already saved locally.
 		for (Comment c: comments) {
 			for (Comment child: children) {
 				if (child.isCommentIdEqual(c)) {
-					allComments.remove(child);
+					children.remove(child);
 					break;
 				}
 			}
 		}
+		
+		// Add children that are not duplicates
+		comments.addAll(children);
 		
 		// Serialization using Gson.
 		Gson gson = new Gson();
