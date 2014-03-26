@@ -237,15 +237,15 @@ public class Comment {
 	 * @param comment
 	 * @return true if IDs are same, false otherwise
 	 */
-	public boolean isCommentIdEqual(Comment comment) {
+	public boolean equals (Comment comment) {
 		if (this == comment)
 			return true;
 		if (comment == null)
 			return false;
-		if (comment.getId() != this.getId()) {
-			return false;
+		if (comment.getId().equals(this.getId())) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 }
 

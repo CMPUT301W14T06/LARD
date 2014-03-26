@@ -38,6 +38,7 @@ public class CommentActivity extends Activity {
 	private TextView parentAuthorView;
 	private TextView parentCommentTextView;
 	private TextView parentNumRepliesView;
+	private CommentController commentController;
 	
 	@SuppressWarnings("unused") // TODO: Remove
 	private ImageView parentPicView;
@@ -74,8 +75,8 @@ public class CommentActivity extends Activity {
 	    commentRequest.setId(commentId);
 	    
 	    // Check a comment was received 
-	    CommentController commentController = new CommentController(commentRequest);
-    	if (commentController.any()) {
+	    commentController = new CommentController(commentRequest);
+    	if (!commentController.isEmpty()) {
     		comment = commentController.getSingle();
     	}
     	else {
@@ -149,15 +150,11 @@ public class CommentActivity extends Activity {
         case R.id.action_fav:
         	Toast.makeText(getApplicationContext(), "Comment Favourited.", Toast.LENGTH_SHORT).show();
         	// Save all the comments replies as well
-        	ArrayList<Comment> favChildren = comment.children();
-        	favChildren.add(comment);
-        	DataModel.saveChildrenLocal(favChildren, getBaseContext());
+        	commentController.favourite(comment);
             return true;
         case R.id.action_save:
         	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
-        	if (!comment.isLocal(getBaseContext())) {
-            	DataModel.saveLocal(comment, true, this); 
-        	}
+        	commentController.paper(comment);
             return true;
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);

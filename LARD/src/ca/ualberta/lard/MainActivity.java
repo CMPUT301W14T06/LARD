@@ -43,6 +43,7 @@ private ListView commentList;
 				Intent i = new Intent(getBaseContext(), CommentActivity.class);
 				Comment selection = allComments.get(position);
 				i.putExtra(CommentActivity.EXTRA_PARENT_ID, selection.getId());
+				System.err.println("Starting Comment Actiivty with commentID " + selection.getId());
 				startActivity(i);
 			}
 		});

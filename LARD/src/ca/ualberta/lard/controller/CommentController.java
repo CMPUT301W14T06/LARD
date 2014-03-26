@@ -68,6 +68,10 @@ public class CommentController {
 		return buffer.size() > 0;
 	}
 	
+	public boolean isEmpty() {
+		return (buffer == null || buffer.size() > 0);
+	}
+	
 	/**
 	 * Sorts a given list of comments by creation date. If an empty list is provided as the
 	 * list to be sorted, an empty list is returned.
@@ -136,6 +140,14 @@ public class CommentController {
 	 */
 	public Comment getSingle() {
 		return buffer.get(0);
+	}
+	
+	public void favourite(Comment comment) {
+		// Todo fill out method
+	}
+	
+	public void paper(Comment comment) {
+		//Todo fill out method
 	}
 
 }

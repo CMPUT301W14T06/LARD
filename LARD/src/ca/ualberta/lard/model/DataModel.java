@@ -7,11 +7,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import android.content.Context;
 import android.util.Pair;
 import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.Stretchy.StretchyClient;
 import ca.ualberta.lard.Stretchy.StretchyResponse;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -35,59 +39,40 @@ public class DataModel {
 	 * We can either be saving as a temporary measure, and store the files in a queue to be uploaded when
 	 * we next have an internet connection, or we could be explicitly saving a Favourite or a Paper.
 	 * </p>
-	 * @param comment The comment object that is to be saved to disk.
-	 * @param persisitent Is this save explicit or is it to be put in the upload queue 
+	 * @param comment Comment The comment object that is to be saved to disk.
+	 * @param persisitent boolean Is this save explicit or is it to be put in the upload queue 
 	 */
-	public static void saveLocal(Comment comment, boolean persisitent, Context context) {
-		ArrayList<Comment> comments = readLocal(context);
-		
-		// Check comment isn't saved locally already.
-		if (comment.isLocal(context)) {
-			return;
-		}
+	public static void saveLocal(Comment comment, boolean persistent, Context context) {
+		// Calls the saveLocal override using ArrayList
+		ArrayList<Comment> comments = new ArrayList<Comment>();
 		comments.add(comment);
-		
-		// Serialization using Gson.
-		Gson gson = new Gson();
-		String json = gson.toJson(comments);
-		
-		try {
-			FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(json);
-			oos.close();
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		saveLocal(comments, persistent, context);
 		return;
 	}
 	
 	/**
-	 * Saves a list of children to local storage. This is necessary because saving a favourited
-	 * comments children individually would require as many saveLocals as there are children.
-	 * @param children
-	 * @param context
+	 * Saves an ArrayList of comments to local storage.
+	 * @param comments ArrayList<Comment> The comments that we want to add to local storage
+	 * @param persistent boolean Do we want this to be permanently stored locally, or just until we can push to a server?
+	 * @param context Context Our android context
 	 */
-	public static void saveChildrenLocal(ArrayList<Comment> children, Context context) {
-		ArrayList<Comment> comments = readLocal(context);
+	public static void saveLocal(ArrayList<Comment> comments, boolean persistent, Context context) {
+		ArrayList<Comment> localComments = readLocal(context);
 		
-		// Only want children that are not already saved locally.
-		for (Comment c: comments) {
-			for (Comment child: children) {
-				if (child.isCommentIdEqual(c)) {
-					children.remove(child);
-					break;
-				}
-			}
+		// We only want to add comments that are not saved locally already.
+		Iterator<Comment> i = comments.iterator();
+		while (i.hasNext()) {
+		   Comment c = i.next();
+		   if (localComments.contains(c)) {
+			   i.remove();
+		   }
 		}
 		
-		// Add children that are not duplicates
-		comments.addAll(children);
+		// Add all new comments to the local array.
+		localComments.addAll(comments);
 		
-		// Serialization using Gson.
 		Gson gson = new Gson();
-		String json = gson.toJson(comments);
+		String json = gson.toJson(localComments);
 		
 		try {
 			FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -99,6 +84,7 @@ public class DataModel {
 			e.printStackTrace();
 		}
 		return;
+		
 	}
 	
 	/**
@@ -198,9 +184,7 @@ public class DataModel {
 	public static boolean isLocal(Comment comment, Context context) {
 		ArrayList<Comment> localComments = readLocal(context);
 		for (Comment c: localComments) {
-			if (c.isCommentIdEqual(comment)) {
-				return true;
-			}
+			return c.equals(comment);
 		}
 		return false;
 	}

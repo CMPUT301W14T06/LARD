@@ -95,14 +95,12 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:style="?android:attr/buttonBarStyle"
         android:gravity="center">
  
 	    <Button
 	        android:id="@+id/attachButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:style="?android:attr/buttonBarButtonStyle"
 	        android:onClick="onClickAttachButton"
 	        android:text="@string/attach_button"
 	        android:textColor="#FFFFFF" />
@@ -111,7 +109,6 @@
 	        android:id="@+id/locationButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:style="?android:attr/buttonBarButtonStyle"
 	        android:onClick="onClickLocationButton"
 	        android:text="@string/location_button"
 	        android:textColor="#FFFFFF"/>
@@ -120,7 +117,6 @@
 	        android:id="@+id/sendButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:style="?android:attr/buttonBarButtonStyle"
 	        android:onClick="onClickSaveChanges"
 	        android:text="@string/save_button"
 	        android:textColor="#FFFFFF" />
