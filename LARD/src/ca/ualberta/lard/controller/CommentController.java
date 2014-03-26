@@ -49,6 +49,7 @@ public class CommentController {
 	 * @param req
 	 */
 	public CommentController(CommentRequest req, Context context) {
+		this.context = context;
 		init(req);
 	}
 	

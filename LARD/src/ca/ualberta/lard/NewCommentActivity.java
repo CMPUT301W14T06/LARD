@@ -290,7 +290,7 @@ public class NewCommentActivity extends Activity {
 		
 		@Override
 		protected String doInBackground(CommentRequest... params) {
-			CommentController commentController = new CommentController(params[0]);
+			CommentController commentController = new CommentController(params[0], getBaseContext());
 			if (commentController.isEmpty()) {
 				Comment comment = commentController.getSingle();
 				// Make a copy of the comment.
