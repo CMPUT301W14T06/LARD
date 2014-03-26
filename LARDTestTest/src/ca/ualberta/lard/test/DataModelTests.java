@@ -69,7 +69,7 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	public void testLocalStorage() {
 		//creates a comment then tests to see if it is saved local
 		Comment localComment = new Comment("I am lost? am I local?", getActivity());
-		DataModel.saveLocal(localComment, true, getActivity());
+		DataModel.saveLocal(localComment, true, getActivity(), false);
 		//Gets the is of the last element of the local list, it should be the same as our newly created comment
 		ArrayList<Comment> localList = DataModel.readLocal(getActivity());
 		//tests if equal
@@ -82,7 +82,7 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	public void testIsLocal() {
 		//creates a comment then tests to see if it is saved local
 		Comment localComment = new Comment("I am lost? am I local?", getActivity());
-		DataModel.saveLocal(localComment, true, getActivity());
+		DataModel.saveLocal(localComment, true, getActivity(), false);
 		//tests to see if true
 		assertEquals("The isLocal should return true", true, DataModel.isLocal(localComment, getActivity()));
 	}

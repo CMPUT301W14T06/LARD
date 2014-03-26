@@ -36,14 +36,16 @@ private ListView commentList;
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
+        
         commentList = (ListView) findViewById(R.id.threadsListView);
+        
         commentList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
 				// Select a top level comment, pass its id to CommentActivity to view it and its children
 				Intent i = new Intent(getBaseContext(), CommentActivity.class);
 				Comment selection = allComments.get(position);
 				i.putExtra(CommentActivity.EXTRA_PARENT_ID, selection.getId());
-				System.err.println("Starting Comment Actiivty with commentID " + selection.getId());
+				System.err.println("Starting Comment Activity with commentID " + selection.getId());
 				startActivity(i);
 			}
 		});
