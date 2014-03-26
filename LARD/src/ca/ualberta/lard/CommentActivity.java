@@ -80,6 +80,8 @@ public class CommentActivity extends Activity {
     		comment = commentController.getSingle();
     	}
     	else {
+    		Toast.makeText(getApplicationContext(), "Error loading the requested comment", Toast.LENGTH_SHORT).show();
+    		System.err.println("Exiting Comment Activity with an Empty commentController.. Comment ID: " + commentId);
     		// Couldn't find the comment, should never get here though.
 	    	finish();
     	}

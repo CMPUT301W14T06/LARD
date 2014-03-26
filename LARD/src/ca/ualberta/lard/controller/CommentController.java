@@ -69,7 +69,7 @@ public class CommentController {
 	}
 	
 	public boolean isEmpty() {
-		return (buffer == null || buffer.size() > 0);
+		return (buffer == null || buffer.size() == 0);
 	}
 	
 	/**

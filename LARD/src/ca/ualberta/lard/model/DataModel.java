@@ -159,16 +159,19 @@ public class DataModel {
 		if (id != null) {
 			Comment c = client.getById(id);
 			if (c != null) {
+				System.err.println("Found a comment with id " + id);
 				comments.add(c);
 				return comments;
 			}
 			// TODO check local storage as a last resort.
+			
+			System.err.println("Failed to find the comment, returning null");
 			return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 		}
-		System.err.println("ID NULL");
+		
+		System.err.println("Beginning a search request...");
 		
 		SearchRequest sReq = new SearchRequest(req);
-		System.err.println(sReq.toString());
 		ArrayList<Comment> comments2 = client.search(sReq); // TODO finish
 		return comments2;
 	}
