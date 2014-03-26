@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<resources>  
+	<array 
+		name="location_array">  
+    	<item>CAB</item>  
+   	 	<item>CAMERON</item>  
+   	 	<item>CCIS</item>  
+    	<item>CSC</item>  
+    	<item>DEWEYS</item>
+    	<item>ETLC</item>
+    	<item>HUB</item>
+    	<item>RUTHERFORD</item>
+    	<item>STJOSPEH</item>
+    	<item>SUB</item>
+    	<item>TORY</item>  
+     </array>
+    </resources>
