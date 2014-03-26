@@ -66,19 +66,25 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	/**
 	 * Tests that the Datamodel is able to check if a comment is saved locally.
 	 */
-	public void testIsLocal() {
-		fail();
-	}
-	
 	public void testLocalStorage() {
 		//creates a comment then tests to see if it is saved local
 		Comment localComment = new Comment("I am lost? am I local?", getActivity());
 		DataModel.saveLocal(localComment, true, getActivity());
-		boolean isLocal = DataModel.isLocal(localComment, getActivity());
 		//Gets the is of the last element of the local list, it should be the same as our newly created comment
 		ArrayList<Comment> localList = DataModel.readLocal(getActivity());
 		//tests if equal
 		assertEquals("The locally stored comment should be the same", localComment.getId(), localList.get(localList.size() - 1).getId());
+	}
+	
+	/**
+	 * Tests that isLocal function
+	 */
+	public void testIsLocal() {
+		//creates a comment then tests to see if it is saved local
+		Comment localComment = new Comment("I am lost? am I local?", getActivity());
+		DataModel.saveLocal(localComment, true, getActivity());
+		//tests to see if true
+		assertEquals("The isLocal should return true", true, DataModel.isLocal(localComment, getActivity()));
 	}
 	
 	/**
