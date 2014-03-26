@@ -52,15 +52,16 @@ public class LocationSelectionActivity extends Activity {
 		customLocationRadioButton.setClickable(true);
 		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
-		
-		
-		
+	
 		// Gets a list of locations from the GeoLocation map then converts it to a string array
 		GeoLocationMap geoMap = new GeoLocationMap();
 		Set<String> nameSet = geoMap.getMap().keySet();
 		String[] stringArray = Arrays.copyOf(nameSet.toArray(), nameSet.toArray().length, String[].class);
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, stringArray);
+		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, stringArray);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.location_array, R.layout.spinner_item);
+		//sets the spinner item as the custom one so you can have increased text size 
+		adapter.setDropDownViewResource(R.layout.spinner_item);
 		spinner.setAdapter(adapter);
 		
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
