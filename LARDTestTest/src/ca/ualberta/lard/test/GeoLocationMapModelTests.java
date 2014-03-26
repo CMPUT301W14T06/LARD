@@ -11,9 +11,9 @@ import android.util.Pair;
  * @author Thomas
  *
  */
-public class GeoLocationMapTests extends ActivityInstrumentationTestCase2<MainActivity> {
+public class GeoLocationMapModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
-	public GeoLocationMapTests() {
+	public GeoLocationMapModelTests() {
 		super(MainActivity.class);
 	}
 	
