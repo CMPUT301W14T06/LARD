@@ -136,6 +136,7 @@ public class NewCommentActivity extends Activity {
 		locationLatTextView.setText("Latitude: " + location.getLatitude());
 		locationLongTextView.setText("Longitude: " + location.getLongitude());
 		
+		// TODO: Change
 		// !picture.isNull()
 		if (picture != null && !picture.isNull()) {
 			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
