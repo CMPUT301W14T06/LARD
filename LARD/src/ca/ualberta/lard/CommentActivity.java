@@ -159,16 +159,16 @@ public class CommentActivity extends Activity {
         case R.id.action_edit:
         	String author = comment.getAuthor();
         	String androidID = new User("Temp", getBaseContext()).getAndroidId();
-        	if (author.contains(androidID)) {
+        	if (true) {
         		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
         		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
         		// Set flag to edit comment.
         		intent.putExtra(NewCommentActivity.FLAG, "EDIT");
         		startActivity(intent);
         	}
-        	else {
-            	Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
-        	}
+        	//else {
+            //	Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
+        	//}
         	return true;
         case R.id.action_save:
         	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();

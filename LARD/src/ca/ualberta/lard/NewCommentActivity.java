@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -92,12 +95,21 @@ public class NewCommentActivity extends Activity {
 	    	if (caller.equals("EDIT")) {
 	    		GetComment getComment = new GetComment();
 		    	getComment.execute(req);
-		    	
+		    	try {
+					editComment = getComment.get();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}    	
 		    	// Display the comments current information
+				Log.d("Out of async:", editComment.getAuthor()
+						+" "+editComment.getBodyText()+" "+editComment.getLocation()+" "+editComment.getPicture());
 				userNameEditTextView.setText(editComment.getAuthor());
 				bodyTextEditTextView.setText(editComment.getBodyText());
-				location.setLatitude(editComment.getLocation().getLatitude());
-				location.setLongitude(editComment.getLocation().getLongitude());
+				location = new GeoLocation(editComment.getLocation().getLatitude(),editComment.getLocation().getLongitude());
+				//location.setLatitude(editComment.getLocation().getLatitude());
+				//location.setLongitude(editComment.getLocation().getLongitude());
 				picture = editComment.getPicture();
 		    }
 	    }
@@ -115,7 +127,7 @@ public class NewCommentActivity extends Activity {
 		locationLatTextView.setText("Latitude: " + location.getLatitude());
 		locationLongTextView.setText("Longitude: " + location.getLongitude());
 		
-		if (!picture.isNull()) {
+		if (picture != null) {
 			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
 			if (bm != null) {
 				pictureImageView.setImageBitmap(bm);
@@ -315,23 +327,32 @@ public class NewCommentActivity extends Activity {
 		}
     }
 	
-	private class GetComment extends AsyncTask<CommentRequest, Integer, String> {
-		private Comment comment;
+	private class GetComment extends AsyncTask<CommentRequest, Integer, Comment> {
 		@Override
-		protected String doInBackground(CommentRequest... params) {
-			CommentController commentController = new CommentController(params[0], getBaseContext());
-			if (commentController.any()) {
-				comment = commentController.getSingle();
-				return "Successful!";
+		protected Comment doInBackground(CommentRequest... params) {
+			Log.d("ASYNC", "Inside async");
+			
+			commentController = new CommentController(params[0], getBaseContext());
+			if (commentController.isEmpty() == false) {
+				Log.d("ASYNC", "Got a comment: "+commentController.getSingle().toString());
+				return commentController.getSingle();
 			}
 			else {
-				return "Error! Parent comment not found!";
+				Log.d("ASYNC", "Returning null");
+				return null;
 			}
 		}
 		
-		protected void onPostExecute(String result) {
-			// Make a copy of the comment.
-			editComment = comment;
+		protected void onPostExecute(Comment result) {
+			Log.d("ASYNC", "In post execute");
+			editComment = result;
+			// TODO: We probably shouldn't be returning the comment because it causes large delays.
+			// Somehow need to refactor the code so we can set all the views after the comment is found.
+			/*
+			userNameEditTextView.setText(editComment.getAuthor());
+			bodyTextEditTextView.setText(editComment.getBodyText());
+			locationLatTextView.setText("Latitude: " + editComment.getLocation().getLatitude());
+			locationLongTextView.setText("Longitude: " + editComment.getLocation().getLongitude()); */
 		}
     }
 	
