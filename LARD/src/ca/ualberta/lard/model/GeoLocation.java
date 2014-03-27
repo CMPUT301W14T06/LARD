@@ -33,8 +33,8 @@ public class GeoLocation {
 		}
 		// Can't find location. They're in compsci
 		if (location == null) {
-			this.lon = 53.526808 ;
-			this.lat = -113.527127;
+			this.lat = 53.526808 ;
+			this.lon = -113.527127;
 		} else {
 			this.lon = location.getLongitude();
 			this.lat = location.getLatitude();

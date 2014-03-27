@@ -117,7 +117,7 @@
 	        android:id="@+id/sendButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:onClick="onClickSaveChanges"
+	        android:onClick="onClickSendButton"
 	        android:text="@string/save_button"
 	        android:textColor="#FFFFFF" />
         
