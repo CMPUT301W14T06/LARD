@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -92,7 +91,7 @@ public class NewCommentActivity extends Activity {
 	    		GetParent getParent = new GetParent();
 		    	getParent.execute(req);
 		    }
-	    	if (caller.equals("EDIT")) {
+	    	else if (caller.equals("EDIT")) {
 	    		GetComment getComment = new GetComment();
 		    	getComment.execute(req);
 		    	try {
@@ -107,15 +106,25 @@ public class NewCommentActivity extends Activity {
 						+" "+editComment.getBodyText()+" "+editComment.getLocation()+" "+editComment.getPicture());
 				userNameEditTextView.setText(editComment.getAuthor());
 				bodyTextEditTextView.setText(editComment.getBodyText());
-				location = new GeoLocation(editComment.getLocation().getLatitude(),editComment.getLocation().getLongitude());
-				//location.setLatitude(editComment.getLocation().getLatitude());
-				//location.setLongitude(editComment.getLocation().getLongitude());
+				location = new GeoLocation(editComment.getLocation().getLatitude(), editComment.getLocation().getLongitude());
+				// TODO: Remove
+				// location.setLatitude(editComment.getLocation().getLatitude());
+				// location.setLongitude(editComment.getLocation().getLongitude());
 				picture = editComment.getPicture();
 		    }
+	    	else {
+	    		// If we get here the flag was sent incorrectly
+	    		Toast.makeText(getApplicationContext(), "Flag was incorrectly set", Toast.LENGTH_SHORT).show();
+		    	finish();
+	    	}
 	    }
-	    
-	    if (id == null && caller.equals("EDIT")) {
+	    else if (caller.equals("NEW")) {
+	    	// is this a valid line?
+	    	;
+	    }
+	    else {
 	    	// If we get here the flag was sent incorrectly or id was null and flag was EDIT
+	    	Toast.makeText(getApplicationContext(), "Flag was incorrectly set or id was null with EDIT flag", Toast.LENGTH_SHORT).show();
 	    	finish();
 	    }
 	}
@@ -127,7 +136,8 @@ public class NewCommentActivity extends Activity {
 		locationLatTextView.setText("Latitude: " + location.getLatitude());
 		locationLongTextView.setText("Longitude: " + location.getLongitude());
 		
-		if (picture != null) {
+		// !picture.isNull()
+		if (picture != null && !picture.isNull()) {
 			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
 			if (bm != null) {
 				pictureImageView.setImageBitmap(bm);
@@ -177,7 +187,10 @@ public class NewCommentActivity extends Activity {
 			comment.setLocation(location);
 
 			// Set a picture for the comment
-			comment.setPicture(picture);
+			// TODO: drop the if condition
+			if (picture != null) {
+				comment.setPicture(picture);
+			}
 
 			// Send the completed comment to the CommentController
 			MakeComment makeComment = new MakeComment();
@@ -187,35 +200,38 @@ public class NewCommentActivity extends Activity {
 			// Set author
 			// if author text is not empty
 			if (!userNameEditTextView.getText().toString().isEmpty()) {
-				comment.setAuthor(userNameEditTextView.getText().toString(), getBaseContext());
+				editComment.setAuthor(userNameEditTextView.getText().toString(), getBaseContext());
 			}
 			// if author text is empty
 			else {
-				comment.setAuthor("Anonymous", getBaseContext());
+				editComment.setAuthor("Anonymous", getBaseContext());
 			}
 			
 			// Set body text
 			// if body text is empty
 			if (bodyTextEditTextView.getText().toString().isEmpty()) {
-				comment.setBodyText("[Comment Text Removed]");
+				editComment.setBodyText("[Comment Text Removed]");
 			}
 			// if body text is not empty
 			else {
-				comment.setBodyText(bodyTextEditTextView.getText().toString());
+				editComment.setBodyText(bodyTextEditTextView.getText().toString());
 			}
 			
 			// Set GeoLocation
-			comment.setLocation(location);
+			editComment.setLocation(location);
 			
 			// Set Picture
-			comment.setPicture(picture);
+			// TODO: drop the if condition
+			if (picture != null) {
+				editComment.setPicture(picture);
+			}
 			
 			// TODO: activities should not directly access models. use CommentController (i dont currently know how to do this)
 			// Check if the comment was saved locally
-			if (comment.isLocal(getBaseContext())) {
+			if (editComment.isLocal(getBaseContext())) {
 				// TODO interact with the comment controller somehow here?
 			}
-			DataModel.save(comment);
+			DataModel.save(editComment);
 		}
 		
 		finish();
