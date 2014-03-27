@@ -1,6 +1,5 @@
 package ca.ualberta.lard.test;
 
-import ca.ualberta.lard.EditCommentActivity;
 import ca.ualberta.lard.LocationSelectionActivity;
 import ca.ualberta.lard.R;
 import ca.ualberta.lard.model.Comment;
