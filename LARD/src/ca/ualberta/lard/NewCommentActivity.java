@@ -170,6 +170,12 @@ public class NewCommentActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "Missing comment text.", Toast.LENGTH_SHORT).show();
 				return;
 			}
+			
+			// Username may not contain "#" character
+			if (userNameEditTextView.getText().toString().contains("#")) {
+				Toast.makeText(getApplicationContext(), "Username may not contain \"#\" character", Toast.LENGTH_SHORT).show();
+				return;
+			}
 
 			// Create the comment either with a pid or without
 			if (id == null) {
@@ -198,6 +204,12 @@ public class NewCommentActivity extends Activity {
 			makeComment.execute(comment);
 		}
 		else {
+			// Username may not contain "#" character
+			if (userNameEditTextView.getText().toString().contains("#")) {
+				Toast.makeText(getApplicationContext(), "Username may not contain \"#\" character", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
 			// Set author
 			// if author text is not empty
 			if (!userNameEditTextView.getText().toString().isEmpty()) {
