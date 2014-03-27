@@ -161,7 +161,7 @@ public class CommentActivity extends Activity {
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
     		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
-    		intent.putExtra(NewCommentActivity.FLAG, "EDIT");
+    		intent.putExtra(NewCommentActivity.FLAG, "NEW");
     		startActivity(intent);
             return true;
         default:

@@ -77,7 +77,7 @@ public class NewCommentActivity extends Activity {
 	    id = intent.getStringExtra(PARENT_ID);
 	    caller = intent.getStringExtra(FLAG);
 	    
-	    if (caller == "NEW") {
+	    if (caller.equals("NEW")) {
 	    	location = new GeoLocation(getApplicationContext()); // TODO: look at users settings first
 			picture = new Picture();
 	    }
@@ -85,11 +85,11 @@ public class NewCommentActivity extends Activity {
 	    if (id != null) {
 	    	CommentRequest req = new CommentRequest(1);
 	    	req.setId(id);
-	    	if (caller == "NEW") {
+	    	if (caller.equals("NEW")) {
 	    		GetParent getParent = new GetParent();
 		    	getParent.execute(req);
 		    }
-	    	if (caller == "EDIT") {
+	    	if (caller.equals("EDIT")) {
 	    		GetComment getComment = new GetComment();
 		    	getComment.execute(req);
 		    	
@@ -102,7 +102,7 @@ public class NewCommentActivity extends Activity {
 		    }
 	    }
 	    
-	    if (id == null && caller == "EDIT") {
+	    if (id == null && caller.equals("EDIT")) {
 	    	// If we get here the flag was sent incorrectly or id was null and flag was EDIT
 	    	finish();
 	    }
@@ -141,7 +141,7 @@ public class NewCommentActivity extends Activity {
 	 * @param v A View
 	 */
 	public void onClickSendButton(View v) {
-		if (caller == "NEW") {
+		if (caller.equals("NEW")) {
 			// There must be text in the bodyTextEditTextView field for the comment to be valid
 			if (bodyTextEditTextView.getText().toString().isEmpty()) {
 				Toast.makeText(getApplicationContext(), "Missing comment text.", Toast.LENGTH_SHORT).show();
@@ -297,7 +297,7 @@ public class NewCommentActivity extends Activity {
 		@Override
 		protected String doInBackground(CommentRequest... params) {
 			commentController = new CommentController(params[0], getBaseContext());
-			if (commentController.isEmpty()) {
+			if (commentController.any()) {
 				Comment comment = commentController.getSingle();
 				return comment.getAuthor().toString();
 			}
@@ -316,18 +316,22 @@ public class NewCommentActivity extends Activity {
     }
 	
 	private class GetComment extends AsyncTask<CommentRequest, Integer, String> {
+		private Comment comment;
 		@Override
 		protected String doInBackground(CommentRequest... params) {
 			CommentController commentController = new CommentController(params[0], getBaseContext());
-			if (commentController.isEmpty()) {
-				Comment comment = commentController.getSingle();
-				// Make a copy of the comment.
-				editComment = comment;
+			if (commentController.any()) {
+				comment = commentController.getSingle();
 				return "Successful!";
 			}
 			else {
 				return "Error! Parent comment not found!";
 			}
+		}
+		
+		protected void onPostExecute(String result) {
+			// Make a copy of the comment.
+			editComment = comment;
 		}
     }
 	
