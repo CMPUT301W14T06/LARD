@@ -8,6 +8,7 @@
     <string name="action_fav">Favourite</string>
     <string name="action_reply">Reply</string>
     <string name="action_save">Save</string>
+    <string name="action_edit">Edit</string>
     <string name="Reply">To:</string>
     <string name="username_text_view">Username:</string>
     <string name="fake_hint">&#8230;</string>

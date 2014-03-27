@@ -61,4 +61,8 @@ public class User {
 		return "Anonymous#" + androidId;
 		
 	}
+	
+	public String getAndroidId() {
+		return this.androidId;
+	}
 }

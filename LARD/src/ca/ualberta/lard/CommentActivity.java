@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.User;
 
 /**
  * CommentActivity is called when a comment is selected.
@@ -154,6 +156,20 @@ public class CommentActivity extends Activity {
         	// Save all the comments replies as well
         	commentController.favourite(comment);
             return true;
+        case R.id.action_edit:
+        	String author = comment.getAuthor();
+        	String androidID = new User("Temp", getBaseContext()).getAndroidId();
+        	if (author.contains(androidID)) {
+        		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
+        		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
+        		// Set flag to edit comment.
+        		intent.putExtra(NewCommentActivity.FLAG, "EDIT");
+        		startActivity(intent);
+        	}
+        	else {
+            	Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
+        	}
+        	return true;
         case R.id.action_save:
         	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
         	commentController.paper(comment);
@@ -161,7 +177,8 @@ public class CommentActivity extends Activity {
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
     		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
-    		intent.putExtra(NewCommentActivity.FLAG, "EDIT");
+    		// Set flag to new because we are replying.
+    		intent.putExtra(NewCommentActivity.FLAG, "NEW");
     		startActivity(intent);
             return true;
         default:
