@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,13 +13,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.DataModel;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 
@@ -39,10 +38,16 @@ public class NewCommentActivity extends Activity {
 	private Picture picture;
 	private GeoLocation location;
 	private Comment comment;
-	private TextView lardTextView;
 	private String caller;
 	public Comment editComment;
 	private CommentController commentController;
+	
+	private TextView lardTextView;
+	private TextView userNameEditTextView;
+	private TextView bodyTextEditTextView;
+	private TextView locationLatTextView;
+	private TextView locationLongTextView;
+	private ImageView pictureImageView;
 	
 	// These probably dont need to be public, may change in future
 	public static final int LOCATION_REQUEST_ID = 1;
@@ -59,44 +64,45 @@ public class NewCommentActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_comment);
 		
-		location = new GeoLocation(getApplicationContext()); // TODO: look at users settings first
-		picture = new Picture();
+		lardTextView = (TextView) findViewById(R.id.lardTextView);
+		userNameEditTextView = (TextView) findViewById(R.id.usernameEditText);
+		bodyTextEditTextView = (TextView) findViewById(R.id.commentEditText);
+		locationLatTextView = (TextView) findViewById(R.id.currentLatLocation);
+		locationLongTextView = (TextView) findViewById(R.id.currentLongLocation);
+		pictureImageView = (ImageView) findViewById(R.id.currentPicture);
 		
 		// get the parent id out of the intent
 		// will be null if this is a top level comment
 		Intent intent = getIntent();
 	    id = intent.getStringExtra(PARENT_ID);
 	    caller = intent.getStringExtra(FLAG);
-
-	    if (id != null && caller == "NEW") {
-	    	lardTextView = (TextView) findViewById(R.id.lardTextView);
-
-	    	// request the comment that has an id equal to the current pid
+	    
+	    if (caller == "NEW") {
+	    	location = new GeoLocation(getApplicationContext()); // TODO: look at users settings first
+			picture = new Picture();
+	    }
+	    
+	    if (id != null) {
 	    	CommentRequest req = new CommentRequest(1);
 	    	req.setId(id);
-	    	GetParent getParent = new GetParent();
-	    	getParent.execute(req);
+	    	if (caller == "NEW") {
+	    		GetParent getParent = new GetParent();
+		    	getParent.execute(req);
+		    }
+	    	if (caller == "EDIT") {
+	    		GetComment getComment = new GetComment();
+		    	getComment.execute(req);
+		    	
+		    	// Display the comments current information
+				userNameEditTextView.setText(editComment.getAuthor());
+				bodyTextEditTextView.setText(editComment.getBodyText());
+				location.setLatitude(editComment.getLocation().getLatitude());
+				location.setLongitude(editComment.getLocation().getLongitude());
+				picture = editComment.getPicture();
+		    }
 	    }
-	    else if (id == null && caller == "NEW") {
-	    	// this is fine
-	    }
-	    else if (id != null && caller == "EDIT") {
-	    	CommentRequest req = new CommentRequest(1);
-	    	req.setId(id);
-	    	GetComment getComment = new GetComment();
-	    	getComment.execute(req);
-	    	
-			TextView usernameTextView = (TextView) findViewById(R.id.usernameEditText);
-			TextView bodtTextTextView = (TextView) findViewById(R.id.commentEditText);	
-			
-			// Display the comments current information
-			usernameTextView.setText(editComment.getAuthor());
-			bodtTextTextView.setText(editComment.getBodyText());
-			location.setLatitude(editComment.getLocation().getLatitude());
-			location.setLongitude(editComment.getLocation().getLongitude());
-			picture = editComment.getPicture();
-	    }
-	    else {
+	    
+	    if (id == null && caller == "EDIT") {
 	    	// If we get here the flag was sent incorrectly or id was null and flag was EDIT
 	    	finish();
 	    }
@@ -106,13 +112,10 @@ public class NewCommentActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
-		TextView locationLatTextView = (TextView) findViewById(R.id.currentLatLocation);
-		TextView locationLongTextView = (TextView) findViewById(R.id.currentLongLocation);
 		locationLatTextView.setText("Latitude: " + location.getLatitude());
 		locationLongTextView.setText("Longitude: " + location.getLongitude());
 		
 		if (!picture.isNull()) {
-			ImageView pictureImageView = (ImageView) findViewById(R.id.currentPicture);
 			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(), 0, picture.getImageByte().length);
 			if (bm != null) {
 				pictureImageView.setImageBitmap(bm);
@@ -138,37 +141,70 @@ public class NewCommentActivity extends Activity {
 	 * @param v A View
 	 */
 	public void onClickSendButton(View v) {
-		EditText commentText = (EditText) findViewById(R.id.commentEditText);
-		// There must be text in the commentEditText field for the comment to be valid
-		if (commentText.getText().toString().isEmpty()) {
-			return;
-		}
+		if (caller == "NEW") {
+			// There must be text in the bodyTextEditTextView field for the comment to be valid
+			if (bodyTextEditTextView.getText().toString().isEmpty()) {
+				Toast.makeText(getApplicationContext(), "Missing comment text.", Toast.LENGTH_SHORT).show();
+				return;
+			}
 
-		// Create the comment either with a pid or without
-		if (id == null) {
-			comment = new Comment(commentText.getText().toString(), this);
+			// Create the comment either with a pid or without
+			if (id == null) {
+				comment = new Comment(bodyTextEditTextView.getText().toString(), this);
+			}
+			else {
+				comment = new Comment(bodyTextEditTextView.getText().toString(), id, this);
+			}
+
+			// Set an author for the comment if you can
+			if (!userNameEditTextView.getText().toString().isEmpty()) {
+				comment.setAuthor(userNameEditTextView.getText().toString(), this);
+			}
+
+			// Set a location for the comment
+			comment.setLocation(location);
+
+			// Set a picture for the comment
+			comment.setPicture(picture);
+
+			// Send the completed comment to the CommentController
+			MakeComment makeComment = new MakeComment();
+			makeComment.execute(comment);
 		}
 		else {
-			comment = new Comment(commentText.getText().toString(), id, this);
-		}
-		
-		// Set an author for the comment if you can
-		EditText usernameText = (EditText) findViewById(R.id.usernameEditText);
-		if (!usernameText.getText().toString().isEmpty()) {
-			comment.setAuthor(usernameText.getText().toString(), this);
-		}
-		
-		// Set a location for the comment
-		comment.setLocation(location);
-		
-		// Set a picture for the comment if you can
-		if (!picture.isNull()) {
+			// Set author
+			// if author text is not empty
+			if (!userNameEditTextView.getText().toString().isEmpty()) {
+				comment.setAuthor(userNameEditTextView.getText().toString(), getBaseContext());
+			}
+			// if author text is empty
+			else {
+				comment.setAuthor("Anonymous", getBaseContext());
+			}
+			
+			// Set body text
+			// if body text is empty
+			if (bodyTextEditTextView.getText().toString().isEmpty()) {
+				comment.setBodyText("[Comment Text Removed]");
+			}
+			// if body text is not empty
+			else {
+				comment.setBodyText(bodyTextEditTextView.getText().toString());
+			}
+			
+			// Set GeoLocation
+			comment.setLocation(location);
+			
+			// Set Picture
 			comment.setPicture(picture);
+			
+			// TODO: activities should not directly access models. use CommentController (i dont currently know how to do this)
+			// Check if the comment was saved locally
+			if (comment.isLocal(getBaseContext())) {
+				// TODO interact with the comment controller somehow here?
+			}
+			DataModel.save(comment);
 		}
-		
-		// Send the completed comment to the CommentController
-		MakeComment makeComment = new MakeComment();
-		makeComment.execute(comment);
 		
 		finish();
 	}
@@ -180,11 +216,6 @@ public class NewCommentActivity extends Activity {
 	 * @param v A View
 	 */
 	public void onClickAttachButton(View v) {
-		// TODO: REMOVE
-		// for taking pics
-        /*Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
-        startActivityForResult(intent, CAMERA_REQUEST_ID);*/
-		
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), CAMERA_REQUEST_ID);
@@ -210,13 +241,11 @@ public class NewCommentActivity extends Activity {
 	        if (resultCode == RESULT_OK) {
 	        	String locationData = data.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
 	        	location = GeoLocation.fromJSON(locationData);
-	        	
 	        }
 	    }
 	    if (requestCode == CAMERA_REQUEST_ID) {
 	        if (resultCode == RESULT_OK) {
-	        	if(data != null)
-	            {
+	        	if(data != null) {
 	        		// gets the image out of the return intent and stores it as a a string in the picture model
 	        		Uri uri = data.getData();
 	        		
@@ -234,9 +263,8 @@ public class NewCommentActivity extends Activity {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-	            }
-	            else
-	            {
+	            } 
+	        	else {
 	            	// should never get here
 	            	Toast.makeText(getApplicationContext(), "Failed to get picture (data was null).", Toast.LENGTH_SHORT).show();
 	            }
@@ -274,6 +302,7 @@ public class NewCommentActivity extends Activity {
 				return comment.getAuthor().toString();
 			}
 			else {
+				// TODO: REMOVE
 				// should this return?
 				// Toast.makeText(getApplicationContext(), "CommentController did not return a comment with that parent id.", Toast.LENGTH_SHORT).show();
 				//finish();
@@ -287,7 +316,6 @@ public class NewCommentActivity extends Activity {
     }
 	
 	private class GetComment extends AsyncTask<CommentRequest, Integer, String> {
-		
 		@Override
 		protected String doInBackground(CommentRequest... params) {
 			CommentController commentController = new CommentController(params[0], getBaseContext());
