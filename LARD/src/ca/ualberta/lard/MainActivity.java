@@ -1,16 +1,22 @@
 package ca.ualberta.lard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 
 import ca.ualberta.lard.R;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
+import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.DataModel;
+import ca.ualberta.lard.model.Favourites;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -72,6 +78,19 @@ private ListView commentList;
     		Intent j = new Intent(getBaseContext(), LocationSelectionActivity.class);
         	startActivity(j);
         	break;
+    	case R.id.action_favourites:
+    		getActionBar().setTitle("Favorites");
+    		
+    		//TODO Wrap in a asyncronous tasks.
+    		/*
+    		CommentController controller = new CommentController(params[0]);
+    		Set<String> favIDSet = controller.getFavourites().getFavouritesList();
+    		
+    		for (String id: favIDSet) {
+    			CommentRequest commentRequest;
+    			commentRequest.setId(id);
+    		}
+    		*/
         }
 
       return true;
