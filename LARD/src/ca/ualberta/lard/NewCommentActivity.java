@@ -187,7 +187,7 @@ public class NewCommentActivity extends Activity {
 
 			// Set an author for the comment if you can
 			if (!userNameEditTextView.getText().toString().isEmpty()) {
-				comment.setAuthor(userNameEditTextView.getText().toString(), this);
+				comment.setAuthor(userNameEditTextView.getText().toString());
 			}
 
 			// Set a location for the comment
@@ -213,11 +213,11 @@ public class NewCommentActivity extends Activity {
 			// Set author
 			// if author text is not empty
 			if (!userNameEditTextView.getText().toString().isEmpty()) {
-				editComment.setAuthor(userNameEditTextView.getText().toString(), getBaseContext());
+				editComment.setAuthor(userNameEditTextView.getText().toString());
 			}
 			// if author text is empty
 			else {
-				editComment.setAuthor("Anonymous", getBaseContext());
+				editComment.setAuthor(null);
 			}
 			
 			// Set body text

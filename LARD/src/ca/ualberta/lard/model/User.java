@@ -3,7 +3,11 @@ package ca.ualberta.lard.model;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.provider.Settings.Secure;
 
 /**
@@ -13,24 +17,26 @@ import android.provider.Settings.Secure;
  */
 
 public class User {
+	public static String PREFS_NAME = "username.pref";
 	private String username;
-	private String androidId;
+	private String userId;
+	private SharedPreferences prefs;
 	
-	/**
-	 * Constructor for User. Username is based off a name the user chooses and 
-	 * the id is set based on the users device. 
-	 * @param username
-	 * @param context
-	 */
-	public User(String username, Context context) {
-		this.username = username;
-		// TODO: Make user Android_id a singleton
-		this.androidId = Secure.getString(context.getContentResolver(),
-	            Secure.ANDROID_ID);
+	public User(SharedPreferences prefs) {
+		this.prefs = prefs;
+		// We see if we already have a userID in Shared prefs.
+		if (!prefs.contains("userId")) {
+			this.set("userId", this.newUserId());
+		}
+		this.username = prefs.getString("username", "Anonymous");
+		// We should never fall back to our default. If we do, then any user who has gotten to this state
+		// will be able to edit this comment.
+		this.userId = prefs.getString("userId", "defaultUser"); 
 	}
 	
 	public void setUsername(String username) {
 		this.username = username;
+		this.set("username", username);
 	}
 	
 	/**
@@ -45,7 +51,7 @@ public class User {
 		try {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		
-		String usernameWithSalt = (this.username + this.androidId);
+		String usernameWithSalt = (this.username + this.userId);
 		md.update(usernameWithSalt.getBytes(), 0, usernameWithSalt.length());
 		 
         //Converts message digest value in base 16 (hex) 
@@ -58,11 +64,17 @@ public class User {
 			// todo this should probably explode?
 		}
 		// We've gotten to an unsalvageable state. They're anonymous with their androidID now.
-		return "Anonymous#" + androidId;
+		return "Anonymous#" + this.userId;
 		
 	}
 	
-	public String getAndroidId() {
-		return this.androidId;
+	private boolean set(String key, String value) {
+		Editor editor = this.prefs.edit();
+		editor.putString(key, value);
+		return editor.commit();
+	}
+	
+	private String newUserId() {
+		return UUID.randomUUID().toString();
 	}
 }

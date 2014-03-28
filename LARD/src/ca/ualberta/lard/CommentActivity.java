@@ -162,7 +162,7 @@ public class CommentActivity extends Activity {
     		// Check that the user was the author of the comment.
     		String[] authorParts = author.split("#");
     		String authorName = authorParts[0];
-    		String myUsername = new User(authorName, getBaseContext()).getUsername();
+    		String myUsername = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE)).getUsername();
     		if (author.equals(myUsername)) {
         		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
         		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
