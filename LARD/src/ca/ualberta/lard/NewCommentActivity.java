@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -102,8 +101,6 @@ public class NewCommentActivity extends Activity {
 					e.printStackTrace();
 				}    	
 		    	// Display the comments current information
-				Log.d("Out of async:", editComment.getAuthor()
-						+" "+editComment.getBodyText()+" "+editComment.getLocation()+" "+editComment.getPicture());
 				userNameEditTextView.setText(editComment.getAuthor());
 				bodyTextEditTextView.setText(editComment.getBodyText());
 				location = new GeoLocation(editComment.getLocation().getLatitude(), editComment.getLocation().getLongitude());
@@ -359,21 +356,17 @@ public class NewCommentActivity extends Activity {
 	private class GetComment extends AsyncTask<CommentRequest, Integer, Comment> {
 		@Override
 		protected Comment doInBackground(CommentRequest... params) {
-			Log.d("ASYNC", "Inside async");
 			
 			commentController = new CommentController(params[0], getBaseContext());
 			if (commentController.isEmpty() == false) {
-				Log.d("ASYNC", "Got a comment: "+commentController.getSingle().toString());
 				return commentController.getSingle();
 			}
 			else {
-				Log.d("ASYNC", "Returning null");
 				return null;
 			}
 		}
 		
 		protected void onPostExecute(Comment result) {
-			Log.d("ASYNC", "In post execute");
 			editComment = result;
 			// TODO: We probably shouldn't be returning the comment because it causes large delays.
 			// Somehow need to refactor the code so we can set all the views after the comment is found.

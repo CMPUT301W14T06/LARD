@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +28,7 @@ import ca.ualberta.lard.model.User;
  * The selected comment can be replied to, added to favourites, or saved locally.
  * Selecting a one of the child comments will open another CommentActivity. 
  *
- * @param  EXTRA_PARENT_ID	Expects the id of the parent comment as a String
+ * EXTRA_PARENT_ID	Expects the id of the parent comment as a String
  * @author Victoria
  */
 
@@ -53,6 +51,11 @@ public class CommentActivity extends Activity {
 	// For getting the id of clicked comment in MainActivity
 	public static final String EXTRA_PARENT_ID = "PARENT_ID";
 	
+	/**
+	 * onCreate grabs all the ids of all the views used in CommentActivity. It uses the comment 
+	 * id it is given from MainActivity to retrieve the comment. onCreate also attaches a click
+	 * listener to the list view, which is supposed to display a list of children.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,36 +110,43 @@ public class CommentActivity extends Activity {
 		
 	}
 	
+	/**
+	 * onStart sets up the adapter communicated with a list view to show all the comments children.
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+		commentList = new ArrayList<Comment>();
+	    adapter = new CommentListBaseAdapter(this, commentList);
+	    commentListView.setAdapter(adapter);
+	}
+	
+	/**
+	 * onResume gets all of the information from the comment and displays it. onResume also
+	 * fetches all the comments children.
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();	
-		Log.d("Starting on resume", "Starting on resume");
-	    CommentRequest commentRequest = new CommentRequest(100);
-	    commentRequest.setParentId(comment.getId());
-	    commentController = new CommentController(commentRequest, this);
-	    
-    	if (!commentController.isEmpty()) {
-    	    commentList = commentController.get();
-    	    Log.d("Got children:", commentList.toString());
-    	}
-    	else {
-    		commentList = new ArrayList<Comment>();
-    	}
-		
+
 		// Set the parent comment info in the view
 		parentCommentTextView.setText(comment.getBodyText());			
 		parentAuthorView.setText("By: "+comment.getAuthor());
 		//TODO: parentLocationView.setText(comment.);
 		parentNumRepliesView.setText(Integer.toString(comment.numReplies())+" replies");
-		//TODO: parentPicView.setP
-	
-	    adapter = new CommentListBaseAdapter(this, commentList);
-	    commentListView.setAdapter(adapter);
+		//TODO: parentPicView.set;
+		
+		// Get the children if there are any/
+	    CommentRequest commentRequest = new CommentRequest(100);
+	    commentRequest.setParentId(comment.getId());
+		FetchChildren fetchChildren = new FetchChildren();
+		fetchChildren.execute(commentRequest);
 	} 
 	
-	// TODO: Not sure if we even need this function
+	/**
+	 * This inflates the action bar and sets which icons are to be displayed.
+	 */
 	@Override
-	// Display action bar
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.comment_actionbar, menu); 
 	    return super.onCreateOptionsMenu(menu);
@@ -159,9 +169,6 @@ public class CommentActivity extends Activity {
             return true;
         case R.id.action_edit:
         	String author = comment.getAuthor();
-    		// Check that the user was the author of the comment.
-    		String[] authorParts = author.split("#");
-    		String authorName = authorParts[0];
     		String myUsername = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE)).getUsername();
     		if (author.equals(myUsername)) {
         		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
@@ -188,6 +195,32 @@ public class CommentActivity extends Activity {
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+    
+    /**
+     * Uses asynctask to fetch all of the comments children.
+     * Takes a comment request which has the parent id set.
+     */
+    private class FetchChildren extends AsyncTask<CommentRequest, Integer, ArrayList<Comment>> {
+
+    	@Override
+    	protected ArrayList<Comment> doInBackground(CommentRequest... params) {
+    		CommentController commentController = new CommentController(params[0], getBaseContext());
+    	
+			if (commentController.isEmpty() == false) {
+				return commentController.get();
+			}
+			else {
+				return new ArrayList<Comment>();
+			}
+			
+    	}
+
+    	protected void onPostExecute(ArrayList<Comment> result) {
+    		commentList.clear();
+    		commentList.addAll(result);
+    		adapter.notifyDataSetChanged();
+    	}
     }
 }
 
