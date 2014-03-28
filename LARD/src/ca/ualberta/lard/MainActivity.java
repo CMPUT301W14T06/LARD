@@ -81,10 +81,8 @@ private ListView commentList;
     	case R.id.action_favourites:
     		getActionBar().setTitle("Favorites");
     		
-    		//FetchFavoriteComments fetch = new FetchFavoriteComments();
-        	//fetch.execute(this);
-        	
-    		
+    		FetchFavoriteComments fetch = new FetchFavoriteComments();
+        	fetch.execute(this);
         }
 
       return true;
