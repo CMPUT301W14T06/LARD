@@ -34,6 +34,11 @@ public class User {
 		this.userId = prefs.getString("userId", "defaultUser"); 
 	}
 	
+	/**
+	 * Removes all Octothorpe characters from a username if there are any
+	 * @param name A username to be checked
+	 * @return Name A valid username
+	 */
 	private String removeOctothorpe(String name) {
 		if (name.contains("#")) {
 			String cleanedName = name.replaceAll("#", "");
@@ -43,7 +48,7 @@ public class User {
 	}
 	
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = removeOctothorpe(username);
 		this.set("username", username);
 	}
 	
