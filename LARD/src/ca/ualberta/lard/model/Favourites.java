@@ -38,4 +38,8 @@ public class Favourites {
 		editor.commit();
 	}
 
+	public Set<String> getFavouritesList() {
+		return favouritesList;
+	}
+
 }
