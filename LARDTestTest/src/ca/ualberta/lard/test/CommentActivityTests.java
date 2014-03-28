@@ -1,12 +1,12 @@
 package ca.ualberta.lard.test;
 
-import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Instrumentation;
-import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ViewAsserts;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import ca.ualberta.lard.CommentActivity;
 import ca.ualberta.lard.NewCommentActivity;
@@ -88,11 +88,19 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	 * Tests that a NewCommentActivity is opened when the reply button in the action bar
 	 * is clicked and that the id of the parent comment is sent.
 	 * @throws Throwable
+	 * 
+	 * Credit: http://stackoverflow.com/questions/20023483/how-to-get-actionbar-view
 	 */
 	public void testReply() throws Throwable {
 		// Get the reply button and click it
-	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_reply);
+	    Window window = activity.getWindow();
+	    View v = window.getDecorView();
+	    int resId = activity.getResources().getIdentifier("action_reply", "id", "android");
+	    final View view = activity.findViewById(resId);
+
+		//final View view = (View) actionBar.getCustomView().findViewById(ca.ualberta.lard.R.id.action_reply);
 	    assertNotNull("Reply button should not be null.", view);
+	    // get a menu view 
 	    
 	    runTestOnUiThread(new Runnable() {
 	    	@Override
