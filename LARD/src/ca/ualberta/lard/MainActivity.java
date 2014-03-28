@@ -81,16 +81,8 @@ private ListView commentList;
     	case R.id.action_favourites:
     		getActionBar().setTitle("Favorites");
     		
-    		//TODO Wrap in a asyncronous tasks.
-    		/*
-    		CommentController controller = new CommentController(params[0]);
-    		Set<String> favIDSet = controller.getFavourites().getFavouritesList();
-    		
-    		for (String id: favIDSet) {
-    			CommentRequest commentRequest;
-    			commentRequest.setId(id);
-    		}
-    		*/
+    		FetchFavoriteComments fetch = new FetchFavoriteComments();
+        	fetch.execute(this);
         }
 
       return true;
@@ -111,6 +103,23 @@ private ListView commentList;
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentController controller = new CommentController(params[0]);
     		return controller.get(); // fetch all the comments off of the server
+    	}
+
+    	protected void onPostExecute(ArrayList<Comment> result) {
+    		allComments.clear();
+    		allComments.addAll(result);
+    		adapter.notifyDataSetChanged();
+    	}
+    }
+    
+    private class FetchFavoriteComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
+    	@Override
+    	protected ArrayList<Comment> doInBackground(Context... params) {
+    		CommentController controller = new CommentController(params[0]);
+		
+    		System.err.println(controller.getFavouriteComments());
+    		
+			return controller.getFavouriteComments();
     	}
 
     	protected void onPostExecute(ArrayList<Comment> result) {

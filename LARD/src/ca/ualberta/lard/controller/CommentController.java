@@ -2,6 +2,7 @@ package ca.ualberta.lard.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -161,6 +162,17 @@ public class CommentController {
 			System.err.println("Unable to retrieve shared preferences");
 		}
 		return new Favourites(prefs);
+	}
+	
+	public ArrayList<Comment> getFavouriteComments() {
+		ArrayList<Comment> favoriteBuffer = new ArrayList<Comment>();
+		Set<String> favIDSet = this.getFavourites().getFavouritesList();
+		for (Comment bufferComment: buffer) {
+			if(favIDSet.contains(bufferComment.getId())) {
+				favoriteBuffer.add(bufferComment);
+			}
+		}
+		return favoriteBuffer;
 	}
 
 }
