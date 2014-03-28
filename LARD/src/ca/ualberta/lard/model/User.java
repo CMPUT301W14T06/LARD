@@ -29,6 +29,14 @@ public class User {
 	            Secure.ANDROID_ID);
 	}
 	
+	private String removeOctothorpe(String name) {
+		if (name.contains("#")) {
+			String cleanedName = name.replaceAll("#", "");
+			return cleanedName;
+		}
+		return name;
+	}
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
