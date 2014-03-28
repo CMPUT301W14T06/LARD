@@ -54,20 +54,20 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	public void testAuthor() {
 		String curAuthor = comment.getAuthor();
 		// Try to change the author to the current name. This shouldn't affect anything.
-		comment.setAuthor(curAuthor, getActivity());
+		comment.setAuthor(curAuthor);
 		assertEquals("Updating with the same author name should make no changes",
 				curAuthor, comment.getAuthor());
 			
 		// Try to change the author to a new name.
 		String newAuthor = "FluffyBunny";
-		comment.setAuthor(newAuthor, getActivity());		
+		comment.setAuthor(newAuthor);		
 		assertFalse("New author should not be the same as the old author.",
 				curAuthor.equals(comment.getAuthor()));
 		assertEquals("Author should be updated to new author.", newAuthor, comment.getAuthor());
 		
 		// Try to change the user name to nothing.
 		newAuthor = "";
-		comment.setAuthor(newAuthor, getActivity());
+		comment.setAuthor(newAuthor);
 		assertFalse("A username cannot be blank.", comment.getAuthor().equals(newAuthor));
 		assertEquals("Updating username with nothing sets it to Anonymous", 
 				"Anonymous", comment.getAuthor());

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 /**
  * An instance of Comment represents a comment a user creates to share
@@ -27,6 +28,7 @@ public class Comment {
 	private String author;
 	private GeoLocation location;
 	private Picture picture;
+	private Context context;
 	/**
 	 * ID of parent comment element.
 	 */
@@ -42,12 +44,11 @@ public class Comment {
 	 * @param context Application context of the current Comment Creation request
 	 */
 	public void init(Comment c, String body, Context context) {
+		this.context = context;
 		c.createdAt = new Date();
 		c.updatedAt = new Date();
-		
-		User user = new User("Anonymous", context);// TODO put this in preferences
+		this.setAuthor(null);
 		this.bodyText = body;
-		c.author = user.getUsername();
 		//c.location = new GeoLocation(context);
 		c.location = new GeoLocation(53.525896, -113.52172);
 		c.id = UUID.randomUUID().toString();
@@ -155,17 +156,14 @@ public class Comment {
 	 * with a hash unique to the device being used. If an empty user name or no name
 	 * is given author will be set to Anonymous by default.
 	 * @param username
-	 * @param context
 	 */
-	public void setAuthor(String username, Context context) {
+	public void setAuthor(String username) {
 		// Check the username is not empty. If it is set to Anonymous.
-		if (username == "" || username == null) {
-			username = "Anonymous";
-			this.author = username;
-			this.setUpdated();
-			return;
-		}	
-		User user = new User(username, context);
+	
+		User user = new User(this.context.getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
+		if (username != null && !username.isEmpty()) {
+			user.setUsername(username);
+		}
 		this.author = user.getUsername();
 		this.setUpdated();
 	}
