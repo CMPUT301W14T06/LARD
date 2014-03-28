@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +38,7 @@ public class CommentActivity extends Activity {
 	private String commentId;
 	private ListView commentListView;
 	private Comment comment;
-	private ArrayList<Comment> commentList;
+	private static ArrayList<Comment> commentList;
 	private CommentListBaseAdapter adapter;
 	private TextView parentAuthorView;
 	private TextView parentCommentTextView;
@@ -107,23 +110,21 @@ public class CommentActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();	
-		
-		// Get children of the comment
-		if (comment.children() == null) {
-			commentList = new ArrayList<Comment>();
-		}
-		else {
-			commentList = comment.children();
-		}
+		Log.d("Starting on resume", "Starting on resume");
+	    CommentRequest commentRequest = new CommentRequest(100);
+	    commentRequest.setParentId(comment.getId());
+	    commentController = new CommentController(commentRequest, this);
+	    
+    	if (!commentController.isEmpty()) {
+    	    commentList = commentController.get();
+    	    Log.d("Got children:", commentList.toString());
+    	}
+    	else {
+    		commentList = new ArrayList<Comment>();
+    	}
 		
 		// Set the parent comment info in the view
-		// Make sure comment body isn't empty
-		if (comment.getBodyText() == null || comment.getBodyText() == "") {
-			parentCommentTextView.setText("[Comment Text Removed]");
-		}
-		else {
-			parentCommentTextView.setText(comment.getBodyText());			
-		}
+		parentCommentTextView.setText(comment.getBodyText());			
 		parentAuthorView.setText("By: "+comment.getAuthor());
 		//TODO: parentLocationView.setText(comment.);
 		parentNumRepliesView.setText(Integer.toString(comment.numReplies())+" replies");
@@ -158,17 +159,20 @@ public class CommentActivity extends Activity {
             return true;
         case R.id.action_edit:
         	String author = comment.getAuthor();
-        	String androidID = new User("Temp", getBaseContext()).getAndroidId();
-        	if (true) {
+    		// Check that the user was the author of the comment.
+    		String[] authorParts = author.split("#");
+    		String authorName = authorParts[0];
+    		String myUsername = new User(authorName, getBaseContext()).getUsername();
+    		if (author.equals(myUsername)) {
         		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
         		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
         		// Set flag to edit comment.
         		intent.putExtra(NewCommentActivity.FLAG, "EDIT");
         		startActivity(intent);
-        	}
-        	//else {
-            //	Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
-        	//}
+    		}
+        	else {
+        		Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
+        	} 
         	return true;
         case R.id.action_save:
         	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
