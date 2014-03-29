@@ -25,5 +25,8 @@
     <string name="cur_pic_title">Current Picture:</string>
     <string name="title_activity_edit_comment">Edit Comment</string>
     <string name="set_username">Set Username</string>
+    <string name="cancel">Cancel</string>
+    <string name="select">Select</string>
+    <string name="username">Username</string>
 
 </resources>

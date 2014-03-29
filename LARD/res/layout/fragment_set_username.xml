@@ -1,43 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/usernameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
-        android:ems="10" >
+        android:layout_marginBottom="5sp"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="@string/username"
+        android:textColor="#FFFFFF" />
 
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-        android:onClick="onClickCancelButton"
-        android:layout_alignLeft="@+id/usernameEditText"
-        android:layout_below="@+id/usernameEditText"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="26dp"
-        android:text="Cancel" />
+        android:layout_marginTop="5sp"
+        android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/selectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-        android:onClick="onClickSelectButton"
-        android:layout_alignBottom="@+id/cancelButton"
-        android:layout_marginLeft="18dp"
-        android:layout_toRightOf="@+id/cancelButton"
-        android:text="Select" />
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickCancelButton"
+            android:text="@string/cancel"
+            android:textColor="#FFFFFF" />
 
-</RelativeLayout>
+        <Space
+            android:id="@+id/space"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/selectButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickSelectButton"
+            android:text="@string/select"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+</LinearLayout>

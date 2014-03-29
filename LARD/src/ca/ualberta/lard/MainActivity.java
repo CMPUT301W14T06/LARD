@@ -124,7 +124,7 @@ private Fragment fragment;
 		TextView userNameEditTextView = (TextView) fragment.getView().findViewById(R.id.usernameEditText);
 		// There must be text in the bodyTextEditTextView field for the comment to be valid
 		if (userNameEditTextView.getText().toString().isEmpty()) {
-			Toast.makeText(getApplicationContext(), "Missing comment text.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Username can not be empty.", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
