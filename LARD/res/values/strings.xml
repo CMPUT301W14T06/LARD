@@ -24,5 +24,6 @@
     <string name="save_button">  Save  </string>
     <string name="cur_pic_title">Current Picture:</string>
     <string name="title_activity_edit_comment">Edit Comment</string>
+    <string name="set_username">Set Username</string>
 
 </resources>

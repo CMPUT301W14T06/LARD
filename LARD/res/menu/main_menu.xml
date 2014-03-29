@@ -15,6 +15,6 @@
         android:title="@string/location_settings"/>
     <item
         android:id="@+id/action_set_username"
-        android:title="@string/action_set_username"/>
+        android:title="@string/set_username"/>
 
 </menu>

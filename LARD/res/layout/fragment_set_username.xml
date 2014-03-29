@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:id="@+id/fragment"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
     <EditText
         android:id="@+id/usernameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="130dp"
@@ -20,21 +21,22 @@
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:onClick="onClickCancelButton"
         android:layout_alignLeft="@+id/usernameEditText"
         android:layout_below="@+id/usernameEditText"
         android:layout_marginLeft="17dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="26dp"
         android:text="Cancel" />
 
     <Button
         android:id="@+id/selectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:onClick="onClickSelectButton"
-        android:layout_alignBaseline="@+id/cancelButton"
         android:layout_alignBottom="@+id/cancelButton"
-        android:layout_marginLeft="19dp"
+        android:layout_marginLeft="18dp"
         android:layout_toRightOf="@+id/cancelButton"
         android:text="Select" />
 
