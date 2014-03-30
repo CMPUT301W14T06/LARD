@@ -81,6 +81,30 @@ public class User {
 		
 	}
 	
+	/**
+	 * Computes what getUsername would return given any author name.
+	 * @param givenUsername Any author name.
+	 * @return authorname + # + hash as a String
+	 */
+	public String hashWithGivenName(String givenUsername) {
+		try {
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		
+		String usernameWithSalt = (givenUsername + this.userId);
+		md.update(usernameWithSalt.getBytes(), 0, usernameWithSalt.length());
+		 
+        //Converts message digest value in base 16 (hex) 
+        String hash = new BigInteger(1, md.digest()).toString(16);
+		
+		return givenUsername + "#" + hash;
+		
+		} catch (NoSuchAlgorithmException e) {
+			System.err.println("No such algorithm");
+		}
+		// Couldn't compute the hash
+		return null;
+	}
+	
 	private boolean set(String key, String value) {
 		Editor editor = this.prefs.edit();
 		editor.putString(key, value);

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.User;
 
 /**
@@ -42,10 +43,7 @@ public class CommentActivity extends Activity {
 	private TextView parentCommentTextView;
 	private TextView parentNumRepliesView;
 	private CommentController commentController;
-	
-	@SuppressWarnings("unused") // TODO: Remove
 	private ImageView parentPicView;
-	@SuppressWarnings("unused") // TODO: Remove
 	private TextView parentLocationView;
 
 	// For getting the id of clicked comment in MainActivity
@@ -132,11 +130,14 @@ public class CommentActivity extends Activity {
 		// Set the parent comment info in the view
 		parentCommentTextView.setText(comment.getBodyText());			
 		parentAuthorView.setText("By: "+comment.getAuthor());
-		//TODO: parentLocationView.setText(comment.);
 		parentNumRepliesView.setText(Integer.toString(comment.numReplies())+" replies");
-		//TODO: parentPicView.set;
+		// Set the distance
+		GeoLocation myCurLoc = new GeoLocation(getBaseContext());
+		String distance = comment.getLocation().roundedDistanceFrom(myCurLoc);
+		parentLocationView.setText(distance+"m away");
+		// TODO parentPicView.set;
 		
-		// Get the children if there are any/
+		// Get the children if there are any
 	    CommentRequest commentRequest = new CommentRequest(100);
 	    commentRequest.setParentId(comment.getId());
 		FetchChildren fetchChildren = new FetchChildren();
@@ -168,9 +169,15 @@ public class CommentActivity extends Activity {
         	commentController.favourite(comment);
             return true;
         case R.id.action_edit:
+        	// Get author of the comment without the hash
         	String author = comment.getAuthor();
-    		String myUsername = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE)).getUsername();
-    		if (author.equals(myUsername)) {
+        	String[] authorParts = author.split("#"); 
+        	// Make a new user based on the current user
+    		User curUser = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
+    		// Compute what the author with hash would be using the current users device id.
+    		String authorWithCurUserId = curUser.hashWithGivenName(authorParts[0]);
+    		// If author and computed author are the same, allow the user to edit the comment.
+    		if (author.equals(authorWithCurUserId)) {
         		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
         		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
         		// Set flag to edit comment.
