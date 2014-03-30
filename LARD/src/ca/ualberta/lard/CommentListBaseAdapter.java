@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import ca.ualberta.lard.model.Comment;
+import ca.ualberta.lard.model.GeoLocation;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -71,7 +72,9 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		Comment comment = myList.get(position);
 		mViewHolder.itemPreview = detail(convertView, R.id.itemPreview, comment.toString());
 		mViewHolder.itemAuthor  = detail(convertView, R.id.itemAuthor,  comment.getAuthor());
-		mViewHolder.itemDistance  = detail(convertView, R.id.itemDistance, "?m away"); // TODO: Actually calculate distance
+		GeoLocation currentLocation = new GeoLocation(this.context);
+		int distanceFromComment = (int) Math.round(currentLocation.distanceFrom(comment.getLocation()));
+		mViewHolder.itemDistance  = detail(convertView, R.id.itemDistance, Integer.toString(distanceFromComment) + "m away"); // TODO: Actually calculate distance
 		// NumReplies uses network, so this is done on a background thread
 		mViewHolder.itemNumChildren = (TextView) convertView.findViewById(R.id.itemReplyCount);
 		ANumReplies aNumReplies = new ANumReplies(mViewHolder.itemNumChildren);

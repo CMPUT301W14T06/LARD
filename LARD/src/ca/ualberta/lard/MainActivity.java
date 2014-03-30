@@ -10,6 +10,7 @@ import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
 import ca.ualberta.lard.model.Favourites;
+import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.User;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -95,11 +96,15 @@ private Fragment fragment;
     		
     		FetchFavoriteComments fetch = new FetchFavoriteComments();
         	fetch.execute(this);
+        	break;
     	case R.id.action_set_username:
     		ft = fm.beginTransaction();
     		fragment = new SetUsernameFragment();
     		ft.add(R.id.fragment, fragment);
     		ft.commit();
+    		break;
+    	case R.id.action_sort:
+    		
         }
 
       return true;
@@ -111,7 +116,7 @@ private Fragment fragment;
     	allComments = new ArrayList<Comment>();
     	adapter = new CommentListBaseAdapter(this, allComments);
     	commentList.setAdapter(adapter);
-    	FetchComments fetch = new FetchComments();
+    	FetchNearbyComments fetch = new FetchNearbyComments();
     	fetch.execute(this);
     }
     
@@ -142,10 +147,17 @@ private Fragment fragment;
 		ft.commit();
 	}
 
-    private class FetchComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
+	
+	/*
+	 * These classes are duplicating lots of code. Later let's refactor, use state model
+	 */
+    private class FetchNearbyComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
-    		CommentController controller = new CommentController(params[0]);
+    		CommentRequest proximityRequest = new CommentRequest(20);
+    		GeoLocation loc = new GeoLocation(getBaseContext());
+    		proximityRequest.setLocation(loc);
+    		CommentController controller = new CommentController(proximityRequest, params[0]);
     		return controller.get(); // fetch all the comments off of the server
     	}
 

@@ -74,7 +74,7 @@ public class GeoLocation {
 	 * Credit: base code for the haversine formula here: http://www.movable-type.co.uk/scripts/latlong.html
 	 * 
 	 * @param loc1
-	 * @return the distance as a double
+	 * @return the distance as a double, in meters
 	 */
 	public double distanceFrom(GeoLocation loc1) {
 		
@@ -87,7 +87,7 @@ public class GeoLocation {
 		double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
 		        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-		return earthRadius * c;
+		return earthRadius * c * 1000;
 	}
 	
 	/**
