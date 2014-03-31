@@ -1,5 +1,6 @@
 package ca.ualberta.lard.model;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import android.content.Context;
@@ -131,6 +132,18 @@ public class GeoLocation {
 		temp = Double.doubleToLongBits(lon);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
+	}
+	
+	/**
+	 * Returns the distance between two GeoLocations rounded to two
+	 * decimal places as a string.
+	 * @param loc The GeoLocation to calculate distance from
+	 * @return String of distance rounded to 2 decimal places
+	 */
+	public String roundedDistanceFrom(GeoLocation loc) {
+		Double unrounded = this.distanceFrom(loc);
+		DecimalFormat rounded = new DecimalFormat("#.##");
+		return rounded.format(unrounded);
 	}
 
 	/**
