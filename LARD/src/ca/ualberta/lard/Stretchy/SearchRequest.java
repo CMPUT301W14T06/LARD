@@ -66,7 +66,7 @@ public class SearchRequest {
 	 * @return true if either bodyText or parent is set
 	 */
 	public boolean anyQuery() {
-		return !(this.bodyText == null && this.parent == null);
+		return !(this.bodyText == null && this.parent == null && this.location == null);
 	}
 	
 	/**
@@ -90,10 +90,12 @@ public class SearchRequest {
 	
 	public String locationString() {
 		if (this.location != null) {
-			return "{ \"sort\" : [ { \"_geo_distance\" : { \"comment.location\" : { \"lat\" : " +
+			String searchString = "{ \"sort\" : [ { \"_geo_distance\" : { \"comment.location\" : { \"lat\" : " +
 					Double.toString(location.getLatitude()) + " , \"lon\" : " +
 					Double.toString(location.getLongitude()) +
-					", \"order\" : \"asc\", \"unit\" : \"km\" } } ], \"query\" : { \"match_all\" : {} }}";
+					", \"order\" : \"asc\", \"unit\" : \"km\" } } ], \"query\" : { \"match_all\" : {} }";
+			System.out.println(searchString);
+			return searchString;
 		}
 		return "";
 	}

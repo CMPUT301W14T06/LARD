@@ -3,6 +3,7 @@ package ca.ualberta.lard.model;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
@@ -26,8 +27,10 @@ public class GeoLocation {
 	 * @param context
 	 */
 	public GeoLocation(Context context) {
-		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE); 
-		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		String provider = lm.getBestProvider(criteria, false);
+		Location location = lm.getLastKnownLocation(provider);
 		if (location == null) {
 			location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
@@ -86,8 +89,10 @@ public class GeoLocation {
 
 		double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
 		        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-		return earthRadius * c * 1000;
+		double c = 2 * Math.asin(Math.sqrt(a)); 
+		double returnValue = earthRadius * c * 1000;
+		System.out.println("Distance: " + Double.toString(returnValue));
+		return returnValue;
 	}
 	
 	/**

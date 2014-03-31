@@ -156,7 +156,7 @@ private Fragment fragment;
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(20);
     		GeoLocation loc = new GeoLocation(getBaseContext());
-    		proximityRequest.setLocation(loc);
+    		//proximityRequest.setLocation(loc); //Doesn't work yet, omit for now
     		CommentController controller = new CommentController(proximityRequest, params[0]);
     		return controller.get(); // fetch all the comments off of the server
     	}
