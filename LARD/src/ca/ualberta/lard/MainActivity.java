@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -43,9 +44,6 @@ public class MainActivity extends Activity {
 private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
 private ListView commentList;
-private FragmentManager fm;
-private FragmentTransaction ft;
-private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +51,6 @@ private Fragment fragment;
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
-        
-        fm = getFragmentManager();
         
         commentList = (ListView) findViewById(R.id.threadsListView);
         
@@ -98,10 +94,8 @@ private Fragment fragment;
         	fetch.execute(this);
         	break;
     	case R.id.action_set_username:
-    		ft = fm.beginTransaction();
-    		fragment = new SetUsernameFragment();
-    		ft.add(R.id.fragment, fragment);
-    		ft.commit();
+    		DialogFragment newFragment = new SetUsernameFragment();
+    	    newFragment.show(getFragmentManager(), "SetUsername");
     		break;
     	case R.id.action_sort:
     		
@@ -119,34 +113,6 @@ private Fragment fragment;
     	FetchNearbyComments fetch = new FetchNearbyComments();
     	fetch.execute(this);
     }
-    
-    public void onClickCancelButton(View v) {
-		ft.remove(fragment);
-		ft.commit();
-	}
-	
-	public void onClickSelectButton(View v) {
-		TextView userNameEditTextView = (TextView) fragment.getView().findViewById(R.id.usernameEditText);
-		// There must be text in the bodyTextEditTextView field for the comment to be valid
-		if (userNameEditTextView.getText().toString().isEmpty()) {
-			Toast.makeText(getApplicationContext(), "Username can not be empty.", Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		// Username may not contain "#" character
-		if (userNameEditTextView.getText().toString().contains("#")) {
-			Toast.makeText(getApplicationContext(), "Username may not contain \"#\" character", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		
-		Editor editor = getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE).edit();
-		editor.putString("username", userNameEditTextView.getText().toString());
-		editor.commit();
-		
-		ft.remove(fragment);
-		ft.commit();
-	}
-
 	
 	/*
 	 * These classes are duplicating lots of code. Later let's refactor, use state model
