@@ -169,7 +169,6 @@ public class DataModel {
 			return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 		}
 		
-		System.err.println("Beginning a search request...");
 		
 		SearchRequest sReq = new SearchRequest(req);
 		ArrayList<Comment> comments2 = client.search(sReq); // TODO finish

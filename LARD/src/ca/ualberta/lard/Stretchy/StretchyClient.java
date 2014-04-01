@@ -108,8 +108,10 @@ public class StretchyClient {
 			@Override
 			public void run() {
 				System.err.println("here");
-				HttpPost postReq = new HttpPost(ES_LOCATION + comment.getId() + "/");
+				HttpPost postReq = new HttpPost(ES_LOCATION);
 				String json = "";
+				
+				// While rare, we experienced stackoverflows before, so it's always good to protect against them.
 				try {
 					json = gson.toJson(comment);
 				} catch (StackOverflowError ex) {
@@ -121,7 +123,7 @@ public class StretchyClient {
 				postReq.setHeader("Accept", "application/json");
 				StringEntity upsert = null;
 				try { 
-					upsert = new StringEntity("{ \"doc\": " + json + ", \"doc_as_upsert\": true }");
+					upsert = new StringEntity(json);
 					System.err.println(upsert);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
