@@ -28,7 +28,8 @@ public class Comment {
 	private String author;
 	private GeoLocation location;
 	private Picture picture;
-	private Context context;
+	// Context is transient because it is required at runtime, but is not relevant for serialization
+	transient Context context;
 	/**
 	 * ID of parent comment element.
 	 */
@@ -195,8 +196,13 @@ public class Comment {
 		return (this.parent != null);
 	}
 	
-	public void setUpdated() {
+	/**
+	 * Touches the Comment's updatedAt timestamp.
+	 * @return Comment The current comment for chaining.
+	 */
+	public Comment setUpdated() {
 		this.updatedAt = new Date();
+		return this;
 	}
 	
 	public boolean hasPicture() {
