@@ -53,7 +53,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="TextView"
+                android:text=".?m away"
                 android:textAlignment="gravity"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="12sp" />
