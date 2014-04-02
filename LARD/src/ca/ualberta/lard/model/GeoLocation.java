@@ -30,7 +30,7 @@ public class GeoLocation {
 	public GeoLocation(Context context) {
 		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
-		String provider = lm.getBestProvider(criteria, false);
+		String provider = lm.getBestProvider(criteria, true);
 		Location location = lm.getLastKnownLocation(provider);
 		if (location == null) {
 			location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);

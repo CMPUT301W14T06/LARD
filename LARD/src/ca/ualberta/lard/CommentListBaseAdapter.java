@@ -1,12 +1,18 @@
 package ca.ualberta.lard;
 
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.GeoLocation;
 import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +61,7 @@ public class CommentListBaseAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return 0; // TODO: This is never used, but if it gets used we'll implement it
+		return 0; // This is never used, but if it gets used we'll implement it
 	}
 
 	@Override
@@ -72,9 +78,53 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		Comment comment = myList.get(position);
 		mViewHolder.itemPreview = detail(convertView, R.id.itemPreview, comment.toString());
 		mViewHolder.itemAuthor  = detail(convertView, R.id.itemAuthor,  comment.getAuthor());
-		GeoLocation currentLocation = new GeoLocation(this.context);
-		int distanceFromComment = (int) Math.round(currentLocation.distanceFrom(comment.getLocation()));
-		mViewHolder.itemDistance  = detail(convertView, R.id.itemDistance, Integer.toString(distanceFromComment) + "m away"); // TODO: Actually calculate distance
+		mViewHolder.itemDistance = (TextView) convertView.findViewById(R.id.itemDistance);
+		
+		// Create a location listener with references to the location textview and the comment location
+		final GeoLocation commentLocation = comment.getLocation();
+		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+		LocationListener locationListener = new LocationListener() {
+			
+			final WeakReference<TextView> locationViewReference = new WeakReference<TextView>(mViewHolder.itemDistance);
+			final WeakReference<GeoLocation> locationReference = new WeakReference<GeoLocation>(commentLocation);
+			@Override
+			public void onLocationChanged(Location location) {
+				// TODO Auto-generated method stub
+				TextView textView = (TextView) locationViewReference.get();
+				GeoLocation referencedLocation = (GeoLocation) locationReference.get();
+				GeoLocation currentLocation = new GeoLocation(location.getLatitude(), location.getLongitude());
+				int distanceFromComment = (int) Math.round(currentLocation.distanceFrom(referencedLocation));
+				textView.setText(Integer.toString(distanceFromComment) + "m away");
+			}
+
+			@Override
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onProviderEnabled(String provider) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onProviderDisabled(String provider) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		
+		// Activate the location manager and request updates
+		LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		String provider = lm.getBestProvider(criteria, true);
+		locationManager.requestLocationUpdates(provider, 20000, 100, locationListener);
+		
+		
 		// NumReplies uses network, so this is done on a background thread
 		mViewHolder.itemNumChildren = (TextView) convertView.findViewById(R.id.itemReplyCount);
 		ANumReplies aNumReplies = new ANumReplies(mViewHolder.itemNumChildren);
