@@ -64,8 +64,8 @@ public class CommentController {
 	 * </p>
 	 * @param comment The comment object that is to be created.
 	 */
-	public static void createComment(Comment comment) {
-		DataModel.save(comment);
+	public static boolean createComment(Comment comment) {
+		return DataModel.save(comment);
 	}
 	
 	public static boolean update(Comment comment) {

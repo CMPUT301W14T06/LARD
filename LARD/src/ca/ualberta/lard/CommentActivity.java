@@ -171,21 +171,19 @@ public class CommentActivity extends Activity {
             return true;
         case R.id.action_edit:
         	// Get author of the comment without the hash
-        	String author = comment.getAuthor();
-        	String[] authorParts = author.split("#"); 
         	
         	// Make a new user based on the current user
     		User curUser = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
     		
     		// Compute what the author with hash would be using the current users device id.
-    		String authorWithCurUserId = curUser.hashWithGivenName(authorParts[0]);
+    		String authorWithCurUserId = curUser.hashWithGivenName(comment.getRawAuthor());
     		
     		// If author and computed author are the same, allow the user to edit the comment.
-    		if (author.equals(authorWithCurUserId)) {
+    		if (comment.getAuthor().equals(authorWithCurUserId)) {
         		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
-        		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
+        		// TODO pass the parent
+        		intent.putExtra(NewCommentActivity.COMMENT_STRING, comment.toJson());
         		// Set flag to edit comment.
-        		intent.putExtra(NewCommentActivity.FLAG, "EDIT");
         		startActivity(intent);
     		} else {
         		Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
@@ -197,9 +195,7 @@ public class CommentActivity extends Activity {
             return true;
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
-    		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
-    		// Set flag to new because we are replying.
-    		intent.putExtra(NewCommentActivity.FLAG, "NEW");
+    		intent.putExtra(NewCommentActivity.PARENT_STRING, comment.toJson());
     		startActivity(intent);
             return true;
         default:

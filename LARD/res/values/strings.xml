@@ -9,7 +9,7 @@
     <string name="action_reply">Reply</string>
     <string name="action_save">Save</string>
     <string name="action_edit">Edit</string>
-    <string name="Reply">To:</string>
+    <string name="Reply">In Reply To: &lt;loading&gt;</string>
     <string name="username_text_view">Username:</string>
     <string name="fake_hint">&#8230;</string>
     <string name="username_edittext_view">Anonymous</string>

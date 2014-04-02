@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import com.google.gson.Gson;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -99,6 +101,10 @@ public class Comment {
 	
 	public String getAuthor() {
 		return this.author;
+	}
+	
+	public String getRawAuthor() {
+		return this.author.split("#")[0];
 	}
 	
 	public GeoLocation getLocation() {
@@ -261,6 +267,16 @@ public class Comment {
 			return true;
 		}
 		return false;
+	}
+	
+	public String toJson() {
+		Gson gson = new Gson();
+		return gson.toJson(this);
+	}
+	
+	public static Comment fromJson(String json) {
+		Gson gson = new Gson();
+		return gson.fromJson(json, Comment.class);
 	}
 }
 
