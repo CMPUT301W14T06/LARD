@@ -88,10 +88,10 @@ private ListView commentList;
         	startActivity(j);
         	break;
     	case R.id.action_favourites:
-    		getActionBar().setTitle("Favorites");
-    		
+    		//getActionBar().setTitle("Favorites");
     		FetchFavoriteComments fetch = new FetchFavoriteComments();
-        	fetch.execute(this);
+        	//fetch.execute(this);
+    		
         	break;
     	case R.id.action_set_username:
     		DialogFragment newFragment = new SetUsernameFragment();
@@ -138,9 +138,6 @@ private ListView commentList;
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentController controller = new CommentController(params[0]);
-		
-    		System.err.println(controller.getFavouriteComments());
-    		
 			return controller.getFavouriteComments();
     	}
 
