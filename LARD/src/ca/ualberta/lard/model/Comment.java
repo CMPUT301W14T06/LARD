@@ -230,7 +230,7 @@ public class Comment {
 	 * it is not.
 	 * @return true or false
 	 */
-	public boolean isLocal(Context context) {
+	public boolean isLocal() {
 		return DataModel.isLocal(this, context);
 	}
 	

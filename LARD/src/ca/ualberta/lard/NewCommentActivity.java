@@ -236,12 +236,10 @@ public class NewCommentActivity extends Activity {
 				editComment.setPicture(picture);
 			}
 			
-			// TODO: activities should not directly access models. use CommentController (i dont currently know how to do this)
-			// Check if the comment was saved locally
-			if (editComment.isLocal(getBaseContext())) {
-				// TODO interact with the comment controller somehow here?
+			// Perform the actual save
+			if (!CommentController.update(editComment)) {
+				Toast.makeText(getApplicationContext(), "Error saving your comment changes", Toast.LENGTH_SHORT).show();
 			}
-			DataModel.save(editComment);
 		}
 		
 		finish();

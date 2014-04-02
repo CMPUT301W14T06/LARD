@@ -68,6 +68,10 @@ public class CommentController {
 		DataModel.save(comment);
 	}
 	
+	public static boolean update(Comment comment) {
+		return DataModel.update(comment);
+	}
+	
 	public boolean any() {
 		return buffer.size() > 0;
 	}
