@@ -131,6 +131,7 @@ public class CommentActivity extends Activity {
 		parentCommentTextView.setText(comment.getBodyText());			
 		parentAuthorView.setText("By: "+comment.getAuthor());
 		parentNumRepliesView.setText(Integer.toString(comment.numReplies())+" replies");
+		parentPicView.setImageBitmap(comment.getPicture().getBitmap());
 		// Set the distance
 		GeoLocation myCurLoc = new GeoLocation(getBaseContext());
 		String distance = comment.getLocation().roundedDistanceFrom(myCurLoc);
