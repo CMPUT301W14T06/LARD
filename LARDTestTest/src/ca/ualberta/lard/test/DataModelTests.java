@@ -2,6 +2,8 @@ package ca.ualberta.lard.test;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import ca.ualberta.lard.MainActivity;
 import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.model.Comment;
@@ -16,6 +18,14 @@ import android.test.ActivityInstrumentationTestCase2;
 
 public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+	
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+	
 	public DataModelTests() {
 		super(MainActivity.class);
 	}
@@ -25,7 +35,9 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	 */
 	// This test will be a little bit handwavey, I suppose. We're involving external infrastructure.
 	public void testSave() {
-		Comment c = new Comment("Super comment wow, such comment amaze", getActivity());
+		Comment c = new Comment("Eldon is mad stinky", getActivity());
+		Gson gson = new Gson();
+		System.err.println(gson.toJson(c));
 		boolean result = DataModel.save(c);
 		assertTrue(result); // this is a finnicky not-a-test
 	}

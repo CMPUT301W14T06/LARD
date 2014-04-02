@@ -3,13 +3,16 @@ package ca.ualberta.lard.Stretchy;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.util.Log;
 import ca.ualberta.lard.model.Comment;
 
@@ -85,7 +88,6 @@ public class StretchyClient {
 		try {
 			new Thread(s).start();
 		} catch (Exception e) {
-			Log.d("HELP", "PLZ HALP");
 			e.printStackTrace();
 		}
 
@@ -98,30 +100,67 @@ public class StretchyClient {
 	 * @param comment The comment that the user wishes to save over the network
 	 * @return StretchyResponse containing the server's response.
 	 */
-	public StretchyResponse save(Comment comment) {
-		HttpPost postReq = new HttpPost(ES_LOCATION);
+	public StretchyResponse save(final Comment comment) {
 		
-		StringEntity json = null;
-		try { 
-			json = new StringEntity(gson.toJson(comment));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		class RunSave implements Runnable {
+			private StretchyResponse sResponse = null;
+			
+			@Override
+			public void run() {
+				System.err.println("here");
+				HttpPost postReq = new HttpPost(ES_LOCATION);
+				String json = "";
+				
+				// While rare, we experienced stackoverflows before, so it's always good to protect against them.
+				try {
+					json = gson.toJson(comment);
+				} catch (StackOverflowError ex) {
+					System.err.println("Major error in StretchyClient - Save: stackoverflow ");
+					sResponse = new StretchyResponse(false, comment.getId());
+					return;
+				}
+				
+				postReq.setHeader("Accept", "application/json");
+				StringEntity upsert = null;
+				try { 
+					upsert = new StringEntity(json);
+					System.err.println(upsert);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				postReq.setEntity(upsert);
+				
+				HttpResponse response = null;
+				try {
+					response = client.execute(postReq);
+					sResponse = StretchyResponse.create(response);
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			public StretchyResponse get() {
+				Long curtime = System.currentTimeMillis();
+				while (sResponse == null) {
+					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
+						sResponse = new StretchyResponse(false, comment.getId());
+						return sResponse;
+					}
+				}
+				return sResponse;
+			}
+			
 		}
-		
-		postReq.setHeader("Accept", "application/json");
-		
-		postReq.setEntity(json);
-		
-		HttpResponse response = null;
+		RunSave s = new RunSave();
 		try {
-			response = client.execute(postReq);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			new Thread(s).start();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return StretchyResponse.create(response);
+
+		return s.get();
 	}
 	
 	/**

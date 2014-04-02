@@ -25,6 +25,11 @@ public class StretchyResponse {
 	@SuppressWarnings("unused") // TODO: Remove
 	private String _index;
 	
+	public StretchyResponse(boolean status, String id) {
+		this.ok = status;
+		this._id = id;
+	}
+	
 	/**
 	 * Factory to create a StrechyResponse given an HttpResponse
 	 * @param response HttpResponse received from the server.
