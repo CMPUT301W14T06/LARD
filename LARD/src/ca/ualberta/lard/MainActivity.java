@@ -141,7 +141,7 @@ private Menu menu;
     private class FetchNearbyComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
-    		CommentRequest proximityRequest = new CommentRequest(20);
+    		CommentRequest proximityRequest = new CommentRequest(200);
     		GeoLocation loc = new GeoLocation(getBaseContext());
     		//proximityRequest.setLocation(loc); //Doesn't work yet, omit for now
     		CommentController controller = new CommentController(proximityRequest, params[0]);

@@ -84,8 +84,7 @@ public class CommentActivity extends Activity {
 	    commentController = new CommentController(commentRequest, this);
     	if (!commentController.isEmpty()) {
     		comment = commentController.getSingle();
-    	}
-    	else {
+    	} else {
     		Toast.makeText(getApplicationContext(), "Error loading the requested comment", Toast.LENGTH_SHORT).show();
     		System.err.println("Exiting Comment Activity with an Empty commentController.. Comment ID: " + commentId);
     		// Couldn't find the comment, should never get here though.
@@ -129,8 +128,10 @@ public class CommentActivity extends Activity {
 
 		// Set the parent comment info in the view
 		parentCommentTextView.setText(comment.getBodyText());			
-		parentAuthorView.setText("By: "+comment.getAuthor());
-		parentNumRepliesView.setText(Integer.toString(comment.numReplies())+" replies");
+		parentAuthorView.setText("By: " + comment.getAuthor());
+		
+		// TODO this should be put in an async task, as it may not necessarily be loaded yet.
+		parentNumRepliesView.setText(Integer.toString(comment.numReplies()) + " replies");
 		// Set the distance
 		GeoLocation myCurLoc = new GeoLocation(getBaseContext());
 		String distance = comment.getLocation().roundedDistanceFrom(myCurLoc);
@@ -172,10 +173,13 @@ public class CommentActivity extends Activity {
         	// Get author of the comment without the hash
         	String author = comment.getAuthor();
         	String[] authorParts = author.split("#"); 
+        	
         	// Make a new user based on the current user
     		User curUser = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
+    		
     		// Compute what the author with hash would be using the current users device id.
     		String authorWithCurUserId = curUser.hashWithGivenName(authorParts[0]);
+    		
     		// If author and computed author are the same, allow the user to edit the comment.
     		if (author.equals(authorWithCurUserId)) {
         		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
@@ -183,8 +187,7 @@ public class CommentActivity extends Activity {
         		// Set flag to edit comment.
         		intent.putExtra(NewCommentActivity.FLAG, "EDIT");
         		startActivity(intent);
-    		}
-        	else {
+    		} else {
         		Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
         	} 
         	return true;

@@ -28,8 +28,15 @@ public class Comment {
 	private String author;
 	private GeoLocation location;
 	private Picture picture;
+	
+	/**
+	 * Lazy-loaded members. Uninstantiated, until a method requires the data.
+	 */
+	private transient Integer numReplies;
+	private transient ArrayList<Comment> children;
+	
 	// Context is transient because it is required at runtime, but is not relevant for serialization
-	transient Context context;
+	private transient Context context;
 	/**
 	 * ID of parent comment element.
 	 */
@@ -129,11 +136,15 @@ public class Comment {
 	 * @return null or ArrayList of children
 	 */
 	public ArrayList<Comment> children() {
+		if (this.children != null) {
+			return this.children;
+		}
 		CommentRequest req = new CommentRequest(100);
 		req.setParentId(this.id);
 		// TODO: Children should be sorted by date of creation.
-		ArrayList<Comment> childList  = DataModel.retrieveComments(req);
-		return childList;
+		this.children  = DataModel.retrieveComments(req);
+		
+		return this.children;
 	}
 	
 	// Setters
@@ -216,13 +227,13 @@ public class Comment {
 	 * Returns an integer. The number of children is 0 if the list
 	 * of children is null. Otherwise the number of elements in the list
 	 * of children is returned.
-	 * @return Number of children 
+	 * @return int Number of children 
 	 */
 	public int numReplies() {
-		if (this.children() == null) {
-			return 0;
+		if (this.numReplies == null) {
+			this.numReplies = this.children().size();
 		}
-		return this.children().size();
+		return this.numReplies;
 	}
 	
 	/**
