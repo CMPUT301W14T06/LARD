@@ -80,6 +80,11 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		mViewHolder.itemAuthor  = detail(convertView, R.id.itemAuthor,  comment.getAuthor());
 		mViewHolder.itemDistance = (TextView) convertView.findViewById(R.id.itemDistance);
 		
+		// Display the last known location, we'll update as the phone moves.
+		GeoLocation currentLocation = new GeoLocation(this.context);
+		int distanceFromComment = (int) Math.round(currentLocation.distanceFrom(comment.getLocation()));
+		mViewHolder.itemDistance.setText(Integer.toString(distanceFromComment) + "m away");
+		
 		// Create a location listener with references to the location textview and the comment location
 		final GeoLocation commentLocation = comment.getLocation();
 		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);

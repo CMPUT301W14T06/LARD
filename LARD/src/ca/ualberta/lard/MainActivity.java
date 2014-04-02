@@ -150,7 +150,13 @@ private Menu menu;
 
     	protected void onPostExecute(ArrayList<Comment> result) {
     		allComments.clear();
-    		allComments.addAll(result);
+    		for (Comment topLevelComment : result)
+    		{
+    			if (topLevelComment.getParent() == null)
+    			{
+    				allComments.add(topLevelComment);
+    			}
+    		}
     		adapter.notifyDataSetChanged();
     	}
     }
@@ -160,6 +166,7 @@ private Menu menu;
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(20);
+    		proximityRequest.setParentId(null);
     		GeoLocation loc = new GeoLocation(getBaseContext());
     		CommentController controller = new CommentController(proximityRequest, params[0]);
 			return controller.getFavouriteComments();
