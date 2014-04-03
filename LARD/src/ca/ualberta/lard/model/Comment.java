@@ -225,6 +225,8 @@ public class Comment {
 	public boolean hasPicture() {
 		if (this.picture == null) {
 			return false;
+		} else if (this.picture.getImageString() == null) {
+			return false;
 		}
 		return true;
 	}
