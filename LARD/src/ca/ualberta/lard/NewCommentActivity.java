@@ -209,8 +209,7 @@ public class NewCommentActivity extends Activity {
 		UpdateOrSaveComment finalize = new UpdateOrSaveComment();
 		finalize.execute(comment);
 
-		
-		//finish();
+		finish();
 	}
 
 	/**
