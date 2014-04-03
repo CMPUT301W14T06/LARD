@@ -1,6 +1,5 @@
 package ca.ualberta.lard;
 
-import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -17,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -134,7 +134,10 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		mViewHolder.itemNumChildren = (TextView) convertView.findViewById(R.id.itemReplyCount);
 		ANumReplies aNumReplies = new ANumReplies(mViewHolder.itemNumChildren);
 		aNumReplies.execute(comment);
-		// mViewHolder.itemIcon  = detail(convertView, R.id.itemIcon, "@android:drawable/ic_menu_camera"); // TODO: Pick icon based on whether or not the comment has a picture
+		if (! comment.hasPicture()) {
+			mViewHolder.itemIcon  = imageDetail(convertView, R.id.itemIcon, "@android:drawable/screen_background_dark"); 
+		}
+		
 		return convertView;
 	}
 	
@@ -144,19 +147,18 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		return tv;
 	}
 	
-	/*
-	private ImageView detail(View v, int resId, int icon) {
+	
+	private ImageView imageDetail(View v, int resId, String icon) {
 		ImageView iv = (ImageView) v.findViewById(resId);
-		iv.setImageResource(icon); // 
-		
+		iv.setImageResource(this.context.getResources().getIdentifier("@android:drawable/screen_background_dark", "drawable", this.context.getPackageName())); // 
 		return iv;
 	}
-	*/
+	
 	
 	private class MyViewHolder {
 		@SuppressWarnings("unused") // TODO: Remove
 		TextView itemPreview, itemAuthor, itemDistance, itemNumChildren;
-		//ImageView itemIcon;
+		ImageView itemIcon;
 	}
 	private class ANumReplies extends AsyncTask<Comment, Integer, String> {
 		// Given a textview and a comment, gives the numreplies of that comment to that textview
