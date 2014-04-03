@@ -84,18 +84,6 @@ public class NewCommentActivity extends Activity {
 
 		Intent intent = getIntent();
 		
-		// we need a parent string to run this activity
-		if (!intent.hasExtra(PARENT_STRING)) {
-			lardTextView.setVisibility(View.GONE);
-		} else {
-			// Initialize the parent
-			this.parent = Comment.fromJson(intent.getStringExtra(PARENT_STRING));
-			this.parent.setContext(getApplicationContext());
-			lardTextView.setText(parent.getAuthor().toString());
-		}
-		
-		
-		
 		// We either deserialize the comment passed along, or we create a new empty one
 		if (intent.hasExtra(COMMENT_STRING)) {
 			this.mode = EDIT_MODE;
@@ -105,6 +93,18 @@ public class NewCommentActivity extends Activity {
 			this.mode = NEW_MODE;
 			this.comment = new Comment("[Comment text removed]", getApplicationContext());
 		}
+		
+		if (!intent.hasExtra(PARENT_STRING)) {
+			lardTextView.setVisibility(View.GONE);
+		} else {
+			// Initialize the parent
+			this.parent = Comment.fromJson(intent.getStringExtra(PARENT_STRING));
+			this.parent.setContext(getApplicationContext());
+			lardTextView.setText(parent.getAuthor().toString());
+			// Since we have a parent, set it to the comment's parent.
+			this.comment.setParent(this.parent.getId());
+		}
+		
 		
 
 		// Display the comments current information
