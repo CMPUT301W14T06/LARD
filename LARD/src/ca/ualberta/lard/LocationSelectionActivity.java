@@ -28,6 +28,7 @@ import android.widget.Toast;
 public class LocationSelectionActivity extends Activity {
 	private boolean gpsLocationClicked;
 	private boolean selectedLocationClicked;
+	private boolean customLocationClicked;
 	private Spinner spinner;
 	private String selectedLocationString;
 	private GeoLocation geoLocation;
@@ -43,13 +44,16 @@ public class LocationSelectionActivity extends Activity {
 		// Default state is gps location is set to true
 		gpsLocationClicked = true;
 		selectedLocationClicked = false;
+		customLocationClicked = false;
 		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
 		RadioButton selectedLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
+		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.customLocationRadioButton);
 		gpsLocationRadioButton.setChecked(true);
 		
-		// Locks gps RadioButton and unlocks custom RadioButton
+		// Locks gps RadioButton and unlocks Selected RadioButton
 		gpsLocationRadioButton.setClickable(false);
 		selectedLocationRadioButton.setClickable(true);
+		customLocationRadioButton.setClickable(true);
 		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
 	
@@ -75,7 +79,6 @@ public class LocationSelectionActivity extends Activity {
 				TextView textView = (TextView) spinner.getSelectedView();
 				textView.setTextColor(Color.WHITE);
 		    }
-
 		    
 		    @Override
 		    public void onNothingSelected(AdapterView<?> parentView) {
@@ -98,6 +101,7 @@ public class LocationSelectionActivity extends Activity {
 	public void gpsLocationClick(View view) {
 		gpsLocationClicked = true;
 		selectedLocationClicked = false;
+		customLocationClicked = false;
 		radioButtonSelector(view);
 	}
 	
@@ -108,6 +112,18 @@ public class LocationSelectionActivity extends Activity {
 	public void selectedLocationClick(View view) {
 		gpsLocationClicked = false;
 		selectedLocationClicked = true;
+		customLocationClicked = false;
+		radioButtonSelector(view);
+	}
+	
+	/**
+	 * Gets the clicked RadioButton then unchecks the other RadioButton, also sets the bools
+	 * @param view
+	 */
+	public void customLocationClick(View view) {
+		gpsLocationClicked = false;
+		selectedLocationClicked = false;
+		customLocationClicked = true;
 		radioButtonSelector(view);
 	}
 	
@@ -118,14 +134,17 @@ public class LocationSelectionActivity extends Activity {
 	private void radioButtonSelector(View view) {
 		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
 		RadioButton selectedLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
+		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.customLocationRadioButton);
 		
 		// swaps which RadioButton has been clicked
 		gpsLocationRadioButton.setChecked(gpsLocationClicked);
 		selectedLocationRadioButton.setChecked(selectedLocationClicked);
+		customLocationRadioButton.setChecked(customLocationClicked);
 		
 		// swaps which RadioButton can be clicked
-		gpsLocationRadioButton.setClickable(selectedLocationClicked);
-		selectedLocationRadioButton.setClickable(gpsLocationClicked);
+		gpsLocationRadioButton.setClickable(selectedLocationClicked || customLocationClicked);
+		selectedLocationRadioButton.setClickable(gpsLocationClicked || customLocationClicked);
+		customLocationRadioButton.setClickable(selectedLocationClicked || gpsLocationClicked);
 	}
 	
 	/**
