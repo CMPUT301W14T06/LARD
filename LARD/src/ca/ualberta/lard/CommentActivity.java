@@ -35,16 +35,18 @@ import ca.ualberta.lard.model.User;
 
 public class CommentActivity extends Activity {
 	private String commentId;
-	private ListView commentListView;
 	private Comment comment;
 	private static ArrayList<Comment> commentList;
+	
 	private CommentListBaseAdapter adapter;
+	private CommentController commentController;
+	
+	private ListView commentListView;
 	private TextView parentAuthorView;
 	private TextView parentCommentTextView;
 	private TextView parentNumRepliesView;
-	private CommentController commentController;
-	private ImageView parentPicView;
 	private TextView parentLocationView;
+	private ImageView parentPicView;
 
 	// For getting the id of clicked comment in MainActivity
 	public static final String EXTRA_PARENT_ID = "PARENT_ID";
@@ -127,19 +129,8 @@ public class CommentActivity extends Activity {
 		super.onResume();	
 
 		// Set the parent comment info in the view
-		parentCommentTextView.setText(comment.getBodyText());			
-		parentAuthorView.setText("By: " + comment.getAuthor());
-		
-		// TODO this should be put in an async task, as it may not necessarily be loaded yet.
-		parentNumRepliesView.setText(Integer.toString(comment.numReplies()) + " replies");
-		if (comment.hasPicture()) {
-			parentPicView.setImageBitmap(comment.getPicture().getBitmap());
-		}
-		// Set the distance
-		GeoLocation myCurLoc = new GeoLocation(getBaseContext());
-		String distance = comment.getLocation().roundedDistanceFrom(myCurLoc);
-		parentLocationView.setText(distance+"m away");
-		// TODO parentPicView.set;
+		SetCommentInfo setInfo = new SetCommentInfo();
+		setInfo.execute(comment);
 		
 		// Get the children if there are any
 	    CommentRequest commentRequest = new CommentRequest(100);
@@ -172,9 +163,7 @@ public class CommentActivity extends Activity {
         	// Save all the comments replies as well
         	commentController.favourite(comment);
             return true;
-        case R.id.action_edit:
-        	// Get author of the comment without the hash
-        	
+        case R.id.action_edit:        	
         	// Make a new user based on the current user
     		User curUser = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
     		
@@ -207,7 +196,7 @@ public class CommentActivity extends Activity {
     }
     
     /**
-     * Uses asynctask to fetch all of the comments children.
+     * Fetch all of the comments children.
      * Takes a comment request which has the parent id set.
      */
     private class FetchChildren extends AsyncTask<CommentRequest, Integer, ArrayList<Comment>> {
@@ -215,21 +204,53 @@ public class CommentActivity extends Activity {
     	@Override
     	protected ArrayList<Comment> doInBackground(CommentRequest... params) {
     		CommentController commentController = new CommentController(params[0], getBaseContext());
-    	
 			if (commentController.isEmpty() == false) {
 				return commentController.get();
 			}
 			else {
 				return new ArrayList<Comment>();
-			}
-			
+			}			
     	}
-
+    	
     	protected void onPostExecute(ArrayList<Comment> result) {
+    		// Set the number of children
+    		parentNumRepliesView.setText(Integer.toString(result.size()) + " replies");
+    		
+    		// Update the list of children to be displayed.
     		commentList.clear();
     		commentList.addAll(result);
     		adapter.notifyDataSetChanged();
     	}
+    }
+    
+    /**
+     * Sets all of main comments info in text and image views.
+     * Takes a comment which provides all the info to display.
+     * @author Victoria
+     *
+     */
+    private class SetCommentInfo extends AsyncTask<Comment, Void, Comment> {
+
+		@Override
+		protected Comment doInBackground(Comment... params) {
+			return params[0];
+		}
+		
+		protected void onPostExecute(Comment result) {
+			// Set the picture, if there is one
+			if (comment.hasPicture()) {
+				parentPicView.setImageBitmap(comment.getPicture().getBitmap());
+			}
+			
+			// Set the distance
+			GeoLocation myCurLoc = new GeoLocation(getBaseContext());
+			String distance = comment.getLocation().roundedDistanceFrom(myCurLoc);
+			parentLocationView.setText(distance+"m away");
+			
+			// Set text and author
+			parentCommentTextView.setText(comment.getBodyText());			
+			parentAuthorView.setText("By: " + comment.getAuthor());			
+		} 	
     }
 }
 
