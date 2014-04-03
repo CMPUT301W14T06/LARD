@@ -115,10 +115,10 @@ public class NewCommentActivity extends Activity {
 				.getLatitude(), comment.getLocation()
 				.getLongitude());*/
 		
-		// TODO: Remove
-		// location.setLatitude(editComment.getLocation().getLatitude());
-		// location.setLongitude(editComment.getLocation().getLongitude());
 		picture = comment.getPicture();
+		if (picture == null) {
+			picture = new Picture();
+		}
 	}
 
 	@Override
