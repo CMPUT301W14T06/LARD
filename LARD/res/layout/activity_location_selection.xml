@@ -45,12 +45,46 @@
         android:onClick= "customLocationClick" 
         android:textColor="#FFFFFF"/>
 
-        <Spinner
-            android:id="@+id/locationSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/selectLocationRadioButton"
-            android:layout_below="@+id/selectLocationRadioButton"
-            android:textColor="#FFFFFF"/>
+    <Spinner
+        android:id="@+id/locationSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/radioButton1"
+        android:layout_below="@+id/gpsRadioButton"
+        android:layout_toRightOf="@+id/selectLocationRadioButton"
+        android:textColor="#FFFFFF" />
+
+    <RadioButton
+        android:id="@+id/radioButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/selectLocationRadioButton"
+        android:layout_alignRight="@+id/selectLocationRadioButton"
+        android:layout_below="@+id/selectLocationRadioButton"
+        android:text="Custom Location:"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/latEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/radioButton1"
+        android:layout_below="@+id/radioButton1"
+        android:ems="10"
+        android:textColor="#FFFFFF"
+        android:hint="Lat" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/lonEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/latEditText"
+        android:layout_below="@+id/latEditText"
+        android:ems="10"
+        android:hint="Lon"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>
