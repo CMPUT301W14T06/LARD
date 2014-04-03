@@ -132,7 +132,9 @@ public class CommentActivity extends Activity {
 		
 		// TODO this should be put in an async task, as it may not necessarily be loaded yet.
 		parentNumRepliesView.setText(Integer.toString(comment.numReplies()) + " replies");
-		parentPicView.setImageBitmap(comment.getPicture().getBitmap());
+		if (comment.hasPicture()) {
+			parentPicView.setImageBitmap(comment.getPicture().getBitmap());
+		}
 		// Set the distance
 		GeoLocation myCurLoc = new GeoLocation(getBaseContext());
 		String distance = comment.getLocation().roundedDistanceFrom(myCurLoc);

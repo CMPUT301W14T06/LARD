@@ -71,16 +71,16 @@ public class User {
 	 */
 	public String hashWithGivenName(String givenUsername) {
 		try {
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		
-		String usernameWithSalt = (givenUsername + this.userId);
-		md.update(usernameWithSalt.getBytes(), 0, usernameWithSalt.length());
-		 
-        //Converts message digest value in base 16 (hex) 
-        String hash = new BigInteger(1, md.digest()).toString(16);
-		
-		return givenUsername + "#" + hash;
-		
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			
+			String usernameWithSalt = (givenUsername + this.userId);
+			md.update(usernameWithSalt.getBytes(), 0, usernameWithSalt.length());
+			 
+	        //Converts message digest value in base 16 (hex) 
+	        String hash = new BigInteger(1, md.digest()).toString(16);
+			
+			return givenUsername + "#" + hash;
+			
 		} catch (NoSuchAlgorithmException e) {
 			System.err.println("No such algorithm");
 		}

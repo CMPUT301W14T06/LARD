@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -41,7 +42,6 @@ public class NewCommentActivity extends Activity {
 	private GeoLocation location;
 	private Comment comment;
 	private Comment parent;
-	private CommentController commentController;
 	
 	private int mode;
 
@@ -90,6 +90,7 @@ public class NewCommentActivity extends Activity {
 		} else {
 			// Initialize the parent
 			this.parent = Comment.fromJson(intent.getStringExtra(PARENT_STRING));
+			this.parent.setContext(getApplicationContext());
 			lardTextView.setText(parent.getAuthor().toString());
 		}
 		
@@ -99,9 +100,10 @@ public class NewCommentActivity extends Activity {
 		if (intent.hasExtra(COMMENT_STRING)) {
 			this.mode = EDIT_MODE;
 			this.comment = Comment.fromJson(intent.getStringExtra(COMMENT_STRING));
+			this.comment.setContext(getApplicationContext());
 		} else {
 			this.mode = NEW_MODE;
-			this.comment = new Comment("", getApplicationContext());
+			this.comment = new Comment("[Comment text removed]", getApplicationContext());
 		}
 		
 
@@ -164,7 +166,6 @@ public class NewCommentActivity extends Activity {
 		// comment to be valid
 		if (bodyTextEditTextView.getText().toString().isEmpty()) {
 			if (this.mode == NEW_MODE) {
-				
 				Toast.makeText(getApplicationContext(),
 					"Missing comment text.", Toast.LENGTH_SHORT).show();
 				return;
@@ -180,14 +181,17 @@ public class NewCommentActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
-		// Set an author for the comment if you can
-		if (!userNameEditTextView.getText().toString().isEmpty()) {
-			this.comment.setAuthor(userNameEditTextView.getText().toString());
-		} else {
-			this.comment.setAuthor(null);
+		try {
+			// Set an author for the comment if you can
+			if (!userNameEditTextView.getText().toString().isEmpty()) {
+				this.comment.setAuthor(userNameEditTextView.getText().toString());
+			} else {
+				this.comment.setAuthor(null);
+			}
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+			return;
 		}
-		
 		// Set a location for the comment
 		// TODO this seems redundant?
 		comment.setLocation(location);
@@ -202,7 +206,8 @@ public class NewCommentActivity extends Activity {
 		UpdateOrSaveComment finalize = new UpdateOrSaveComment();
 		finalize.execute(comment);
 
-		finish();
+		
+		//finish();
 	}
 
 	/**
@@ -294,6 +299,7 @@ public class NewCommentActivity extends Activity {
 		}
 
 		protected void onPostExecute(Boolean result) {
+			System.out.println("Result of NewCommentActivity onPostExecute");
 			System.out.println(result);
 		}
 	}

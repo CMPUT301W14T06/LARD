@@ -36,8 +36,7 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 	// This test will be a little bit handwavey, I suppose. We're involving external infrastructure.
 	public void testSave() {
 		Comment c = new Comment("Eldon is mad stinky", getActivity());
-		Gson gson = new Gson();
-		System.err.println(gson.toJson(c));
+		System.err.println(c.toJson());
 		boolean result = DataModel.save(c);
 		assertTrue(result); // this is a finnicky not-a-test
 	}

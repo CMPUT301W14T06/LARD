@@ -170,7 +170,8 @@ private Menu menu;
     		GeoLocation loc = new GeoLocation(getBaseContext());
     		CommentController controller = new CommentController(proximityRequest, params[0]);
 			return controller.getFavouriteComments();
-    	}    	FetchNearbyComments fetch = new FetchNearbyComments();
+    	}    	
+    	FetchNearbyComments fetch = new FetchNearbyComments();
     	protected void onPostExecute(ArrayList<Comment> result) {
     		allComments.clear();
     		allComments.addAll(result);

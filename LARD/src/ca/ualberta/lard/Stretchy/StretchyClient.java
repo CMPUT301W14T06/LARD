@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -111,7 +112,7 @@ public class StretchyClient {
 	 * @return StretchyResponse containing the server's response.
 	 */
 	public StretchyResponse update(final Comment comment) {
-		HttpPost postReq = new HttpPost(ES_LOCATION + comment.getId() + "/_update");
+		HttpPut postReq = new HttpPut(ES_LOCATION + comment.getId() + "");
 		return push(postReq, comment);
 	}
 	
@@ -121,11 +122,12 @@ public class StretchyClient {
 	 * @param comment Comment The data payload.
 	 * @return StretchyResponse Contains the server's response
 	 */
-	private StretchyResponse push(final HttpPost postReq, final Comment comment) {
+	private StretchyResponse push(final HttpEntityEnclosingRequestBase postReq, final Comment comment) {
 		class RunPush implements Runnable {
 			private StretchyResponse sResponse = null;
 			@Override
 			public void run() {
+				HttpEntityEnclosingRequestBase mutableReq = postReq;
 				String json = "";
 				
 				// While rare, we experienced stackoverflows before, so it's always good to protect against them.
@@ -137,18 +139,18 @@ public class StretchyClient {
 					return;
 				}
 				
-				postReq.setHeader("Accept", "application/json");
+				mutableReq.setHeader("Accept", "application/json");
 				StringEntity insert = null;
 				try { 
 					insert = new StringEntity(json);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				postReq.setEntity(insert);
+				mutableReq.setEntity(insert);
 				
 				HttpResponse response = null;
 				try {
-					response = client.execute(postReq);
+					response = client.execute(mutableReq);
 					sResponse = StretchyResponse.create(response);
 					return;
 				} catch (ClientProtocolException e) {

@@ -1,6 +1,5 @@
 package ca.ualberta.lard.test;
 
-import android.app.ActionBar;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -124,7 +123,7 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	    instru.waitForIdleSync();
 	    
 	    // Get the id from the NewCommentActivity intent.
-	    String passedId = intent.getStringExtra(NewCommentActivity.PARENT_ID);	    
+	    String passedId = intent.getStringExtra(NewCommentActivity.PARENT_STRING);	    
 	    assertEquals("Passed id should match parent id.", id, passedId);
 	}
 	

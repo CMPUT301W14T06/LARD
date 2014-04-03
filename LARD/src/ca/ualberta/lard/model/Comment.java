@@ -175,15 +175,17 @@ public class Comment {
 	 * is given author will be set to Anonymous by default.
 	 * @param username
 	 */
-	public void setAuthor(String username) {
+	public Comment setAuthor(String username) {
 		// Check the username is not empty. If it is set to Anonymous.
-	
+		
 		User user = new User(this.context.getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
+		
 		if (username != null && !username.isEmpty()) {
 			user.setUsername(username);
 		}
 		this.author = user.getUsername();
 		this.setUpdated();
+		return this;
 	}
 	
 	public void setLocation(GeoLocation location) {
@@ -206,6 +208,11 @@ public class Comment {
 		this.createdAt = date;
 	}
 	
+	public Comment setContext(Context context) {
+		this.context = context;
+		return this;
+	}
+	
 	
 	// Helper functions
 	
@@ -223,7 +230,7 @@ public class Comment {
 	}
 	
 	public boolean hasPicture() {
-		if (this.picture == null) {
+		if (this.picture == null || this.picture.isNull()) {
 			return false;
 		}
 		return true;
