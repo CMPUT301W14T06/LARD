@@ -91,7 +91,7 @@ public class NewCommentActivity extends Activity {
 			this.comment.setContext(getApplicationContext());
 		} else {
 			this.mode = NEW_MODE;
-			this.comment = new Comment("[Comment text removed]", getApplicationContext());
+			this.comment = new Comment("", getApplicationContext());
 		}
 		
 		if (!intent.hasExtra(PARENT_STRING)) {
@@ -104,18 +104,11 @@ public class NewCommentActivity extends Activity {
 			// Since we have a parent, set it to the comment's parent.
 			this.comment.setParent(this.parent.getId());
 		}
-		
-		
 
 		// Display the comments current information
 		userNameEditTextView.setText(comment.getRawAuthor());
 		bodyTextEditTextView.setText(comment.getBodyText());
 		this.location = comment.getLocation();
-		
-		// TODO WTF DYLAN?
-		/*location = new GeoLocation(comment.getLocation()
-				.getLatitude(), comment.getLocation()
-				.getLongitude());*/
 		
 		picture = comment.getPicture();
 		if (picture == null) {

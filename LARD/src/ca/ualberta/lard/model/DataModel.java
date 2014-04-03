@@ -171,8 +171,11 @@ public class DataModel {
 			}
 			// TODO check local storage as a last resort.
 			
-			System.err.println("Failed to find the comment, returning null");
-			return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
+			// TODO: change?
+			//System.err.println("Failed to find the comment, returning null");
+			//return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
+			System.err.println("Failed to find the comment, returning empty ArrayList");
+			return new ArrayList<Comment>(); // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 		}
 		
 		
