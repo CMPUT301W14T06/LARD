@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 public class LocationSelectionActivity extends Activity {
 	private boolean gpsLocationClicked;
-	private boolean customLocationClicked;
+	private boolean selectedLocationClicked;
 	private Spinner spinner;
-	private String slectedLocationString;
+	private String selectedLocationString;
 	private GeoLocation geoLocation;
 	
 	// For getting the location set by this activity
@@ -42,14 +42,14 @@ public class LocationSelectionActivity extends Activity {
 		
 		// Default state is gps location is set to true
 		gpsLocationClicked = true;
-		customLocationClicked = false;
+		selectedLocationClicked = false;
 		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
-		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
+		RadioButton selectedLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
 		gpsLocationRadioButton.setChecked(true);
 		
 		// Locks gps RadioButton and unlocks custom RadioButton
 		gpsLocationRadioButton.setClickable(false);
-		customLocationRadioButton.setClickable(true);
+		selectedLocationRadioButton.setClickable(true);
 		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
 	
@@ -69,7 +69,7 @@ public class LocationSelectionActivity extends Activity {
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 		    	// Gets the name of the clicks item	
 		        String string = (spinner.getItemAtPosition(position)).toString();
-		        slectedLocationString = string;
+		        selectedLocationString = string;
 		        
 		        //sets text color of spinner to white
 				TextView textView = (TextView) spinner.getSelectedView();
@@ -97,7 +97,7 @@ public class LocationSelectionActivity extends Activity {
 	 */
 	public void gpsLocationClick(View view) {
 		gpsLocationClicked = true;
-		customLocationClicked = false;
+		selectedLocationClicked = false;
 		radioButtonSelector(view);
 	}
 	
@@ -105,9 +105,9 @@ public class LocationSelectionActivity extends Activity {
 	 * Gets the clicked RadioButton then unchecks the other RadioButton, also sets the bools
 	 * @param view
 	 */
-	public void customLocationClick(View view) {
+	public void selectedLocationClick(View view) {
 		gpsLocationClicked = false;
-		customLocationClicked = true;
+		selectedLocationClicked = true;
 		radioButtonSelector(view);
 	}
 	
@@ -117,15 +117,15 @@ public class LocationSelectionActivity extends Activity {
 	 */
 	private void radioButtonSelector(View view) {
 		RadioButton gpsLocationRadioButton = (RadioButton) findViewById(R.id.gpsRadioButton);
-		RadioButton customLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
+		RadioButton selectedLocationRadioButton = (RadioButton) findViewById(R.id.selectLocationRadioButton);
 		
 		// swaps which RadioButton has been clicked
 		gpsLocationRadioButton.setChecked(gpsLocationClicked);
-		customLocationRadioButton.setChecked(customLocationClicked);
+		selectedLocationRadioButton.setChecked(selectedLocationClicked);
 		
 		// swaps which RadioButton can be clicked
-		gpsLocationRadioButton.setClickable(customLocationClicked);
-		customLocationRadioButton.setClickable(gpsLocationClicked);
+		gpsLocationRadioButton.setClickable(selectedLocationClicked);
+		selectedLocationRadioButton.setClickable(gpsLocationClicked);
 	}
 	
 	/**
@@ -149,12 +149,12 @@ public class LocationSelectionActivity extends Activity {
 			}
 			finish();
 		}
-		else if (customLocationClicked == true) {
-			if (slectedLocationString != null || slectedLocationString.isEmpty() == false) {
+		else if (selectedLocationClicked == true) {
+			if (selectedLocationString != null || selectedLocationString.isEmpty() == false) {
 				//Creates a new GeoLocation based on what location was selected
 				GeoLocationMap geoMap = new GeoLocationMap();
-				double lat = (geoMap.getMap()).get(slectedLocationString).first;
-				double lon = (geoMap.getMap()).get(slectedLocationString).second;
+				double lat = (geoMap.getMap()).get(selectedLocationString).first;
+				double lon = (geoMap.getMap()).get(selectedLocationString).second;
 				geoLocation = new GeoLocation(lat,lon);
 				//serializes the GeoLocation
 				String geoString = geoLocation.toJSON();

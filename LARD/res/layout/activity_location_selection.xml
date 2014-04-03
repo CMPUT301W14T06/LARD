@@ -42,20 +42,11 @@
         android:layout_alignLeft="@+id/locationSettingsTextView"
         android:layout_below="@+id/gpsRadioButton"
         android:text="Selected Location:"
-        android:onClick= "customLocationClick" 
+        android:onClick= "selectedLocationClick" 
         android:textColor="#FFFFFF"/>
-
-    <Spinner
-        android:id="@+id/locationSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/radioButton1"
-        android:layout_below="@+id/gpsRadioButton"
-        android:layout_toRightOf="@+id/selectLocationRadioButton"
-        android:textColor="#FFFFFF" />
-
+    
     <RadioButton
-        android:id="@+id/radioButton1"
+        android:id="@+id/customLocationRadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/selectLocationRadioButton"
@@ -64,18 +55,14 @@
         android:text="Custom Location:"
         android:textColor="#FFFFFF" />
 
-    <EditText
-        android:id="@+id/latEditText"
+    <Spinner
+        android:id="@+id/locationSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/radioButton1"
-        android:layout_below="@+id/radioButton1"
-        android:ems="10"
-        android:textColor="#FFFFFF"
-        android:hint="Lat" >
-
-        <requestFocus />
-    </EditText>
+        android:layout_above="@+id/customLocationRadioButton"
+        android:layout_below="@+id/gpsRadioButton"
+        android:layout_toRightOf="@+id/selectLocationRadioButton"
+        android:textColor="#FFFFFF" />
 
     <EditText
         android:id="@+id/lonEditText"
@@ -86,5 +73,18 @@
         android:ems="10"
         android:hint="Lon"
         android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/latEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/customLocationRadioButton"
+        android:layout_below="@+id/customLocationRadioButton"
+        android:ems="10"
+        android:hint="Lat"
+        android:textColor="#FFFFFF" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>
