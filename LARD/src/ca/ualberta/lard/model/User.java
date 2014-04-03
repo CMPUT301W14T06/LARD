@@ -61,24 +61,7 @@ public class User {
 	 * @author Brendan Long on stackoverflow
 	 */
 	public String getUsername() {
-		try {
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		
-		String usernameWithSalt = (this.username + this.userId);
-		md.update(usernameWithSalt.getBytes(), 0, usernameWithSalt.length());
-		 
-        //Converts message digest value in base 16 (hex) 
-        String hash = new BigInteger(1, md.digest()).toString(16);
-		
-		return this.username + "#" + hash;
-		
-		} catch (NoSuchAlgorithmException e) {
-			System.err.println("No such algorithm");
-			// todo this should probably explode?
-		}
-		// We've gotten to an unsalvageable state. They're anonymous with their androidID now.
-		return "Anonymous#" + this.userId;
-		
+		return this.hashWithGivenName(this.username);
 	}
 	
 	/**
@@ -102,7 +85,7 @@ public class User {
 			System.err.println("No such algorithm");
 		}
 		// Couldn't compute the hash
-		return null;
+		return "Anonymous#" + this.userId;
 	}
 	
 	private boolean set(String key, String value) {

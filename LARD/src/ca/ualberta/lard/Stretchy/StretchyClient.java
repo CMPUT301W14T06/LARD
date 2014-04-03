@@ -101,44 +101,62 @@ public class StretchyClient {
 	 * @return StretchyResponse containing the server's response.
 	 */
 	public StretchyResponse save(final Comment comment) {
-		
-		class RunSave implements Runnable {
+		HttpPost postReq = new HttpPost(ES_LOCATION);
+		return push(postReq, comment);
+	}
+	
+	/**
+	 * Updates a comment Elastic Search.
+	 * @param comment The comment that the user wishes to save over the network
+	 * @return StretchyResponse containing the server's response.
+	 */
+	public StretchyResponse update(final Comment comment) {
+		HttpPost postReq = new HttpPost(ES_LOCATION + comment.getId() + "/_update");
+		return push(postReq, comment);
+	}
+	
+	/**
+	 * Pushes a comment to elastic search.
+	 * @param postReq HttpPost A post request to the server.
+	 * @param comment Comment The data payload.
+	 * @return StretchyResponse Contains the server's response
+	 */
+	private StretchyResponse push(final HttpPost postReq, final Comment comment) {
+		class RunPush implements Runnable {
 			private StretchyResponse sResponse = null;
-			
 			@Override
 			public void run() {
-				System.err.println("here");
-				HttpPost postReq = new HttpPost(ES_LOCATION);
 				String json = "";
 				
 				// While rare, we experienced stackoverflows before, so it's always good to protect against them.
 				try {
 					json = gson.toJson(comment);
 				} catch (StackOverflowError ex) {
-					System.err.println("Major error in StretchyClient - Save: stackoverflow ");
+					System.err.println("Major error in StretchyClient - Update: stackoverflow ");
 					sResponse = new StretchyResponse(false, comment.getId());
 					return;
 				}
 				
 				postReq.setHeader("Accept", "application/json");
-				StringEntity upsert = null;
+				StringEntity insert = null;
 				try { 
-					upsert = new StringEntity(json);
-					System.err.println(upsert);
+					insert = new StringEntity(json);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				postReq.setEntity(upsert);
+				postReq.setEntity(insert);
 				
 				HttpResponse response = null;
 				try {
 					response = client.execute(postReq);
 					sResponse = StretchyResponse.create(response);
+					return;
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				
 			}
 			
 			public StretchyResponse get() {
@@ -151,16 +169,18 @@ public class StretchyClient {
 				}
 				return sResponse;
 			}
-			
 		}
-		RunSave s = new RunSave();
+			
+		RunPush run = new RunPush();
+		
 		try {
-			new Thread(s).start();
+			new Thread(run).start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return s.get();
+		return run.get();
+			
 	}
 	
 	/**
