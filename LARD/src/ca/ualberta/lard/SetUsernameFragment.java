@@ -24,6 +24,11 @@ public class SetUsernameFragment extends DialogFragment {
 		View v = inflater.inflate(R.layout.fragment_set_username, null);
 		final TextView userNameEditTextView = (TextView) v.findViewById(R.id.usernameEditText);
 		
+		String currentUsername = getActivity().getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE).getString("username", null);
+		if (currentUsername != null) {
+			userNameEditTextView.setText(currentUsername);
+		}
+		
 		// Inflate and set the layout for the dialog
 		// Pass null as the parent view because its going in the dialog layout
 		builder.setView(v);
@@ -31,7 +36,7 @@ public class SetUsernameFragment extends DialogFragment {
 		builder.setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				// User clicked Set button
-				// There must be text in the bodyTextEditTextView field for the comment to be valid
+				// There must be text in the userNameEditTextView field for the Username to be valid
 				if (userNameEditTextView.getText().toString().isEmpty()) {
 					Toast.makeText(getActivity().getApplicationContext(), "Username can not be empty.", Toast.LENGTH_SHORT).show();
 					return;
