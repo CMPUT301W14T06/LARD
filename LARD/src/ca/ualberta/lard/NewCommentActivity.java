@@ -172,6 +172,9 @@ public class NewCommentActivity extends Activity {
 				comment.setBodyText("[Comment Text Removed]");
 			}
 		}
+		else {
+			comment.setBodyText(bodyTextEditTextView.getText().toString());
+		}
 		
 		// Username may not contain "#" character
 		if (userNameEditTextView.getText().toString().contains("#")) {
