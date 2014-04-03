@@ -13,5 +13,9 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/username"
+        android:inputType="textPersonName"
         android:textColor="#FFFFFF" />
-</LinearLayout>
+
+    <requestFocus />
+
+</LinearLayout>
