@@ -135,7 +135,13 @@ public class DataModel {
 	 */
 	public static boolean save(Comment comment) {
 		StretchyClient client = new StretchyClient();
-		StretchyResponse response = client.save(comment.setUpdated());
+		StretchyResponse response = client.save(comment);
+		return response.ok();
+	}
+	
+	public static boolean update(Comment comment) {
+		StretchyClient client = new StretchyClient();
+		StretchyResponse response = client.update(comment.setUpdated());
 		return response.ok();
 	}
 	

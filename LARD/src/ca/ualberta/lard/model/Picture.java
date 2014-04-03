@@ -1,5 +1,7 @@
 package ca.ualberta.lard.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 /**
@@ -36,6 +38,11 @@ public class Picture {
 	 */
 	public byte[] getImageByte() {
 		return Base64.decode(imageString, Base64.URL_SAFE);
+	}
+	
+	public Bitmap getBitmap() {
+		byte[] decodedByte = getImageByte();
+		return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
 	}
 
 	/**
