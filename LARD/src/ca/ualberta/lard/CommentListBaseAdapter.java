@@ -150,7 +150,7 @@ public class CommentListBaseAdapter extends BaseAdapter {
 	
 	private ImageView imageDetail(View v, int resId, String icon) {
 		ImageView iv = (ImageView) v.findViewById(resId);
-		iv.setImageResource(this.context.getResources().getIdentifier("@android:drawable/screen_background_dark", "drawable", this.context.getPackageName())); // 
+		iv.setImageResource(this.context.getResources().getIdentifier(icon, "drawable", this.context.getPackageName())); // 
 		return iv;
 	}
 	
