@@ -56,12 +56,6 @@ public class LocationSelectionActivity extends Activity {
 		selectedLocationRadioButton.setClickable(true);
 		customLocationRadioButton.setClickable(true);
 		
-		// sets customLocation to default 0
-		EditText latEditText = (EditText) findViewById(R.id.latEditText);
-		EditText lonEditText = (EditText) findViewById(R.id.lonEditText);
-		latEditText.setText("0");
-		lonEditText.setText("0");
-		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
 	
 		// Gets a list of locations from the GeoLocation map then converts it to a string array
@@ -197,20 +191,17 @@ public class LocationSelectionActivity extends Activity {
 			EditText latEditText = (EditText) findViewById(R.id.latEditText);
 			EditText lonEditText = (EditText) findViewById(R.id.lonEditText);
 			
-			//checks if strings are empty
+			//checks if strings are empty, if are then make it 0
 			String latString = latEditText.getText().toString();
 			String lonString = lonEditText.getText().toString();
-			
-			if(latString.matches("0")) {
-				latEditText.setHint("Please Fill");	
+			if(latString.matches("")) {
+				latEditText.setText("0");
 			}
-			
-			if( lonString.matches("0") ) {
-				latEditText.setHint("Please Fill");	
+			if( lonString.matches("") ) {
+				lonEditText.setText("0");	
 			}
 			double lat = Double.parseDouble(latEditText.getText().toString());
 			double lon = Double.parseDouble(lonEditText.getText().toString());
-			
 			geoLocation = new GeoLocation(lat, lon);
 			if (geoLocation != null ) {
 				// serializes string 
