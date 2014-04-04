@@ -35,7 +35,7 @@ public class StretchyClient {
 	/**
 	 * Time in milliseconds to wait for the requested comments
 	 */
-	private static final int NETWORKTIMEOUT = 50000000;
+	private static final int NETWORKTIMEOUT = 5000;
 	
 	/**
 	 * Constructor to intialize the Gson worker and the Apache HttpClient.

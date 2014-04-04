@@ -278,11 +278,20 @@ public class Comment {
 		return false;
 	}
 	
+	/**
+	 * Converts a comment to a json string.
+	 * @return Comment as a json string
+	 */
 	public String toJson() {
 		Gson gson = new Gson();
 		return gson.toJson(this);
 	}
 	
+	/**
+	 * Converts a json string back to a comment.
+	 * @param json Comment as a string
+	 * @return Comment
+	 */
 	public static Comment fromJson(String json) {
 		Gson gson = new Gson();
 		return gson.fromJson(json, Comment.class);
