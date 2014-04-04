@@ -53,6 +53,7 @@
         android:layout_alignRight="@+id/selectLocationRadioButton"
         android:layout_below="@+id/selectLocationRadioButton"
         android:text="Custom Location:"
+        android:onClick= "customLocationClick"
         android:textColor="#FFFFFF" />
 
     <Spinner
@@ -66,6 +67,7 @@
 
     <EditText
         android:id="@+id/lonEditText"
+        android:inputType="numberDecimal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/latEditText"
@@ -76,6 +78,7 @@
 
     <EditText
         android:id="@+id/latEditText"
+        android:inputType="numberDecimal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/customLocationRadioButton"

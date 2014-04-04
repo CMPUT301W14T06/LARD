@@ -14,6 +14,7 @@ import android.webkit.WebSettings;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -54,6 +55,12 @@ public class LocationSelectionActivity extends Activity {
 		gpsLocationRadioButton.setClickable(false);
 		selectedLocationRadioButton.setClickable(true);
 		customLocationRadioButton.setClickable(true);
+		
+		// sets customLocation to default 0
+		EditText latEditText = (EditText) findViewById(R.id.latEditText);
+		EditText lonEditText = (EditText) findViewById(R.id.lonEditText);
+		latEditText.setText("0");
+		lonEditText.setText("0");
 		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
 	
@@ -185,6 +192,38 @@ public class LocationSelectionActivity extends Activity {
 			
 			finish();
 		}
+		
+		else if (customLocationClicked == true) {
+			EditText latEditText = (EditText) findViewById(R.id.latEditText);
+			EditText lonEditText = (EditText) findViewById(R.id.lonEditText);
+			
+			//checks if strings are empty
+			String latString = latEditText.getText().toString();
+			String lonString = lonEditText.getText().toString();
+			
+			if(latString.matches("0")) {
+				latEditText.setHint("Please Fill");	
+			}
+			
+			if( lonString.matches("0") ) {
+				latEditText.setHint("Please Fill");	
+			}
+			double lat = Double.parseDouble(latEditText.getText().toString());
+			double lon = Double.parseDouble(lonEditText.getText().toString());
+			
+			geoLocation = new GeoLocation(lat, lon);
+			if (geoLocation != null ) {
+				// serializes string 
+				String geoString = geoLocation.toJSON();
+				// sends serialized string to parent activity
+				Intent resultData = new Intent();
+				resultData.putExtra(LOCATION_REQUEST, geoString);
+				setResult(Activity.RESULT_OK, resultData);
+				finish();
+			}
+			
+		}
+		
 		else {
 			// We should not of got here
 			Toast.makeText(getApplicationContext(), "Neither boolean set to true", Toast.LENGTH_SHORT).show();
