@@ -110,14 +110,14 @@ public class DataModel {
 			// Retrieve json object from memory
 			FileInputStream fis = context.openFileInput(FILENAME);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			String allCountersTemp = (String) ois.readObject();
+			String allCommentsTemp = (String) ois.readObject();
 			ois.close();
 			fis.close();
 			
-			// Convert back to type ArrayList<Counter>
+			// Convert back to type ArrayList<Comment>
 			Gson gson = new Gson();			
 			Type listOfComments = new TypeToken<ArrayList<Comment>>(){}.getType();
-			comments = gson.fromJson(allCountersTemp, listOfComments);
+			comments = gson.fromJson(allCommentsTemp, listOfComments);
 			return comments;
 			
 		} catch (Exception e) {
@@ -130,7 +130,7 @@ public class DataModel {
 	/**
 	 * Saves a comment to stretchy client. Returns a boolean which specifies 
 	 * if the save was successful or not.
-	 * @param comment
+	 * @param comment to be save
 	 * @return true if save was successful, otherwise false
 	 */
 	public static boolean save(Comment comment) {
@@ -139,6 +139,12 @@ public class DataModel {
 		return response.ok();
 	}
 	
+	/**
+	 * Updates a comment which already exists on the server. Returns a boolean which
+	 * specifies if the update was successful or not.
+	 * @param comment to be updated
+	 * @return true if update was a success, otherwise false
+	 */
 	public static boolean update(Comment comment) {
 		StretchyClient client = new StretchyClient();
 		StretchyResponse response = client.update(comment.setUpdated());
@@ -180,8 +186,12 @@ public class DataModel {
 		
 		
 		SearchRequest sReq = new SearchRequest(req);
-		ArrayList<Comment> comments2 = client.search(sReq); // TODO finish
-		return comments2;
+		ArrayList<Comment> comments2 = client.search(sReq);
+		if (comments2 != null) {
+			return comments2;		
+		}
+		// If search request failed, return an empty list.
+		return new ArrayList<Comment>();
 	}
 	
 	/**
