@@ -124,26 +124,6 @@ public class CommentActivity extends Activity {
 	}
 	
 	/**
-	 * onResume gets all of the information from the comment and displays it. onResume also
-	 * fetches all the comments children.
-	 */
-	/*
-	@Override
-	protected void onResume() {
-		super.onResume();	
-
-		// Set the parent comment info in the view
-		SetCommentInfo setInfo = new SetCommentInfo();
-		setInfo.execute(comment);
-		
-		// Get the children if there are any
-	    CommentRequest commentRequest = new CommentRequest(100);
-	    commentRequest.setParentId(comment.getId());
-		FetchChildren fetchChildren = new FetchChildren();
-		fetchChildren.execute(commentRequest);
-	} */
-	
-	/**
 	 * This inflates the action bar and sets which icons are to be displayed.
 	 */
 	@Override
@@ -176,9 +156,9 @@ public class CommentActivity extends Activity {
     		
     		// If author and computed author are the same, allow the user to edit the comment.
     		if (comment.getAuthor().equals(authorWithCurUserId)) {
-        		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
+        		Intent intent = new Intent(getApplicationContext(), NewEditCommentActivity.class);
         		// TODO pass the parent
-        		intent.putExtra(NewCommentActivity.COMMENT_STRING, comment.toJson());
+        		intent.putExtra(NewEditCommentActivity.COMMENT_STRING, comment.toJson());
         		// Set flag to edit comment.
         		startActivity(intent);
     		} else {
@@ -190,8 +170,8 @@ public class CommentActivity extends Activity {
         	commentController.paper(comment);
             return true;
         case R.id.action_reply:
-    		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
-    		intent.putExtra(NewCommentActivity.PARENT_STRING, comment.toJson());
+    		Intent intent = new Intent(getApplicationContext(), NewEditCommentActivity.class);
+    		intent.putExtra(NewEditCommentActivity.PARENT_STRING, comment.toJson());
     		startActivity(intent);
             return true;
         case R.id.action_refresh:

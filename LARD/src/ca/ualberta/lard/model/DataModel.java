@@ -83,8 +83,7 @@ public class DataModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return;
-		
+		return;		
 	}
 	
 	/**
@@ -189,7 +188,7 @@ public class DataModel {
 		ArrayList<Comment> comments2 = client.search(sReq);
 		if (comments2 != null) {
 			return comments2;		
-		}
+		} 
 		// If search request failed, return an empty list.
 		return new ArrayList<Comment>();
 	}

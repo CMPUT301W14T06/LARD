@@ -1,6 +1,6 @@
 package ca.ualberta.lard.test;
 
-import ca.ualberta.lard.NewCommentActivity;
+import ca.ualberta.lard.NewEditCommentActivity;
 import ca.ualberta.lard.model.GeoLocation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -11,10 +11,10 @@ import android.test.ActivityInstrumentationTestCase2;
  * text for the comment).
  */
 
-public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<NewCommentActivity> {
+public class NewCommentActivityTests extends ActivityInstrumentationTestCase2<NewEditCommentActivity> {
 	
 	public NewCommentActivityTests() {
-		super(NewCommentActivity.class);
+		super(NewEditCommentActivity.class);
 	}
 	
 	/*public void testParentIDExists() {

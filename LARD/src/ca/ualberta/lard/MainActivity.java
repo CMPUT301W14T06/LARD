@@ -83,8 +83,8 @@ private Menu menu;
       switch (item.getItemId()) {
       // These are the menu options in the action bar menu
       	case R.id.action_new:
-      		Intent i = new Intent(getBaseContext(), NewCommentActivity.class);
-      		i.putExtra(NewCommentActivity.FLAG, "NEW");
+      		Intent i = new Intent(getBaseContext(), NewEditCommentActivity.class);
+      		i.putExtra(NewEditCommentActivity.FLAG, "NEW");
       		startActivity(i);
       		break;
     	case R.id.action_location:

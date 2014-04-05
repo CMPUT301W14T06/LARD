@@ -37,7 +37,7 @@ import ca.ualberta.lard.model.Picture;
  * @author Dylan
  */
 
-public class NewCommentActivity extends Activity {
+public class NewEditCommentActivity extends Activity {
 	private Picture picture;
 	private GeoLocation location;
 	private Comment comment;

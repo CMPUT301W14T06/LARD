@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ca.ualberta.lard.NewCommentActivity"
+            android:name="ca.ualberta.lard.NewEditCommentActivity"
             android:label="@string/title_activity_new_comment" >
         </activity>
         <activity
