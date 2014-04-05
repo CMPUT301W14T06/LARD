@@ -118,12 +118,16 @@ public class CommentActivity extends Activity {
 		commentList = new ArrayList<Comment>();
 	    adapter = new CommentListBaseAdapter(this, commentList);
 	    commentListView.setAdapter(adapter);
+	    
+	    // Display comment and children
+	   displayCommentAndChildren(comment);  
 	}
 	
 	/**
 	 * onResume gets all of the information from the comment and displays it. onResume also
 	 * fetches all the comments children.
 	 */
+	/*
 	@Override
 	protected void onResume() {
 		super.onResume();	
@@ -137,7 +141,7 @@ public class CommentActivity extends Activity {
 	    commentRequest.setParentId(comment.getId());
 		FetchChildren fetchChildren = new FetchChildren();
 		fetchChildren.execute(commentRequest);
-	} 
+	} */
 	
 	/**
 	 * This inflates the action bar and sets which icons are to be displayed.
@@ -190,9 +194,28 @@ public class CommentActivity extends Activity {
     		intent.putExtra(NewCommentActivity.PARENT_STRING, comment.toJson());
     		startActivity(intent);
             return true;
+        case R.id.action_refresh:
+        	displayCommentAndChildren(comment);
+        	Toast.makeText(getApplicationContext(), "Page Refreshed.", Toast.LENGTH_SHORT).show();        	
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+    
+    /**
+     * Displays a comments information and its children.
+     * @param comment The Comment to be displayed
+     */
+    private void displayCommentAndChildren(Comment comment) {
+		// Set the parent comment info in the view
+		SetCommentInfo setInfo = new SetCommentInfo();
+		setInfo.execute(comment);
+		
+		// Get the children if there are any
+	    CommentRequest commentRequest = new CommentRequest(100);
+	    commentRequest.setParentId(comment.getId());
+		FetchChildren fetchChildren = new FetchChildren();
+		fetchChildren.execute(commentRequest);
     }
     
     /**
