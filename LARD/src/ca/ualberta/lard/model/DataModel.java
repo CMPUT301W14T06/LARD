@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Pair;
 import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.Stretchy.StretchyClient;
@@ -194,6 +196,49 @@ public class DataModel {
 	}
 	
 	/**
+	 * Performs a regular search, and if it comes up empty we try a local search as
+	 * a last resort. This is only performed when the comment controller has been
+	 * given a context.
+	 * 
+	 * The network check will speed things up if the phone does not have an active connection.
+	 * However, the emulator will report an active connection even if the host computer
+	 * does not have one. In order to see this at proper performance, you must disable
+	 * data within the emulator.
+	 * 
+	 * @param req A CommentRequest object containing the parameters the user wishes to Search for.
+	 * @param context required for local storage
+	 * @return ArrayList of comments in the usual case. Worst case, no comments at all exist, and we will return null.
+	 */
+	public static ArrayList<Comment> retrieveComments(CommentRequest req, Context context) {
+		ArrayList<Comment> retrievedComments = new ArrayList<Comment>();
+		if (isNetworkAvailable(context)) {
+			retrievedComments = retrieveComments(req);
+			if (retrievedComments.size() > 0) {
+				return retrievedComments;
+			}
+		}
+		ArrayList<Comment> localComments = readLocal(context);
+		if (req.getParentId() != null) {
+			for (Comment comment : localComments) {
+				if (req.getParentId().equals(comment.getParentId())) {
+					retrievedComments.add(comment);
+				}
+			}
+			return retrievedComments;
+		}
+		if (req.getId() != null) {
+			for (Comment comment : localComments) {
+				if (req.getId().equals(comment.getId())) {
+					retrievedComments.add(comment);
+					return retrievedComments;
+				}
+			}
+		}
+		
+		return localComments;
+	}
+	
+	/**
 	 * Checks if a comment is saved locally. Returns a boolean which specifies if it
 	 * is saved locally or not.
 	 * When determining if a comment is saved locally, only compare comment IDs since
@@ -209,6 +254,14 @@ public class DataModel {
 			}
 		}
 		return false;
+	}
+	
+//	http://stackoverflow.com/questions/4238921/android-detect-whether-there-is-an-internet-connection-available
+	private static boolean isNetworkAvailable(Context context) {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
 }

@@ -56,15 +56,20 @@ public class StretchyClient {
 	public Comment getById(final String id) {
 		class RunGet implements Runnable {
 			private Comment foundComment = null;
+			private boolean failed = false;
 			@Override
 			public void run() {
 				HttpGet getReq = new HttpGet(ES_LOCATION + id + "?pretty=1");
 				getReq.addHeader("Accept", "application/json");
 				try {
 					HttpResponse response = client.execute(getReq);
-
+					if (response == null) {
+						failed = true;
+					}
 					StretchyResult<Comment> sResult = StretchyResult.create(response);
-					if (sResult.exists()) {
+					if (sResult == null) {
+						failed = true;
+					} else if (sResult.exists()) {
 						foundComment = sResult.getSource();
 						//return sResult.getSource();
 					}
@@ -77,7 +82,7 @@ public class StretchyClient {
 			}
 			public Comment get() {
 				Long curtime = System.currentTimeMillis();
-				while (foundComment == null) {
+				while (foundComment == null && failed == false) {
 					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
 						break;
 					}
@@ -125,6 +130,7 @@ public class StretchyClient {
 	private StretchyResponse push(final HttpEntityEnclosingRequestBase postReq, final Comment comment) {
 		class RunPush implements Runnable {
 			private StretchyResponse sResponse = null;
+			private boolean failed = false;
 			@Override
 			public void run() {
 				HttpEntityEnclosingRequestBase mutableReq = postReq;
@@ -152,6 +158,9 @@ public class StretchyClient {
 				try {
 					response = client.execute(mutableReq);
 					sResponse = StretchyResponse.create(response);
+					if (sResponse == null) {
+						failed = true;
+					}
 					return;
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
@@ -163,7 +172,7 @@ public class StretchyClient {
 			
 			public StretchyResponse get() {
 				Long curtime = System.currentTimeMillis();
-				while (sResponse == null) {
+				while (sResponse == null && failed == false) {
 					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
 						sResponse = new StretchyResponse(false, comment.getId());
 						return sResponse;
@@ -193,6 +202,7 @@ public class StretchyClient {
 	public ArrayList<Comment> search(final SearchRequest req) {
 		class RunSearch implements Runnable {
 			private volatile ArrayList<Comment> returnComments;
+			private boolean failed = false;
 
 			@Override
 			public synchronized void run() {
@@ -211,6 +221,9 @@ public class StretchyClient {
 				HttpResponse response = null;
 				try { 
 					response = client.execute(postReq);
+					if (response == null) {
+						failed = true;
+					}
 				} catch (ClientProtocolException e) {
 					e.printStackTrace(); // TODO
 				} catch (IOException e) {
@@ -218,15 +231,18 @@ public class StretchyClient {
 				}
 
 				StretchySearchResult<Comment> result = StretchySearchResult.create(response);
-				if (result.timedOut()) {
+				if (result == null) {
+					failed = true;
+				} else if (result.timedOut()) {
 					// TODO
 					//throw new IOException("Timed out");
+				} else {
+					returnComments = result.hits().get();
 				}
-				returnComments = result.hits().get();
 			}
 			public ArrayList<Comment> get() {
 				Long curtime = System.currentTimeMillis();
-				while (returnComments == null) {
+				while (returnComments == null && failed == false) {
 					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
 						break;
 					}
