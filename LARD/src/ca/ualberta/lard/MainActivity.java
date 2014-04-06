@@ -20,6 +20,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.Intent;
@@ -139,6 +140,15 @@ private Menu menu;
 	 * These classes are duplicating lots of code. Later let's refactor, use state model
 	 */
     private class FetchNearbyComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
+		ProgressDialog spinner = new ProgressDialog(MainActivity.this); 
+    	
+    	@Override
+    	protected void onPreExecute() {
+    		// Display a spinner while retrieving children
+    		spinner.setMessage("Loading Comments...");
+    		spinner.show();
+    	}
+    	
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(200);
@@ -158,6 +168,8 @@ private Menu menu;
     			}
     		}
     		adapter.notifyDataSetChanged();
+    		
+    		spinner.dismiss();
     	}
     }
     
