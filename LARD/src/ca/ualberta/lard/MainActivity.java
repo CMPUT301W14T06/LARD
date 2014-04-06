@@ -16,12 +16,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ClipData.Item;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -45,6 +47,7 @@ public class MainActivity extends Activity {
 private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
 private ListView commentList;
+private GeoLocation sortLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +100,32 @@ private ListView commentList;
     	    newFragment.show(getFragmentManager(), "SetUsername");
     		break;
     	case R.id.action_sort:
-    		
+    		final String[] sortOptions =  {"Sort by location", "Sort by date", "Sort by pictures"};
+
+    		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    		builder.setTitle("How would you like to sort?");
+    		builder.setItems(sortOptions, new DialogInterface.OnClickListener() {
+    		    @Override
+    		    public void onClick(DialogInterface dialog, int which) {
+		        	CommentController cController = new CommentController();
+    		        switch(which) {
+    		        case 0:
+    		        	Intent intent = new Intent(getBaseContext(), LocationSelectionActivity.class);
+    		    		startActivityForResult(intent, NewEditCommentActivity.LOCATION_REQUEST_ID);
+    		        	break;
+    		        case 1:
+    		        	allComments = cController.sortByCreationDate(allComments);
+    		        	adapter.notifyDataSetChanged();
+    		        	break;
+    		        case 2:
+    		        	allComments = cController.sortPicturesFirst(allComments);
+    		        	adapter.notifyDataSetChanged();
+    		        	break;
+    		        	
+    		        }
+    		    }
+    		});
+    		builder.show();
         }
 
       return true;
@@ -113,17 +141,21 @@ private ListView commentList;
     	fetch.execute(this);
     }
 	
-	/*
-	 * These classes are duplicating lots of code. Later let's refactor, use state model
+	/**
+	 * Grabs all the comments, caches them, and displays them sorted by location
+	 * @author Eldon Lake
+	 * @param context
 	 */
     private class FetchNearbyComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(200);
     		GeoLocation loc = new GeoLocation(getBaseContext());
-    		//proximityRequest.setLocation(loc); //Doesn't work yet, omit for now
+    		if (sortLocation != null) {
+    			loc = sortLocation;
+    		}
     		CommentController controller = new CommentController(proximityRequest, params[0]);
-    		return controller.get(); // fetch all the comments off of the server
+    		return controller.sortByLocation(controller.get(), loc); // fetch all the comments off of the server
     	}
 
     	protected void onPostExecute(ArrayList<Comment> result) {
@@ -138,6 +170,18 @@ private ListView commentList;
     		}
     		adapter.notifyDataSetChanged();
     	}
+    }
+    
+    @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	System.out.println("We got our activity result");
+		if (requestCode == NewEditCommentActivity.LOCATION_REQUEST_ID) {
+			if (resultCode == RESULT_OK) {
+				String locationData = data
+						.getStringExtra(LocationSelectionActivity.LOCATION_REQUEST);
+				sortLocation = GeoLocation.fromJSON(locationData);
+			}
+		}
     }
     
 }

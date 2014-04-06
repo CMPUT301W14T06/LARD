@@ -14,7 +14,7 @@ public class CreationDateComparator implements Comparator<Comment>{
 
 	@Override
 	public int compare(Comment lhs, Comment rhs) {
-		return lhs.getCreatedDate().compareTo(rhs.getCreatedDate());
+		return rhs.getCreatedDate().compareTo(lhs.getCreatedDate());
 	}
 
 }

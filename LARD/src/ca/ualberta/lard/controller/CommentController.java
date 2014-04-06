@@ -37,6 +37,10 @@ public class CommentController {
 		buffer = DataModel.retrieveComments(req, context);
 	}
 	
+	public CommentController() {
+		// used when we just need to sort without getting comments
+	}
+	
 	/**
 	 * 
 	 * @param context
