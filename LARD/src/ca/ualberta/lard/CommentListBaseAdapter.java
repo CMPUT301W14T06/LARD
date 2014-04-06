@@ -134,8 +134,10 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		mViewHolder.itemNumChildren = (TextView) convertView.findViewById(R.id.itemReplyCount);
 		ANumReplies aNumReplies = new ANumReplies(mViewHolder.itemNumChildren);
 		aNumReplies.execute(comment);
-		if (! comment.hasPicture()) {
-			mViewHolder.itemIcon  = imageDetail(convertView, R.id.itemIcon, "@android:drawable/screen_background_dark"); 
+		if (comment.hasPicture()) {
+			mViewHolder.itemIcon  = imageDetail(convertView, R.id.itemIcon, "@android:drawable/ic_menu_camera"); 
+		} else {
+			mViewHolder.itemIcon  = imageDetail(convertView, R.id.itemIcon, ""); 
 		}
 		
 		return convertView;

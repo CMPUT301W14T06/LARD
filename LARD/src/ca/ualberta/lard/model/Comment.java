@@ -276,15 +276,28 @@ public class Comment {
 	 * @param comment
 	 * @return true if IDs are same, false otherwise
 	 */
-	public boolean equals (Comment comment) {
-		if (this == comment)
+	public boolean equals (Object o) {
+		if (this == o)
 			return true;
-		if (comment == null)
+		if (o == null)
 			return false;
-		if (comment.getId().equals(this.getId())) {
-			return true;
+		// Don't call comment.equal on a non-comment object
+		try {
+			if (((Comment) o).getId().equals(this.getId())) {
+				return true;
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/**
+	 * Override hashcode so that it's solely dependent on id, for equivalency checking
+	 */
+	@Override
+	public int hashCode () {
+		return this.id.hashCode();
 	}
 	
 	/**

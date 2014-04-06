@@ -62,16 +62,11 @@ public class DataModel {
 		ArrayList<Comment> localComments = readLocal(context);
 		
 		// We only want to add comments that are not saved locally already.
-		Iterator<Comment> i = comments.iterator();
-		while (i.hasNext()) {
-		   Comment c = i.next();
-		   if (localComments.contains(c)) {
-			   i.remove();
+		for (Comment newComment : comments) {
+		   if (! localComments.contains(newComment)) {
+			   localComments.add(newComment);
 		   }
 		}
-		
-		// Add all new comments to the local array.
-		localComments.addAll(comments);
 		
 		Gson gson = new Gson();
 		String json = gson.toJson(localComments);
