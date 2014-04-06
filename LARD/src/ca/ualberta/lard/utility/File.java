@@ -27,7 +27,9 @@ public class File {
 			return result;
 		} catch (IOException e) {
 			System.err.println("Error parsing JSON from HTTP response " + e.getMessage());
+		} catch (NullPointerException e) {
+			System.err.println("Cannot parse a null");
 		}
-		return "";
+		return null;
 	}
 }

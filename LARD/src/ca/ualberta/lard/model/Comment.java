@@ -137,6 +137,14 @@ public class Comment {
 	}
 	
 	/**
+	 * Returns the id of the parent.
+	 * @return parent id
+	 */
+	public String getParentId() {
+		return parent;
+	}
+	
+	/**
 	 * Returns null is a comment has no children. Otherwise returns the 
 	 * children in a ArrayList. Children should be sorted by date created.
 	 * @return null or ArrayList of children

@@ -128,9 +128,10 @@ private ListView commentList;
 
     	protected void onPostExecute(ArrayList<Comment> result) {
     		allComments.clear();
+    		DataModel.saveLocal(result, false, getBaseContext()); // Cache all the comments (this is a master retrieve)
     		for (Comment topLevelComment : result)
     		{
-    			if (topLevelComment.getParent() == null)
+    			if (topLevelComment.getParentId() == null)
     			{
     				allComments.add(topLevelComment);
     			}

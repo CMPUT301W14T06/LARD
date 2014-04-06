@@ -33,6 +33,9 @@ public class CommentController {
 	public void init(CommentRequest req) {
 		buffer = DataModel.retrieveComments(req);
 	}
+	public void init(CommentRequest req, Context context) {
+		buffer = DataModel.retrieveComments(req, context);
+	}
 	
 	/**
 	 * 
@@ -42,7 +45,7 @@ public class CommentController {
 		CommentRequest req = new CommentRequest(10); //TODO pull this from configuration.
 		req.setLocation(new GeoLocation(context));
 		this.context = context;
-		init(req);
+		init(req, context);
 	}
 	
 	/**
@@ -51,7 +54,7 @@ public class CommentController {
 	 */
 	public CommentController(CommentRequest req, Context context) {
 		this.context = context;
-		init(req);
+		init(req, context);
 	}
 	
 	public CommentController request(CommentRequest req) {
