@@ -14,16 +14,6 @@ public class PictureModelTests extends ActivityInstrumentationTestCase2<MainActi
 	}
 	
 	/**
-	 * Tests the String setters and getters with an arbitrary String
-	 */
-	public void testSetImageString() {
-		Picture picture = new Picture();
-		String string = "The quick brown fox jumps over the lazy dog!";
-		picture.setImageString(string);
-		assertEquals("The String getter should return the setted string", string, picture.getImageString() );
-	}
-	
-	/**
 	 * Tests the byte getters and setters to make sure they are not returning null
 	 */
 	public void testByteArray(){

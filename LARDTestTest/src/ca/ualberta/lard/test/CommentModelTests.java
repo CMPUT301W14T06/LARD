@@ -143,7 +143,7 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		
 		// Attach a picture to the comment.
 		Picture picture = new Picture();
-		picture.setImageString("kadj");
+		picture.setImageByte(new byte[] {(byte) 0x00, (byte)0xf3});
 		comment.setPicture(picture);
 		
 		// Picture should no longer be null and should have the correct picture.
