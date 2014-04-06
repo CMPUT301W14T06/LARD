@@ -21,6 +21,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -147,6 +148,15 @@ private GeoLocation sortLocation;
 	 * @param context
 	 */
     private class FetchNearbyComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
+		ProgressDialog spinner = new ProgressDialog(MainActivity.this); 
+    	
+    	@Override
+    	protected void onPreExecute() {
+    		// Display a spinner while retrieving children
+    		spinner.setMessage("Loading Comments...");
+    		spinner.show();
+    	}
+    	
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(200);
@@ -169,6 +179,8 @@ private GeoLocation sortLocation;
     			}
     		}
     		adapter.notifyDataSetChanged();
+    		
+    		spinner.dismiss();
     	}
     }
     

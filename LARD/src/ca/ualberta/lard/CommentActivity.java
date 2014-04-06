@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -92,7 +93,7 @@ public class CommentActivity extends Activity {
     		// Couldn't find the comment, should never get here though.
 	    	finish();
     	}
-	    
+    	
 	    // Configure the list view
 	    commentListView = (ListView)findViewById(R.id.children_list);
 	    commentListView.setOnItemClickListener(new OnItemClickListener() {
@@ -106,21 +107,15 @@ public class CommentActivity extends Activity {
 	    		startActivity(intent);		
 	    	}	    	
 		});
-		
-	}
-	
-	/**
-	 * onStart sets up the adapter communicated with a list view to show all the comments children.
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
+	    
+	    // Set up the adapter.
 		commentList = new ArrayList<Comment>();
 	    adapter = new CommentListBaseAdapter(this, commentList);
 	    commentListView.setAdapter(adapter);
 	    
 	    // Display comment and children
-	   displayCommentAndChildren(comment);  
+	    displayCommentAndChildren(comment);  
+		
 	}
 	
 	/**
@@ -203,7 +198,15 @@ public class CommentActivity extends Activity {
      * Takes a comment request which has the parent id set.
      */
     private class FetchChildren extends AsyncTask<CommentRequest, Integer, ArrayList<Comment>> {
-
+		ProgressDialog spinner = new ProgressDialog(CommentActivity.this);
+    	
+    	@Override
+    	protected void onPreExecute() {
+    		// Display a spinner while retrieving children
+    		spinner.setMessage("Loading Replies...");
+    		spinner.show();
+    	}
+    	
     	@Override
     	protected ArrayList<Comment> doInBackground(CommentRequest... params) {
     		CommentController commentController = new CommentController(params[0], getBaseContext());
@@ -223,6 +226,9 @@ public class CommentActivity extends Activity {
     		commentList.clear();
     		commentList.addAll(result);
     		adapter.notifyDataSetChanged();
+    		
+    		// Get rid of spinner
+    		spinner.dismiss();
     	}
     }
     

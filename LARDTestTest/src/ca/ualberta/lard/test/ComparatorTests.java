@@ -119,7 +119,7 @@ public class ComparatorTests extends ActivityInstrumentationTestCase2<MainActivi
 		
 		// Try sorting with some pictures.
 		Picture picture = new Picture();
-		picture.setImageString("Picture");
+		picture.setImageByte(new byte[] {(byte) 0x00, (byte)0xf3});
 		comment2.setPicture(picture);
 		Collections.sort(comments, new PictureComparator());
 		assertFalse(copy.equals(comments));
@@ -128,10 +128,10 @@ public class ComparatorTests extends ActivityInstrumentationTestCase2<MainActivi
 		
 		// Try sorting if all comments have a picture.
 		Picture pic2 = new Picture();
-		picture.setImageString("Hello");
+		picture.setImageByte(new byte[] {(byte) 0x00, (byte)0xf3});
 		comment1.setPicture(pic2);
 		Picture pic3 = new Picture();
-		picture.setImageString("Apples");
+		picture.setImageByte(new byte[] {(byte) 0x00, (byte)0xf3});
 		comment3.setPicture(pic3);
 		copy = comments;
 		Collections.sort(comments, new PictureComparator());
