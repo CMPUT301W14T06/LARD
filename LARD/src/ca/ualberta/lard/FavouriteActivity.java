@@ -1,42 +1,26 @@
 package ca.ualberta.lard;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
 
 import ca.ualberta.lard.R;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
-import ca.ualberta.lard.model.Favourites;
-import ca.ualberta.lard.model.GeoLocation;
-import ca.ualberta.lard.model.User;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * The favorite activity is the  page where we view favorite comments and their top level replies.
- * 
  * @author Thomas Curnow
  */
 
@@ -44,15 +28,17 @@ public class FavouriteActivity extends MainActivity {
 private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
 private ListView commentList;
-private Menu menu;
 
+	/**
+	 * Populates the Action bar and Listview, making it so you are able to click on favorite 
+	 * comments to view them in more detail
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
-        
         commentList = (ListView) findViewById(R.id.threadsListView);
         
         commentList.setOnItemClickListener(new OnItemClickListener() {
@@ -72,7 +58,6 @@ private Menu menu;
         // Inflate the menu; this adds items to the action bar if it is present.
     	MenuInflater inflater = getMenuInflater();	
        	inflater.inflate(R.menu.main_menu, menu);
-       	this.menu = menu;
 		//sets the favourite option to be a go back to main option instead
 		MenuItem favouriteItem = menu.findItem(R.id.action_favourites);
 		favouriteItem.setTitle("Main");
@@ -84,6 +69,10 @@ private Menu menu;
         return true;
     }
 
+    /**
+     * Gives function to the option items that give you sorting ability and going back
+     * to main.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
@@ -96,16 +85,15 @@ private Menu menu;
     			//go back by just finishing the activity
     			finish();
     			break;
-    		case R.id.action_set_username:
-    			DialogFragment newFragment = new SetUsernameFragment();
-    			newFragment.show(getFragmentManager(), "SetUsername");
-    			break;
     		case R.id.action_sort:
 			
     	}
       return true;
     } 
     
+    /**
+     * Immediately tries to fetch all the favorite comments from server
+     */
     @Override
     protected void onStart() {
     	super.onStart();
@@ -116,13 +104,18 @@ private Menu menu;
 		fetch.execute(this);
     }
     
+    /**
+     * An AsyncTask task that calls a function in the Comment controller that will filter
+     * out all favourite comments from the other comments.
+     * @author Thomas
+     *
+     */
     private class FetchFavoriteComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
     	
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(20);
     		proximityRequest.setParentId(null);
-    		GeoLocation loc = new GeoLocation(getBaseContext());
     		CommentController controller = new CommentController(proximityRequest, params[0]);
 			return controller.getFavouriteComments();
     	}    	
@@ -131,7 +124,6 @@ private Menu menu;
     		allComments.addAll(result);
     		adapter.notifyDataSetChanged();
     	}
-    	
     }
     
 }
