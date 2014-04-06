@@ -26,13 +26,12 @@ import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 
 /**
- * NewCommentActivity is called when a CreateComment button is pushed (Either
- * from MainActivity or CommentActivity). This activity is used to create a new
- * comment (Either top level or reply). The new comment can be given a picture
+ * NewEditCommentActivity is called when a CreateComment button is pushed (Either
+ * from MainActivity or CommentActivity), or when an EditComment button is pushed. 
+ * This activity is used to create a new comment (Either top level or reply) or to 
+ * edit an existing comment. The comment can be given a picture
  * or a location (from LocationSelectionActivity). A valid new comment must have
  * some body text. Everything else is optional.
- * <p>
- * PARENT_ID: Expects the id of the parent comment as a String
  * 
  * @author Dylan
  */
@@ -42,7 +41,6 @@ public class NewEditCommentActivity extends Activity {
 	private GeoLocation location;
 	private Comment comment;
 	private Comment parent;
-	
 	private int mode;
 
 	private TextView lardTextView;
@@ -63,10 +61,6 @@ public class NewEditCommentActivity extends Activity {
 	// Our modes for this activity
 	private static final int EDIT_MODE = 1;
 	private static final int NEW_MODE = 2;
-	
-	// Specify if the comment is a reply or a new comment;
-	// Set flag to NEW or EDIT.
-	public static final String FLAG = "FLAG";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +74,6 @@ public class NewEditCommentActivity extends Activity {
 		locationLatTextView = (TextView) findViewById(R.id.currentLatLocation);
 		locationLongTextView = (TextView) findViewById(R.id.currentLongLocation);
 		pictureImageView = (ImageView) findViewById(R.id.currentPicture);
-
 
 		Intent intent = getIntent();
 		
@@ -97,12 +90,17 @@ public class NewEditCommentActivity extends Activity {
 		if (!intent.hasExtra(PARENT_STRING)) {
 			lardTextView.setVisibility(View.GONE);
 		} else {
-			// Initialize the parent
-			this.parent = Comment.fromJson(intent.getStringExtra(PARENT_STRING));
-			this.parent.setContext(getApplicationContext());
-			lardTextView.setText(parent.getAuthor().toString());
-			// Since we have a parent, set it to the comment's parent.
-			this.comment.setParent(this.parent.getId());
+			if (intent.getStringExtra(PARENT_STRING) != null) {
+				// Initialize the parent
+				this.parent = Comment.fromJson(intent.getStringExtra(PARENT_STRING));
+				this.parent.setContext(getApplicationContext());
+				lardTextView.setText(parent.getAuthor().toString());
+				// Since we have a parent, set it to the comment's parent.
+				this.comment.setParent(this.parent.getId());
+			}
+			else {
+				lardTextView.setVisibility(View.GONE);
+			}
 		}
 
 		// Display the comments current information
@@ -189,7 +187,6 @@ public class NewEditCommentActivity extends Activity {
 			return;
 		}
 		// Set a location for the comment
-		// TODO this seems redundant?
 		comment.setLocation(location);
 		
 		// Set a picture for the comment

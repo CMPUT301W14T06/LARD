@@ -81,7 +81,7 @@ private ListView commentList;
       // These are the menu options in the action bar menu
       	case R.id.action_new:
       		Intent i = new Intent(getBaseContext(), NewEditCommentActivity.class);
-      		i.putExtra(NewEditCommentActivity.FLAG, "NEW");
+      		i.putExtra(NewEditCommentActivity.PARENT_STRING, (String) null);
       		startActivity(i);
       		break;
     	case R.id.action_location:
