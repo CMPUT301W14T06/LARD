@@ -8,7 +8,6 @@ import ca.ualberta.lard.R;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
-import ca.ualberta.lard.model.DataModel;
 import ca.ualberta.lard.model.Favourites;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.User;
@@ -36,15 +35,16 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
- * The main activity is the main page where we view top level comments.
+ * The favorite activity is the  page where we view favorite comments and their top level replies.
  * 
- * @author Eldon Lake
+ * @author Thomas Curnow
  */
 
-public class MainActivity extends Activity {
+public class FavouriteActivity extends MainActivity {
 private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
 private ListView commentList;
+private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,34 +72,32 @@ private ListView commentList;
         // Inflate the menu; this adds items to the action bar if it is present.
     	MenuInflater inflater = getMenuInflater();	
        	inflater.inflate(R.menu.main_menu, menu);
+       	this.menu = menu;
+		//sets item labels	
+		MenuItem favouriteItem = menu.findItem(R.id.action_favourites);
+		favouriteItem.setTitle("Main");
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-      // These are the menu options in the action bar menu
-      	case R.id.action_new:
-      		Intent i = new Intent(getBaseContext(), NewEditCommentActivity.class);
-      		i.putExtra(NewEditCommentActivity.PARENT_STRING, (String) null);
-      		startActivity(i);
-      		break;
-    	case R.id.action_location:
-    		Intent j = new Intent(getBaseContext(), LocationSelectionActivity.class);
-        	startActivity(j);
-        	break;
-    	case R.id.action_favourites:
-    		Intent fav = new Intent(getBaseContext(), FavouriteActivity.class);
-        	startActivity(fav);
-        	break;
-    	case R.id.action_set_username:
-    		DialogFragment newFragment = new SetUsernameFragment();
-    	    newFragment.show(getFragmentManager(), "SetUsername");
-    		break;
-    	case R.id.action_sort:
-    		
-        }
-
+    	switch (item.getItemId()) {
+    		// These are the menu options in the action bar menu
+    		case R.id.action_location:
+    			Intent j = new Intent(getBaseContext(), LocationSelectionActivity.class);
+    			startActivity(j);
+    			break;
+    		case R.id.action_favourites:
+    			//go back by just finishing the activity
+    			finish();
+    			break;
+    		case R.id.action_set_username:
+    			DialogFragment newFragment = new SetUsernameFragment();
+    			newFragment.show(getFragmentManager(), "SetUsername");
+    			break;
+    		case R.id.action_sort:
+			
+    	}
       return true;
     } 
     
@@ -109,34 +107,26 @@ private ListView commentList;
     	allComments = new ArrayList<Comment>();
     	adapter = new CommentListBaseAdapter(this, allComments);
     	commentList.setAdapter(adapter);
-    	FetchNearbyComments fetch = new FetchNearbyComments();
-    	fetch.execute(this);
+		FetchFavoriteComments fetch = new FetchFavoriteComments();
+		fetch.execute(this);
     }
-	
-	/*
-	 * These classes are duplicating lots of code. Later let's refactor, use state model
-	 */
-    private class FetchNearbyComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
+    
+    private class FetchFavoriteComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
+    	
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
-    		CommentRequest proximityRequest = new CommentRequest(200);
+    		CommentRequest proximityRequest = new CommentRequest(20);
+    		proximityRequest.setParentId(null);
     		GeoLocation loc = new GeoLocation(getBaseContext());
-    		//proximityRequest.setLocation(loc); //Doesn't work yet, omit for now
     		CommentController controller = new CommentController(proximityRequest, params[0]);
-    		return controller.get(); // fetch all the comments off of the server
-    	}
-
+			return controller.getFavouriteComments();
+    	}    	
     	protected void onPostExecute(ArrayList<Comment> result) {
     		allComments.clear();
-    		for (Comment topLevelComment : result)
-    		{
-    			if (topLevelComment.getParent() == null)
-    			{
-    				allComments.add(topLevelComment);
-    			}
-    		}
+    		allComments.addAll(result);
     		adapter.notifyDataSetChanged();
     	}
+    	
     }
     
 }
