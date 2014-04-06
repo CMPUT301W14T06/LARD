@@ -232,7 +232,8 @@ public class Comment {
 	public boolean hasPicture() {
 		if (this.picture == null || this.picture.isNull()) {
 			return false;
-		} else if (this.picture.getImageString() == null) {
+		} else if (this.picture.getImageByte() == null) {
+			// this check doenst make a lot of sense to me. is this not the same as the above check?
 			return false;
 		}
 		return true;

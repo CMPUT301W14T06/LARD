@@ -40,28 +40,11 @@ public class Picture {
 		return Base64.decode(imageString, Base64.URL_SAFE);
 	}
 	
+	/**
+	 * Returns the Bitmap representation of the Picture
+	 */
 	public Bitmap getBitmap() {
 		byte[] decodedByte = getImageByte();
 		return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
 	}
-
-	/**
-	 * Sets the Base64 encoded String representation of the Picture
-	 * <p>
-	 * Might become DEPRECATED
-	 * @param string A Base64 encoded String representation of the Picture
-	 */
-	public void setImageString(String string) {
-		imageString = string;
-	}
-	
-	/**
-	 * Returns the Base64 encoded String representation of the Picture
-	 * <p>
-	 * Might become DEPRECATED
-	 */
-	public String getImageString() {
-		return imageString;
-	}
-
 }
