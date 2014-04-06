@@ -73,9 +73,14 @@ private Menu menu;
     	MenuInflater inflater = getMenuInflater();	
        	inflater.inflate(R.menu.main_menu, menu);
        	this.menu = menu;
-		//sets item labels	
+		//sets the favourite option to be a go back to main option instead
 		MenuItem favouriteItem = menu.findItem(R.id.action_favourites);
 		favouriteItem.setTitle("Main");
+		//hides stuff the user does not need to see
+		MenuItem addNewItem = menu.findItem(R.id.action_new);
+		addNewItem.setVisible(false);
+		MenuItem usernameItem = menu.findItem(R.id.action_set_username);
+		usernameItem.setVisible(false);
         return true;
     }
 
