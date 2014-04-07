@@ -14,7 +14,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.util.Log;
 import ca.ualberta.lard.model.Comment;
 
 import com.google.gson.Gson;
@@ -54,6 +53,7 @@ public class StretchyClient {
 	 * @return Comment if found, null otherwise
 	 */
 	public Comment getById(final String id) {
+		// We implement this using a Runnable
 		class RunGet implements Runnable {
 			private Comment foundComment = null;
 			private boolean failed = false;
@@ -71,7 +71,6 @@ public class StretchyClient {
 						failed = true;
 					} else if (sResult.exists()) {
 						foundComment = sResult.getSource();
-						//return sResult.getSource();
 					}
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
@@ -80,6 +79,12 @@ public class StretchyClient {
 				}
 				// We've come too far, the Comment doesn't exist
 			}
+			/**
+			 * Continually polls until the network times out to see if we have found any comments.
+			 * This should only be run inside of an Async Task, so it should not cause any worker or
+			 * UI thread to lock
+			 * @return Comment if found, else null
+			 */
 			public Comment get() {
 				Long curtime = System.currentTimeMillis();
 				while (foundComment == null && failed == false) {
@@ -90,13 +95,14 @@ public class StretchyClient {
 				return foundComment;
 			}
 		}
+		// Run the runnable
 		RunGet s = new RunGet();
 		try {
 			new Thread(s).start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		//return the result of the runnable.
 		return s.get();
 	}
 
@@ -128,6 +134,7 @@ public class StretchyClient {
 	 * @return StretchyResponse Contains the server's response
 	 */
 	private StretchyResponse push(final HttpEntityEnclosingRequestBase postReq, final Comment comment) {
+		// We implement server interfacing using a Runnable
 		class RunPush implements Runnable {
 			private StretchyResponse sResponse = null;
 			private boolean failed = false;
@@ -170,6 +177,13 @@ public class StretchyClient {
 				
 			}
 			
+			/**
+			 * Continually polls until the network times out to see if we have completed the operation and
+			 * receieved a response.
+			 * This should only be run inside of an Async Task, so it should not cause any worker or
+			 * UI thread to lock
+			 * @return StretchyResponse Server's response
+			 */
 			public StretchyResponse get() {
 				Long curtime = System.currentTimeMillis();
 				while (sResponse == null && failed == false) {
@@ -181,15 +195,16 @@ public class StretchyClient {
 				return sResponse;
 			}
 		}
-			
-		RunPush run = new RunPush();
 		
+		// Run the runnable
+		RunPush run = new RunPush();
 		try {
 			new Thread(run).start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		// Get the result
 		return run.get();
 			
 	}
@@ -240,6 +255,12 @@ public class StretchyClient {
 					returnComments = result.hits().get();
 				}
 			}
+			/**
+			 * Continually polls until the network times out to see if we have found any comments.
+			 * This should only be run inside of an Async Task, so it should not cause any worker or
+			 * UI thread to lock
+			 * @return ArrayList<Comment> if found, else null
+			 */
 			public ArrayList<Comment> get() {
 				Long curtime = System.currentTimeMillis();
 				while (returnComments == null && failed == false) {
@@ -250,13 +271,15 @@ public class StretchyClient {
 				return returnComments;
 			}
 		}
+		// Run the runnable
 		RunSearch s = new RunSearch();
 		try {
 			new Thread(s).start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		// Get the results
 		return s.get();
 	}
 	
