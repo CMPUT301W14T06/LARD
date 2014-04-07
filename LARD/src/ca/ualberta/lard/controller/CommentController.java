@@ -177,7 +177,7 @@ public class CommentController {
 	}
 	
 	public Follow getFollows() {
-		SharedPreferences prefs = context.getSharedPreferences(Favourites.PREFS_NAME, Context.MODE_PRIVATE);
+		SharedPreferences prefs = context.getSharedPreferences(Follow.PREFS_NAME, Context.MODE_PRIVATE);
 		if (prefs == null) {
 			System.err.println("Unable to retrieve shared preferences");
 		}
