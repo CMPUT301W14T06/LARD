@@ -23,7 +23,6 @@ import android.widget.AdapterView.OnItemClickListener;
  * The favorite activity is the  page where we view favorite comments and their top level replies.
  * @author Thomas Curnow
  */
-
 public class FavouriteActivity extends MainActivity {
 private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
@@ -54,6 +53,10 @@ private ListView commentList;
 		});
     }
 
+    /**
+     * Hides not needed options and changes the option that goes to main into 
+     * an option that goes into favorites instead
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -118,13 +121,19 @@ private ListView commentList;
      */
     private class FetchFavoriteComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
     	
+    	/**
+    	 * Calls the controller to request a comments list that consist of favorites
+    	 */
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(20);
     		proximityRequest.setParentId(null);
     		CommentController controller = new CommentController(proximityRequest, params[0]);
 			return controller.getFavouriteComments();
-    	}    	
+    	}   
+    	/**
+    	 * Tells the adapter that the favourites list has changed
+    	 */
     	protected void onPostExecute(ArrayList<Comment> result) {
     		allComments.clear();
     		allComments.addAll(result);
