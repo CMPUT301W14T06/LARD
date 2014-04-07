@@ -49,9 +49,9 @@ public class Comment {
 	 * <p>
 	 * Initializes code common to the multiple Comment constructors.
 	 * </p>
-	 * @param c The Comment object to populate
-	 * @param body BodyText of the Comment
-	 * @param context Application context of the current Comment Creation request
+	 * @param c Comment The Comment object to populate
+	 * @param body String BodyText of the Comment
+	 * @param context Context Application context of the current Comment Creation request
 	 */
 	public void init(Comment c, String body, Context context) {
 		this.context = context;
@@ -66,23 +66,35 @@ public class Comment {
 		c.parent = null;
 	}
 	
-	/* Minimal constructor, contains only body text */
+	/**
+	 * Constructor for creating a body given only the body text
+	 * @param body String body text
+	 * @param context Context Application context
+	 */
 	public Comment(String body, Context context) {
 		this.init(this, body, context);
 	}
 	
-	/* Constructor for creating replies */
+	/**
+	 * Constructor used for creating replies
+	 * @param body String body text
+	 * @param parentID String The ID of the comment we are replying to
+	 * @param context Context application context
+	 */
 	public Comment (String body, String parentID, Context context) {
 		this.init(this, body, context);
 		this.parent = parentID;
 	}
 	
+	/**
+	 * Overridden toString
+	 * @return String Body text of comment
+	 */
 	public String toString() {
 		return this.bodyText;
 	}
 	
 	// Getters
-	
 	public String getId() {
 		return this.id;
 	}
@@ -103,6 +115,10 @@ public class Comment {
 		return this.author;
 	}
 	
+	/**
+	 * Get the author name without any hashing appended to it
+	 * @return String Author name without any hash.
+	 */
 	public String getRawAuthor() {
 		return this.author.split("#")[0];
 	}
@@ -116,9 +132,7 @@ public class Comment {
 	}
 	
 	/**
-	 * Returns null if the comment does not have a parent, so the 
-	 * parent comment cannot be retrieved. Otherwise, the parent comment
-	 * is returned.
+	 * Get the parent comment of the current object.
 	 * @return null or the parent Comment
 	 */
 	public Comment getParent() {
@@ -128,7 +142,7 @@ public class Comment {
 		}		
 		CommentRequest req = new CommentRequest(1);
 		req.setId(this.parent);
-		ArrayList<Comment> arr = DataModel.retrieveComments(req);
+		ArrayList<Comment> arr = DataModel.retrieveComments(req, context);
 		
 		if (arr.size() > 0) {
 			return arr.get(0);
@@ -137,16 +151,16 @@ public class Comment {
 	}
 	
 	/**
-	 * Returns the id of the parent.
-	 * @return parent id
+	 * Get the ID of the parent of this comment
+	 * @return String parent id
 	 */
 	public String getParentId() {
 		return parent;
 	}
 	
 	/**
-	 * Returns null is a comment has no children. Otherwise returns the 
-	 * children in a ArrayList. Children should be sorted by date created.
+	 * Get the children of the current comment object.
+	 * Children should be sorted by date created.
 	 * @return null or ArrayList of children
 	 */
 	public ArrayList<Comment> children() {
@@ -162,26 +176,27 @@ public class Comment {
 	}
 	
 	// Setters
-	
+	// By default all setters retrun themselves for chaining.
 	/**
 	 * Sets the text of the comment. If an empty input is given the text will
 	 * be set to [Comment Text Removed] by default. 
 	 * @param bodyText
 	 */
-	public void setBodyText(String bodyText) {
+	public Comment setBodyText(String bodyText) {
 		// Check the body text is not empty.
 		if (bodyText == "" || bodyText == null) {
 			bodyText = "[Comment Text Removed]";
 		}
 		this.bodyText = bodyText;
 		this.setUpdated();
+		return this;
 	}
 	
 	/**
 	 * Sets the author of the comment. The author will be the user name appended
 	 * with a hash unique to the device being used. If an empty user name or no name
 	 * is given author will be set to Anonymous by default.
-	 * @param username
+	 * @param username String the username we want to set as the author.
 	 */
 	public Comment setAuthor(String username) {
 		// Check the username is not empty. If it is set to Anonymous.
@@ -196,24 +211,28 @@ public class Comment {
 		return this;
 	}
 	
-	public void setLocation(GeoLocation location) {
+	public Comment setLocation(GeoLocation location) {
 		this.location = location;
 		this.setUpdated();
+		return this;
 	}
 	
-	public void setPicture(Picture picture) {
+	public Comment setPicture(Picture picture) {
 		this.picture = picture;
 		this.setUpdated();
+		return this;
 	}
 	
-	public void setParent(String parentID) {
+	public Comment setParent(String parentID) {
 		this.parent = parentID;
 		this.setUpdated();
+		return this;
 	}
 	
 	// For testing comparators
-	public void setCreationDate(Date date) {
+	public Comment setCreationDate(Date date) {
 		this.createdAt = date;
+		return this;
 	}
 	
 	public Comment setContext(Context context) {
@@ -221,34 +240,37 @@ public class Comment {
 		return this;
 	}
 	
-	
-	// Helper functions
-	
-	public boolean hasParent() {
-		return (this.parent != null);
-	}
-	
-	/**
-	 * Touches the Comment's updatedAt timestamp.
-	 * @return Comment The current comment for chaining.
-	 */
 	public Comment setUpdated() {
 		this.updatedAt = new Date();
 		return this;
 	}
 	
+	
+	// Helper functions
+	
+	/**
+	 * Check if the comment is a top level comment or a reply
+	 * @return boolean Does this comment have a parent?
+	 */
+	public boolean hasParent() {
+		return (this.parent != null);
+	}
+	
+	/**
+	 * Check if the comment has a picture associated with it
+	 * @return boolean Does the comment have a picture?
+	 */
 	public boolean hasPicture() {
 		if (this.picture == null || this.picture.isNull()) {
 			return false;
 		} else if (this.picture.getImageByte() == null) {
-			// this check doenst make a lot of sense to me. is this not the same as the above check?
 			return false;
 		}
 		return true;
 	}
 	
 	/**
-	 * Returns an integer. The number of children is 0 if the list
+	 * The number of children is 0 if the list
 	 * of children is null. Otherwise the number of elements in the list
 	 * of children is returned.
 	 * @return int Number of children 
@@ -263,7 +285,7 @@ public class Comment {
 	/**
 	 * Returns true if the comment is saved locally and false if
 	 * it is not.
-	 * @return true or false
+	 * @return boolean Is the comment local?
 	 */
 	public boolean isLocal() {
 		return DataModel.isLocal(this, context);
@@ -273,8 +295,8 @@ public class Comment {
 	 * Checks whether the id's of 2 comments are the same. This is
 	 * used by DataModel to decide if a comment has been saved locally
 	 * but might have had it's fields edited.
-	 * @param comment
-	 * @return true if IDs are same, false otherwise
+	 * @param Object The comment object we're comparing
+	 * @return boolean true if IDs are same, false otherwise
 	 */
 	public boolean equals (Object o) {
 		if (this == o)

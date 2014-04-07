@@ -171,11 +171,7 @@ public class DataModel {
 				comments.add(c);
 				return comments;
 			}
-			// TODO check local storage as a last resort.
 			
-			// TODO: change?
-			//System.err.println("Failed to find the comment, returning null");
-			//return null; // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 			System.err.println("Failed to find the comment, returning empty ArrayList");
 			return new ArrayList<Comment>(); // We couldn't find the ID the user requested. We've failed. Pack up and go home.
 		}
@@ -252,6 +248,11 @@ public class DataModel {
 	}
 	
 //	http://stackoverflow.com/questions/4238921/android-detect-whether-there-is-an-internet-connection-available
+	/**
+	 * Checks if the network is currently available
+	 * @param context Context Android context in which the request is currently Running
+	 * @return boolean Status of the network
+	 */
 	private static boolean isNetworkAvailable(Context context) {
 	    ConnectivityManager connectivityManager 
 	          = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
