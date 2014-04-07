@@ -47,6 +47,9 @@ public class LocationSelectionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location_selection);
 		
+		//Makes the action bar title look cleaner
+		getActionBar().setTitle("Location Settings");
+		
 		// Default state is gps location is set to true
 		gpsLocationClicked = true;
 		selectedLocationClicked = false;

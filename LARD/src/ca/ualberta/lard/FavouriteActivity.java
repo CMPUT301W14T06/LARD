@@ -31,12 +31,13 @@ private ListView commentList;
 
 	/**
 	 * Populates the Action bar and Listview, making it so you are able to click on favorite 
-	 * comments to view them in more detail
+	 * comments to view them in more detail 
 	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getActionBar().setTitle("Favorites");
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         commentList = (ListView) findViewById(R.id.threadsListView);
