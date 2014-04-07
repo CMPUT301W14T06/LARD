@@ -62,6 +62,11 @@ public class NewEditCommentActivity extends Activity {
 	private static final int EDIT_MODE = 1;
 	private static final int NEW_MODE = 2;
 
+	/**
+	 * Instantiate all of the views and displays the comments current information. 
+	 * Information including information on the comments parent, bodytext and if 
+	 * the comment contains a picture
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -114,6 +119,10 @@ public class NewEditCommentActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Gets the phones current location and will decode pictures from the
+	 * picture's byte array
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -133,14 +142,6 @@ public class NewEditCommentActivity extends Activity {
 						"Picture Bitmap was null.", Toast.LENGTH_SHORT).show();
 			}
 		}
-	}
-
-	// TODO: Not sure if we even need this function
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.new_comment, menu);
-		return true;
 	}
 
 	/**
@@ -232,10 +233,11 @@ public class NewEditCommentActivity extends Activity {
 		startActivityForResult(intent, LOCATION_REQUEST_ID);
 	}
 
-	// Called when LocationSelectionActivity or Intent.ACTION_GET_CONTENT
-	// returns
-	// Will either get the GeoLocation data from LocationSelectionActivity
-	// or get the picture data from Intent.ACTION_GET_CONTENT
+	/**
+	 * Called when LocationSelectionActivity or Intent.ACTION_GET_CONTENT returns
+	 * and Will either get the GeoLocation data from LocationSelectionActivity
+	 * or get the picture data from Intent.ACTION_GET_CONTENT
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == LOCATION_REQUEST_ID) {
@@ -278,6 +280,10 @@ public class NewEditCommentActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Will Save the comment if the comment is a new comment or in case of editing
+	 * a comment, it will update that comment. 
+	 */
 	private class UpdateOrSaveComment extends AsyncTask<Comment, Integer, Boolean> {
 		@Override
 		protected Boolean doInBackground(Comment... params) {
