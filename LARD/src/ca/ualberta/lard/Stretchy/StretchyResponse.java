@@ -15,14 +15,14 @@ import ca.ualberta.lard.utility.File;
  *
  */
 public class StretchyResponse {
+	// Status of the request
 	private boolean ok;
+	// ID of object we requested
 	private String _id;
 	
-	@SuppressWarnings("unused") // TODO: Remove
+	// Unused, but necessary for proper deserialization of the response from Elastic Search
 	private int _version;
-	@SuppressWarnings("unused") // TODO: Remove
 	private String _type;
-	@SuppressWarnings("unused") // TODO: Remove
 	private String _index;
 	
 	public StretchyResponse(boolean status, String id) {
