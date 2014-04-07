@@ -16,5 +16,6 @@
     <item
         android:id="@+id/action_set_username"
         android:title="@string/set_username"/>
+    <item android:id="@+id/action_followed" android:title="Followed" android:titleCondensed="Followed"></item>
 
 </menu>

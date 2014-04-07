@@ -32,5 +32,6 @@
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_favourite">FavouriteActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_follow">Followed Posts</string>
 
 </resources>

@@ -14,6 +14,7 @@ import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
 import ca.ualberta.lard.model.Favourites;
+import ca.ualberta.lard.model.Follow;
 import ca.ualberta.lard.model.GeoLocation;
 
 /**
@@ -175,6 +176,14 @@ public class CommentController {
 		return new Favourites(prefs);
 	}
 	
+	public Follow getFollows() {
+		SharedPreferences prefs = context.getSharedPreferences(Favourites.PREFS_NAME, Context.MODE_PRIVATE);
+		if (prefs == null) {
+			System.err.println("Unable to retrieve shared preferences");
+		}
+		return new Follow(prefs);
+	}
+	
 	public ArrayList<Comment> getFavouriteComments() {
 		ArrayList<Comment> favoriteBuffer = new ArrayList<Comment>();
 		Set<String> favIDSet = this.getFavourites().getFavouritesList();
@@ -184,6 +193,18 @@ public class CommentController {
 			}
 		}
 		return favoriteBuffer;
+	}
+	
+	public ArrayList<Comment> getFollowedComments() {
+		ArrayList<Comment> followedBuffer = new ArrayList<Comment>();
+		Set<String> followedIDSet = this.getFollows().getFollowed();
+		for (Comment bufferComment : buffer) {
+			if(followedIDSet.contains(bufferComment.getAuthor())) {
+				followedBuffer.add(bufferComment);
+			}
+		}
+		
+		return followedBuffer;
 	}
 
 }

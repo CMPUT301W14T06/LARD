@@ -30,7 +30,7 @@ public class Follow {
 		Set<String> editSet = new HashSet<String>();
 		editSet.addAll(followsList);
 		
-		// add our new favourite
+		// add our new follow
 		editSet.add(id);
 		Editor editor = preferences.edit();
 		editor.putStringSet(PREFS_OBJ, editSet);

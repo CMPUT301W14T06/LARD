@@ -96,6 +96,10 @@ private GeoLocation sortLocation;
     		Intent fav = new Intent(getBaseContext(), FavouriteActivity.class);
         	startActivity(fav);
         	break;
+    	case R.id.action_followed:
+    		Intent fol = new Intent(getBaseContext(), FollowActivity.class);
+    		startActivity(fol);
+    		break;
     	case R.id.action_set_username:
     		DialogFragment newFragment = new SetUsernameFragment();
     	    newFragment.show(getFragmentManager(), "SetUsername");
