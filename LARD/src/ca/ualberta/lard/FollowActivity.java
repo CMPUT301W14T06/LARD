@@ -18,11 +18,13 @@ import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import android.view.View;
 
-
+/**
+ * Gives you an up-to-date list of comments from your followed users and their comments
+ */
 public class FollowActivity extends MainActivity {
-private CommentListBaseAdapter adapter;
-private ArrayList<Comment> allComments;
-private ListView commentList;
+	private CommentListBaseAdapter adapter;
+	private ArrayList<Comment> allComments;
+	private ListView commentList;
 
 	/**
 	 * Populates the Action bar and Listview, making it so you are able to click on followed 
@@ -48,6 +50,10 @@ private ListView commentList;
 		});
     }
 
+    /**
+     * Hides not needed options and changes the option that goes to main into 
+     * an option that goes into favorites instead
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -105,18 +111,24 @@ private ListView commentList;
     }
     
     /**
-     * 
-     *
+     * An AsyncTask task that calls a function in the Comment controller that will filter
+     * out all followed comments from the other comments.
      */
     private class FetchFollowedComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
     	
+       	/**
+    	 * Calls the controller to request a comments list that consist of followe comments
+    	 */
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest req = new CommentRequest(20);
     		req.setParentId(null);
     		CommentController controller = new CommentController(req, params[0]);
 			return controller.getFollowedComments();
-    	}    	
+    	}  
+    	/**
+    	 * Tells the adapter that the followed comments list has changed
+    	 */
     	protected void onPostExecute(ArrayList<Comment> result) {
     		allComments.clear();
     		allComments.addAll(result);

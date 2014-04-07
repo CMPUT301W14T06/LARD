@@ -22,10 +22,10 @@ import android.widget.Toast;
 
 /**
  * Returns A GeoLocation through intents. Can create a GeoLocation with your current
- * gps location or a location based on a list of pre-created locations on campus
+ * gps location, a location based on a list of pre-created locations on campus or
+ * a location created manually by inputing the desired latitude and longitude.
  * @author Thomas
  */
-
 public class LocationSelectionActivity extends Activity {
 	private boolean gpsLocationClicked;
 	private boolean selectedLocationClicked;
@@ -37,10 +37,18 @@ public class LocationSelectionActivity extends Activity {
 	// For getting the location set by this activity
 	public static final String LOCATION_REQUEST = "LOCATION";
 	
+	/**
+	 * Gets the widgets and sets them to their default state. The Default state is that the RadioButton
+	 * for using your current gps location is clicked. It populates the spinner with some default 
+	 * location across local campus (CSC, CAB, etc) and makes the spinner clickable
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location_selection);
+		
+		//Makes the action bar title look cleaner
+		getActionBar().setTitle("Location Settings");
 		
 		// Default state is gps location is set to true
 		gpsLocationClicked = true;
@@ -57,43 +65,37 @@ public class LocationSelectionActivity extends Activity {
 		customLocationRadioButton.setClickable(true);
 		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
-	
 		// Gets a list of locations from the GeoLocation map then converts it to a string array
 		GeoLocationMap geoMap = new GeoLocationMap();
 		Set<String> nameSet = geoMap.getMap().keySet();
 		String[] stringArray = Arrays.copyOf(nameSet.toArray(), nameSet.toArray().length, String[].class);
-		
-		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.location_list_item, stringArray);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.location_array, R.layout.spinner_item);
 		//sets the spinner item as the custom one so you can have increased text size 
 		adapter.setDropDownViewResource(R.layout.spinner_item);
 		spinner.setAdapter(adapter);
-		
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			/**
+			 * Gets the name of the clicked item then stores the item's string in an attribute
+			 * so that when you click save it had a selected location to build a GeoLocation from.
+			 */
 		    @Override
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-		    	// Gets the name of the clicks item	
 		        String string = (spinner.getItemAtPosition(position)).toString();
-		        selectedLocationString = string;
-		        
+		        selectedLocationString = string;	        
 		        //sets text color of spinner to white
 				TextView textView = (TextView) spinner.getSelectedView();
 				textView.setTextColor(Color.WHITE);
 		    }
 		    
+		    /**
+		     * does nothing, but needed for Listener
+		     */
 		    @Override
 		    public void onNothingSelected(AdapterView<?> parentView) {
-		        // does nothing, but needed for Listener
 		    }
 		});
 	}
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.location_selection, menu);
-		return true;
-	}
 	/**
 	 * Gets RadioButton clicked then unchecks the other RadioButton, also sets the bools
 	 * @param view
@@ -150,7 +152,7 @@ public class LocationSelectionActivity extends Activity {
 	/**
 	 * Will return a GeoLocation when you press the save button, what GeoLocation
 	 * You get will depend on what RadioButtons are selected and what Location
-	 * you have selected on the spinner.
+	 * you have selected on the spinner or what value you have in the lat and lon fields.
 	 * @param view
 	 */
 	public void locationSaveClick(View view){		

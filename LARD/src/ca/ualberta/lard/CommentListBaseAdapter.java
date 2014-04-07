@@ -43,6 +43,9 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		inflater = LayoutInflater.from(this.context);	// only context can also be used
 	}
 
+	/**
+	 * Gets count of Comment list
+	 */
 	@Override
 	public int getCount() {
 		if (myList == null) {
@@ -53,19 +56,27 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		}
 	}
 
+	/**
+	 * Gets comment at position from Comment list
+	 */
 	@Override
 	public Comment getItem(int position) {
 		return myList.get(position);
 	}
 
+	/**
+	 * Gets the Item id from a position
+	 */
 	@Override
 	public long getItemId(int position) {
 		return 0; // This is never used, but if it gets used we'll implement it
 	}
 
+	/**
+	 * Gets the view used to populate a single item in the list
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// Gets the view used to populate a single item in the list
 		
 		if(convertView == null) { 
 			convertView = inflater.inflate(R.layout.thread_list_item, null);
@@ -138,26 +149,44 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		return convertView;
 	}
 	
+	/**
+	 * Sets and returns a TextView that is set with the given text 
+	 * @param v     Is the view
+	 * @param resId Is the id of the TextView
+	 * @param text  Is the text you want to set
+	 * @return tv   A TextView of the detail
+	 */
 	private TextView detail(View v, int resId, String text) {
 		TextView tv = (TextView) v.findViewById(resId);
 		tv.setText(text);
 		return tv;
 	}
 	
-	
+	/**
+	 * Sets and returns an ImageView with the icon string
+	 * @param v     Is the view
+	 * @param resId Is the id of the imageView
+	 * @param icon  Is the string of the icon you want to be set
+	 * @return      An ImageView 
+	 */
 	private ImageView imageDetail(View v, int resId, String icon) {
 		ImageView iv = (ImageView) v.findViewById(resId);
 		iv.setImageResource(this.context.getResources().getIdentifier(icon, "drawable", this.context.getPackageName())); // 
 		return iv;
 	}
 	
-	
+	/**
+	 * A View Holder
+	 */
 	private class MyViewHolder {
 		TextView itemPreview, itemAuthor, itemDistance, itemNumChildren;
 		ImageView itemIcon;
 	}
+	
+	/**
+	 * Given a TextView and a comment, gives the number of replies of that comment to that TextView
+	 */
 	private class ANumReplies extends AsyncTask<Comment, Integer, String> {
-		// Given a textview and a comment, gives the numreplies of that comment to that textview
 		private final WeakReference<TextView> textViewReference;
 		public ANumReplies(TextView textView) {
 			textViewReference = new WeakReference<TextView>(textView);

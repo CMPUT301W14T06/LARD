@@ -16,14 +16,14 @@ import android.location.LocationManager;
  */
 
 public class GeoLocation {
-	
+
 	private double lon;
 	private double lat;
-	
+
 	// Our internal list of default locations
 	public ArrayList<GeoLocation> locations;
-	
-	
+
+
 	/**
 	 * Creates a GeoLocation using the position of the device.
 	 * @param context Context Application context in which we are running.
@@ -46,7 +46,7 @@ public class GeoLocation {
 			this.lat = location.getLatitude();
 		}
 	}
-	
+
 	/**
 	 * Creates a GeoLocation using a input latitude and longitude.
 	 * @param lat double Latitude
@@ -61,24 +61,24 @@ public class GeoLocation {
 	public double getLatitude() {
 		return this.lat;
 	}
-	
+
 	public double getLongitude() {
 		return this.lon;
 	}
-	
+
 	//Setters
 	//Return themselves for chaining
-	
+
 	public GeoLocation setLatitude(double lat) {
 		this.lat = lat;
 		return this;
 	}
-	
+
 	public GeoLocation setLongitude(double lon) {
 		this.lon = lon;
 		return this;
 	}
-	
+
 	/**
 	 * Finds the distance from current location to a specified GeoLocation.
 	 * 
@@ -88,7 +88,7 @@ public class GeoLocation {
 	 * @return double Distance in meters from current location to specified location
 	 */
 	public double distanceFrom(GeoLocation loc1) {
-		
+
 		int earthRadius = 6371; // earth's radius in KM - constant in source code because we don't expect this to change - ever.
 		double dLat = Math.toRadians(this.getLatitude() - loc1.getLatitude());
 		double dLon = Math.toRadians(this.getLongitude() - loc1.getLongitude());
@@ -101,7 +101,7 @@ public class GeoLocation {
 		double returnValue = earthRadius * c * 1000;
 		return returnValue;
 	}
-	
+
 	/**
 	 * Returns GeoLocation model as a json object.
 	 * @return String The GeoLocation as a json object.
@@ -111,7 +111,7 @@ public class GeoLocation {
 		String json = gson.toJson(this);
 		return json;
 	}
-	
+
 	/**
 	 * Returns a GeoLocation model from a Json object.
 	 * @param text String the JSON string we want to deserialize
@@ -122,7 +122,7 @@ public class GeoLocation {
 		GeoLocation new_model = gson.fromJson(text, GeoLocation.class);
 		return new_model;
 	}
-	
+
 	/**
 	 * Overridden hashcode, to verify uniqueness of our GeoLocation
 	 */
@@ -137,7 +137,7 @@ public class GeoLocation {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-	
+
 	/**
 	 * Returns the distance between two GeoLocations rounded to two
 	 * decimal places as a string.

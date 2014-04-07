@@ -48,7 +48,6 @@ public class GeoLocationMap {
 	 * returns the HashMap Attribute
 	 * @return GeoLocationMap's HashMap
 	 */
-	
 	public Map<String, Pair<Double, Double>> getMap() {
 		return geoDict;
 	}	

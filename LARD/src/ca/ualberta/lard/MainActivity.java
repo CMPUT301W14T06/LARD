@@ -39,17 +39,23 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
- * The main activity is the main page where we view top level comments.
+ * The main activity is the main page where we view top level comments, their 
+ * distance and how many replies they have. From this activity you can select
+ * comments, go to the favorites comment activity and create new top level comments
  * 
  * @author Eldon Lake
  */
-
 public class MainActivity extends Activity {
 private CommentListBaseAdapter adapter;
 private ArrayList<Comment> allComments;
 private ListView commentList;
 private GeoLocation sortLocation;
 
+	/**
+	 * Gets the action bar and sets the comment ListView Adapter that lets you 
+	 * click on comments and go to the CommentActivity that will let you view the 
+	 * Top-level comments in more detail
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,18 +77,24 @@ private GeoLocation sortLocation;
 		});
     }
 
+    /**
+     * Inflate the menu; this adds items to the action bar if it is present.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
     	MenuInflater inflater = getMenuInflater();	
        	inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
+    /**
+     * Adds functionality to the menu options in the action bar menu. Options include
+     * createing a new comment, setting your location, going to favourites, going to
+     * followed authors, setting username and sorting the comments list.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
-      // These are the menu options in the action bar menu
       	case R.id.action_new:
       		Intent i = new Intent(getBaseContext(), NewEditCommentActivity.class);
       		i.putExtra(NewEditCommentActivity.PARENT_STRING, (String) null);
@@ -136,6 +148,10 @@ private GeoLocation sortLocation;
       return true;
     } 
     
+    /**
+     * Starts the activity by creating the Comment adapter and then fetches nearby
+     * comments from the comment controller
+     */
     @Override
     protected void onStart() {
     	super.onStart();
@@ -154,13 +170,18 @@ private GeoLocation sortLocation;
     private class FetchNearbyComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
 		ProgressDialog spinner = new ProgressDialog(MainActivity.this); 
     	
+		/**
+		 * Display a spinner while retrieving children
+		 */
     	@Override
     	protected void onPreExecute() {
-    		// Display a spinner while retrieving children
     		spinner.setMessage("Loading Comments...");
     		spinner.show();
     	}
     	
+    	/**
+    	 * fetch all the comments off of the server
+    	 */
     	@Override
     	protected ArrayList<Comment> doInBackground(Context... params) {
     		CommentRequest proximityRequest = new CommentRequest(200);
@@ -169,12 +190,16 @@ private GeoLocation sortLocation;
     			loc = sortLocation;
     		}
     		CommentController controller = new CommentController(proximityRequest, params[0]);
-    		return controller.sortByLocation(controller.get(), loc); // fetch all the comments off of the server
+    		return controller.sortByLocation(controller.get(), loc);  
     	}
 
+    	/**
+    	 * Cache all the comments (this is a master retrieve) and notifies the adapter that
+    	 * the comment list has changed, then dismisses the loading spinner
+    	 */
     	protected void onPostExecute(ArrayList<Comment> result) {
     		allComments.clear();
-    		DataModel.saveLocal(result, false, getBaseContext()); // Cache all the comments (this is a master retrieve)
+    		DataModel.saveLocal(result, false, getBaseContext()); 
     		for (Comment topLevelComment : result)
     		{
     			if (topLevelComment.getParentId() == null)
@@ -188,6 +213,9 @@ private GeoLocation sortLocation;
     	}
     }
     
+    /**
+     * Sets the GeoLocation used for soring comments
+     */
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	System.out.println("We got our activity result");
