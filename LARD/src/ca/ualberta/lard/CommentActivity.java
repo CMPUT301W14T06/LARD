@@ -206,13 +206,18 @@ public class CommentActivity extends Activity {
     private class FetchChildren extends AsyncTask<CommentRequest, Integer, ArrayList<Comment>> {
 		ProgressDialog spinner = new ProgressDialog(CommentActivity.this);
     	
+		/**
+		 * Display a spinner while retrieving children
+		 */
     	@Override
     	protected void onPreExecute() {
-    		// Display a spinner while retrieving children
     		spinner.setMessage("Loading Replies...");
     		spinner.show();
     	}
     	
+    	/**
+    	 * Fetches the comments from the comment controller
+    	 */
     	@Override
     	protected ArrayList<Comment> doInBackground(CommentRequest... params) {
     		CommentController commentController = new CommentController(params[0], getBaseContext());
@@ -224,16 +229,17 @@ public class CommentActivity extends Activity {
 			}			
     	}
     	
+    	/**
+    	 *  Sets the number of childen and updates the list of children to be displayed, then
+    	 *  gets rid of the loading spinner
+    	 */
     	protected void onPostExecute(ArrayList<Comment> result) {
-    		// Set the number of children
     		parentNumRepliesView.setText(Integer.toString(result.size()) + " replies");
     		
-    		// Update the list of children to be displayed.
     		commentList.clear();
     		commentList.addAll(result);
     		adapter.notifyDataSetChanged();
     		
-    		// Get rid of spinner
     		spinner.dismiss();
     	}
     }
