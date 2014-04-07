@@ -14,6 +14,11 @@ import org.apache.http.HttpResponse;
  */
 public class File {
 
+	/**
+	 * Gets a JSON string from an HTTPResponse
+	 * @param response HttpResponse containing the result from the server
+	 * @return String JSON representation of the response
+	 */
 	public static String parseJsonFromResponse(HttpResponse response) {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));

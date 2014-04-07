@@ -18,13 +18,10 @@ public class StretchyResult<T> {
 	private boolean exists;
 	private T _source;
 	
-	@SuppressWarnings("unused") // TODO: Remove
+	// Unused, but necessary to deserialize the result from elastic search
 	private String _index;
-	@SuppressWarnings("unused") // TODO: Remove
 	private String _type;
-	@SuppressWarnings("unused") // TODO: Remove
 	private String _id;
-	@SuppressWarnings("unused") // TODO: Remove
 	private int _version;
 	
 	
