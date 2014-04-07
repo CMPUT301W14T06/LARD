@@ -76,6 +76,14 @@ public class User {
 	}
 	
 	/**
+	 * Returns the current username without any hashing applied to it yet.
+	 * @return String username without any hashing
+	 */
+	public String getUsernameWithoutHash() {
+		return this.username;
+	}
+	
+	/**
 	 * Computes what getUsername would return given any author name.
 	 * @param givenUsername Any author name.
 	 * @return authorname + # + hash as a String
