@@ -8,15 +8,17 @@ import android.util.Base64;
  * Simple picture model
  * <p>
  * Stores a string which is a Base64 encoded Byte Array
- *
+ * </p>
  * @author Dylan
  */
 
 public class Picture {
+	// Image as a base64 string
 	private String imageString;
-
+	
 	/**
-	 * Returns true if the picture is null (ie not set)
+	 * Is the picture null?
+	 * @return boolean picture null?
 	 */
 	public boolean isNull() {
 		if (imageString != null) {
@@ -27,21 +29,25 @@ public class Picture {
 	
 	/**
 	 * Sets the Byte Array representation of the Picture
-	 * @param byteArray A Byte Array representation of the Picture
+	 * @param byte[] A Byte Array representation of the Picture
+	 * @return Picture Itself, for chaining
 	 */
-	public void setImageByte(byte[] byteArray) {
+	public Picture setImageByte(byte[] byteArray) {
 		imageString = Base64.encodeToString(byteArray, Base64.URL_SAFE);
+		return this;
 	}
-	
+
 	/**
-	 * Returns the Byte Array representation of the Picture
+	 * Gets the byte array representation of the picture.
+	 * @return byte[] the Byte Array representation of the Picture
 	 */
 	public byte[] getImageByte() {
 		return Base64.decode(imageString, Base64.URL_SAFE);
 	}
 	
 	/**
-	 * Returns the Bitmap representation of the Picture
+	 * Gets the bitmap representation of the picture.
+	 * @return Bitmap the Bitmap representation of the Picture
 	 */
 	public Bitmap getBitmap() {
 		byte[] decodedByte = getImageByte();
