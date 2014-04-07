@@ -88,7 +88,6 @@ public class LocationSelectionActivity extends Activity {
 		});
 	}
 	
-	// TODO: Not sure if we even need this function
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

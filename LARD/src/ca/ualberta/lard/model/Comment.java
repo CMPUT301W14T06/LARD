@@ -168,7 +168,6 @@ public class Comment {
 		}
 		CommentRequest req = new CommentRequest(100);
 		req.setParentId(this.id);
-		// TODO: Children should be sorted by date of creation.
 		this.children  = DataModel.retrieveComments(req);
 		
 		return this.children;

@@ -154,7 +154,6 @@ public class CommentActivity extends Activity {
     		// If author and computed author are the same, allow the user to edit the comment.
     		if (comment.getAuthor().equals(authorWithCurUserId)) {
         		Intent intent = new Intent(getApplicationContext(), NewEditCommentActivity.class);
-        		// TODO pass the parent
         		intent.putExtra(NewEditCommentActivity.COMMENT_STRING, comment.toJson());
         		// Set flag to edit comment.
         		startActivity(intent);

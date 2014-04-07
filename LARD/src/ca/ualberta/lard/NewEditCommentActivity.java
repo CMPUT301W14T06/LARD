@@ -121,8 +121,6 @@ public class NewEditCommentActivity extends Activity {
 		locationLatTextView.setText("Latitude: " + location.getLatitude());
 		locationLongTextView.setText("Longitude: " + location.getLongitude());
 
-		// TODO: Change
-		// !picture.isNull()
 		if (picture != null && !picture.isNull()) {
 			Bitmap bm = BitmapFactory.decodeByteArray(picture.getImageByte(),
 					0, picture.getImageByte().length);
@@ -135,7 +133,6 @@ public class NewEditCommentActivity extends Activity {
 		}
 	}
 
-	// TODO: Not sure if we even need this function
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -190,7 +187,6 @@ public class NewEditCommentActivity extends Activity {
 		comment.setLocation(location);
 		
 		// Set a picture for the comment
-		// TODO: drop the if condition
 		if (picture != null) {
 			comment.setPicture(picture);
 		}

@@ -30,7 +30,6 @@ import android.widget.TextView;
  * @author Eldon
  */
 
-// TODO: Replace all instances of Comment with Comment when we can get comments to construct properly (???)
 
 public class CommentListBaseAdapter extends BaseAdapter {
 	private ArrayList<Comment> myList = new ArrayList<Comment>(); 
@@ -94,7 +93,6 @@ public class CommentListBaseAdapter extends BaseAdapter {
 			final WeakReference<GeoLocation> locationReference = new WeakReference<GeoLocation>(commentLocation);
 			@Override
 			public void onLocationChanged(Location location) {
-				// TODO Auto-generated method stub
 				TextView textView = (TextView) locationViewReference.get();
 				GeoLocation referencedLocation = (GeoLocation) locationReference.get();
 				GeoLocation currentLocation = new GeoLocation(location.getLatitude(), location.getLongitude());
@@ -105,19 +103,16 @@ public class CommentListBaseAdapter extends BaseAdapter {
 			@Override
 			public void onStatusChanged(String provider, int status,
 					Bundle extras) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void onProviderEnabled(String provider) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void onProviderDisabled(String provider) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -158,7 +153,6 @@ public class CommentListBaseAdapter extends BaseAdapter {
 	
 	
 	private class MyViewHolder {
-		@SuppressWarnings("unused") // TODO: Remove
 		TextView itemPreview, itemAuthor, itemDistance, itemNumChildren;
 		ImageView itemIcon;
 	}
@@ -176,7 +170,7 @@ public class CommentListBaseAdapter extends BaseAdapter {
     	protected void onPostExecute(String result) {
     		if (result != null) {
     			TextView textView = (TextView) textViewReference.get();
-    			textView.setText(result); // TODO: Concatenate distance, num replies, author, etc
+    			textView.setText(result);
     		}
     	}
     }
