@@ -81,6 +81,10 @@ public class SearchRequest {
 		return "";
 	}
 	
+	/**
+	 * Generates the JSON string to search for a parent ID
+	 * @return The JSON string to send to elastic search
+	 */
 	public String parentString() {
 		if (this.parent != null && !this.parent.isEmpty()) {
 			return "\"query_string\" : { \"query\" : \"" + this.parent + "\" , \"fields\": [\"parent\"] } ";
@@ -88,6 +92,10 @@ public class SearchRequest {
 		return "";
 	}
 	
+	/**
+	 * Generates the JSON string for filtering by location
+	 * @return String the JSON string to pass to elastic Search.
+	 */
 	public String locationString() {
 		if (this.location != null) {
 			String searchString = "{ \"sort\" : [ { \"_geo_distance\" : { \"comment.location\" : { \"lat\" : " +
