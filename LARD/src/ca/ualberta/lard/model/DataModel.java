@@ -7,13 +7,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Pair;
 import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.Stretchy.StretchyClient;
 import ca.ualberta.lard.Stretchy.StretchyResponse;

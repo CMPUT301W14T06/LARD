@@ -163,8 +163,12 @@ public class CommentActivity extends Activity {
         	} 
         	return true;
         case R.id.action_save:
-        	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
-        	commentController.paper(comment);
+        	if (commentController.paper(comment))
+        	{
+        		Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
+        	} else {
+        		Toast.makeText(getApplicationContext(), "Error saving comment", Toast.LENGTH_SHORT).show();
+        	}
             return true;
         case R.id.action_reply:
     		Intent intent = new Intent(getApplicationContext(), NewEditCommentActivity.class);

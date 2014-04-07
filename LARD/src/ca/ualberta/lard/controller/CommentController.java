@@ -164,8 +164,14 @@ public class CommentController {
 		DataModel.saveLocal(comment, true, this.context, true);
 	}
 	
-	public void paper(Comment comment) {
-		//Todo fill out method
+	/**
+	 * Saves a comment to local storage
+	 * @param comment Comment the comment we want to save
+	 * @return boolean Did it work?
+	 */
+	public boolean paper(Comment comment) {
+		DataModel.saveLocal(comment, true, context, false);
+		return true;
 	}
 	
 	public Favourites getFavourites() {
