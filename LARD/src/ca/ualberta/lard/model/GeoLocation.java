@@ -14,14 +14,11 @@ import android.location.LocationManager;
  * using specific coordinates or it can be set by getting the position of 
  * the users device in the world.
  */
-
 public class GeoLocation {
 	
 	private double lon;
 	private double lat;
-	
 	public ArrayList<GeoLocation> locations;
-	
 	
 	/**
 	 * Creates a GeoLocation using the position of the device.
@@ -47,27 +44,42 @@ public class GeoLocation {
 	
 	/**
 	 * Creates a GeoLocation using a input latitude and longitude.
-	 * @param lat
-	 * @param lon
+	 * @param lat the latitude of the location
+	 * @param lon the longitude of the location
 	 */
 	public GeoLocation (double lat, double lon) {
 		this.lon = lon;
 		this.lat = lat;
 	}
 	
-	
+	/**
+	 * Gets the latitude of the GeoLocation
+	 * @return the Latitude of the GeoLocation
+	 */
 	public double getLatitude() {
 		return this.lat;
 	}
 	
+	/**
+	 * Gets the longitude of the GeoLocation
+	 * @return the longitude of the GeoLocation
+	 */
 	public double getLongitude() {
 		return this.lon;
 	}
 	
+	/**
+	 * Sets the GeoLocation's latitude
+	 * @param lat the latitude of the location
+	 */
 	public void setLatitude(double lat) {
 		this.lat = lat;
 	}
 	
+	/**
+	 * Sets the GeoLocation's longitude
+	 * @param lon the longitude of the location
+	 */
 	public void setLongitude(double lon) {
 		this.lon = lon;
 	}
@@ -77,7 +89,7 @@ public class GeoLocation {
 	 * 
 	 * Credit: base code for the haversine formula here: http://www.movable-type.co.uk/scripts/latlong.html
 	 * 
-	 * @param loc1
+	 * @param  loc1 the location of the GeoLocation you are measuring to
 	 * @return the distance as a double, in meters
 	 */
 	public double distanceFrom(GeoLocation loc1) {
@@ -108,7 +120,7 @@ public class GeoLocation {
 	
 	/**
 	 * Returns a GeoLocation model from a Json object.
-	 * @param text
+	 * @param  text The JSON string of a GeoLocation object
 	 * @return GeoLocation model
 	 */
 	public static GeoLocation fromJSON(String text) {
