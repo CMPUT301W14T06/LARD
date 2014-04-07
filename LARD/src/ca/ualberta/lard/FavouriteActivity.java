@@ -117,7 +117,6 @@ private ListView commentList;
      * An AsyncTask task that calls a function in the Comment controller that will filter
      * out all favourite comments from the other comments.
      * @author Thomas
-     *
      */
     private class FetchFavoriteComments extends AsyncTask<Context, Integer, ArrayList<Comment>> {
     	
