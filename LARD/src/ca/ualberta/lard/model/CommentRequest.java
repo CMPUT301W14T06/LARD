@@ -17,7 +17,6 @@ public class CommentRequest {
 	/**
 	 * We can specify that the comment must be a child of a particular comment.
 	 */
-	@SuppressWarnings("unused") // TODO: Remove
 	private String parentId;
 	
 	public String getParentId() {
@@ -27,7 +26,6 @@ public class CommentRequest {
 	/**
 	 * If the location property is set, Comments nearest this location will be returned over those further from this location.
 	 */
-	@SuppressWarnings("unused") // TODO: Remove
 	private GeoLocation location;
 	
 	public GeoLocation getLocation() {
@@ -37,13 +35,11 @@ public class CommentRequest {
 	/**
 	 * Do we only want to search threads, or are replies acceptable also?
 	 */
-	@SuppressWarnings("unused") // TODO: Remove
 	private boolean topLevel;
 	
 	/**
 	 * Do we only want comments with pictures?
 	 */
-	@SuppressWarnings("unused") // TODO: Remove
 	private boolean hasPicture;
 	
 	/**
