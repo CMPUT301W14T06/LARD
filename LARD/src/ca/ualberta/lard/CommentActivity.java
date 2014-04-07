@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.Follow;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.User;
 
@@ -169,9 +171,13 @@ public class CommentActivity extends Activity {
     		intent.putExtra(NewEditCommentActivity.PARENT_STRING, comment.toJson());
     		startActivity(intent);
             return true;
+        case R.id.action_follow:
+        	Follow follow = new Follow(getApplicationContext().getSharedPreferences(Follow.PREFS_NAME, Context.MODE_PRIVATE));
+        	follow.addFollow(comment.getAuthor());
+        	Toast.makeText(getApplicationContext(), "Followed user: " + comment.getAuthor(), Toast.LENGTH_SHORT).show();
         case R.id.action_refresh:
         	displayCommentAndChildren(comment);
-        	Toast.makeText(getApplicationContext(), "Page Refreshed.", Toast.LENGTH_SHORT).show();        	
+        	Toast.makeText(getApplicationContext(), "Page Refreshed.", Toast.LENGTH_SHORT).show();
         default:
             return super.onOptionsItemSelected(item);
         }

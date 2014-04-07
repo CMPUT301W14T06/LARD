@@ -254,7 +254,6 @@ public class StretchyClient {
 		try {
 			new Thread(s).start();
 		} catch (Exception e) {
-			Log.d("HELP", "PLZ HALP");
 			e.printStackTrace();
 		}
 

@@ -38,7 +38,7 @@ private ListView commentList;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getActionBar();
-        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         commentList = (ListView) findViewById(R.id.threadsListView);
         
         commentList.setOnItemClickListener(new OnItemClickListener() {
@@ -83,6 +83,11 @@ private ListView commentList;
     			break;
     		case R.id.action_favourites:
     			//go back by just finishing the activity
+    			finish();
+    			break;
+    			
+    		case android.R.id.home:
+    			// we got a call to the parent activity
     			finish();
     			break;
     		case R.id.action_sort:

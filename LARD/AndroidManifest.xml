@@ -39,10 +39,16 @@
         <activity
             android:name="ca.ualberta.lard.CommentActivity"
             android:label="@string/title_activity_comment" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.ualberta.lard.MainActivity" />
         </activity>
         <activity
             android:name="ca.ualberta.lard.FavouriteActivity"
             android:label="@string/title_activity_favourite" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.ualberta.lard.MainActivity" />
         </activity>
     </application>
 
