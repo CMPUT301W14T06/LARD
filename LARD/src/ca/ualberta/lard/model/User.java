@@ -5,10 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.provider.Settings.Secure;
 
 /**
  * The User model deals with the unique username of the user. Username is 
@@ -17,11 +15,17 @@ import android.provider.Settings.Secure;
  */
 
 public class User {
+	// Shared preference file storing User data
 	public static String PREFS_NAME = "username.pref";
 	private String username;
+	// The unique user ID
 	private String userId;
 	private SharedPreferences prefs;
 	
+	/**
+	 * Constructor for instantiating a user.
+	 * @param prefs SharedPreferences The preference object containing all the user data.
+	 */
 	public User(SharedPreferences prefs) {
 		this.prefs = prefs;
 		// We see if we already have a userID in Shared prefs.
@@ -35,9 +39,10 @@ public class User {
 	}
 	
 	/**
-	 * Removes all Octothorpe characters from a username if there are any
-	 * @param name A username to be checked
-	 * @return Name A valid username
+	 * Removes all Octothorpe characters from a username if there are any, since
+	 * this is a reserved character for delimiting a hash.
+	 * @param name String A username to be checked
+	 * @return String A valid username
 	 */
 	private String removeOctothorpe(String name) {
 		if (name.contains("#")) {
@@ -47,9 +52,15 @@ public class User {
 		return name;
 	}
 	
-	public void setUsername(String username) {
+	/**
+	 * Sets the username
+	 * @param username String Username that we want to set
+	 * @return User Itself, for chaining
+	 */
+	public User setUsername(String username) {
 		this.username = removeOctothorpe(username);
 		this.set("username", username);
+		return this;
 	}
 	
 	/**
@@ -88,12 +99,22 @@ public class User {
 		return "Anonymous#" + this.userId;
 	}
 	
+	/**
+	 * Sets a key => value pair in the SharedPreferences file
+	 * @param key String Key that we want to save in
+	 * @param value String the value we want to associate with the key
+	 * @return boolean Did it work?
+	 */
 	private boolean set(String key, String value) {
 		Editor editor = this.prefs.edit();
 		editor.putString(key, value);
 		return editor.commit();
 	}
 	
+	/**
+	 * Generates a new user ID
+	 * @return String a Unique user ID.
+	 */
 	private String newUserId() {
 		return UUID.randomUUID().toString();
 	}

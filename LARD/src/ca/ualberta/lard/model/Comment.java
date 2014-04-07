@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
-import com.google.gson.Gson;
-
 import android.content.Context;
-import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
 
 /**
  * An instance of Comment represents a comment a user creates to share
