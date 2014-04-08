@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * This username fragment is used to let the user set his username. it first inflates 
+ * the layout, then sets up a builder so that the user can input his desired username.
+ */
 public class SetUsernameFragment extends DialogFragment {
 	private User user;
 	@Override
