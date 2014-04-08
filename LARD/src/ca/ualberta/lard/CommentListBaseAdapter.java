@@ -100,8 +100,8 @@ public class CommentListBaseAdapter extends BaseAdapter {
 		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 		LocationListener locationListener = new LocationListener() {
 			
-			final WeakReference<TextView> locationViewReference = new WeakReference<TextView>(mViewHolder.itemDistance);
-			final WeakReference<GeoLocation> locationReference = new WeakReference<GeoLocation>(commentLocation);
+			WeakReference<TextView> locationViewReference = new WeakReference<TextView>(mViewHolder.itemDistance);
+			WeakReference<GeoLocation> locationReference = new WeakReference<GeoLocation>(commentLocation);
 			@Override
 			public void onLocationChanged(Location location) {
 				TextView textView = (TextView) locationViewReference.get();
