@@ -73,13 +73,6 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		String newAuthor = "FluffyBunny";
 		comment.setAuthor(newAuthor);		
 		assertEquals("Author should be updated to new author.", newAuthor, comment.getRawAuthor());
-		
-		// Try to change the user name to nothing.
-		newAuthor = "";
-		comment.setAuthor(newAuthor);
-		assertFalse("A username cannot be blank.", comment.getRawAuthor().isEmpty());
-		assertEquals("Updating username with nothing sets it to Anonymous", 
-				"Anonymous", comment.getRawAuthor());
 	}
 	
 	/**

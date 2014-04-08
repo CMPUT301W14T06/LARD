@@ -60,7 +60,7 @@ public class GeoLocationModelTests extends
 	public void testSerialization() {
 		GeoLocation geoLocation = new GeoLocation(60.0, 70.0);
 		String string = geoLocation.toJSON();
-		GeoLocation newGeoLocation = geoLocation.fromJSON(string);
+		GeoLocation newGeoLocation = GeoLocation.fromJSON(string);
 		
 		assertEquals("newGeoLocation lat should be the same", geoLocation.getLatitude(), newGeoLocation.getLatitude());
 		assertEquals("newGeoLocation lon should be the same", geoLocation.getLongitude(), newGeoLocation.getLongitude());

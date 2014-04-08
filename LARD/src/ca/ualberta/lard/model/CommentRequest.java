@@ -35,11 +35,13 @@ public class CommentRequest {
 	/**
 	 * Do we only want to search threads, or are replies acceptable also?
 	 */
+	@SuppressWarnings("unused")
 	private boolean topLevel;
 	
 	/**
 	 * Do we only want comments with pictures?
 	 */
+	@SuppressWarnings("unused")
 	private boolean hasPicture;
 	
 	/**

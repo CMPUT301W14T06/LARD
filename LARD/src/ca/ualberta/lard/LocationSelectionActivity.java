@@ -1,16 +1,12 @@
 package ca.ualberta.lard;
 
-import java.util.Arrays;
-import java.util.Set;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.GeoLocationMap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.view.Menu;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -66,9 +62,6 @@ public class LocationSelectionActivity extends Activity {
 		
 		spinner = (Spinner) findViewById(R.id.locationSpinner);
 		// Gets a list of locations from the GeoLocation map then converts it to a string array
-		GeoLocationMap geoMap = new GeoLocationMap();
-		Set<String> nameSet = geoMap.getMap().keySet();
-		String[] stringArray = Arrays.copyOf(nameSet.toArray(), nameSet.toArray().length, String[].class);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.location_array, R.layout.spinner_item);
 		//sets the spinner item as the custom one so you can have increased text size 
 		adapter.setDropDownViewResource(R.layout.spinner_item);

@@ -4,8 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
-import ca.ualberta.lard.model.CommentRequest;
-import ca.ualberta.lard.model.DataModel;
 import ca.ualberta.lard.model.GeoLocation;
 import ca.ualberta.lard.model.Picture;
 

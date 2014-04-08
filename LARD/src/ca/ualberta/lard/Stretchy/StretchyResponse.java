@@ -21,8 +21,11 @@ public class StretchyResponse {
 	private String _id;
 	
 	// Unused, but necessary for proper deserialization of the response from Elastic Search
+	@SuppressWarnings("unused")
 	private int _version;
+	@SuppressWarnings("unused")
 	private String _type;
+	@SuppressWarnings("unused")
 	private String _index;
 	
 	public StretchyResponse(boolean status, String id) {

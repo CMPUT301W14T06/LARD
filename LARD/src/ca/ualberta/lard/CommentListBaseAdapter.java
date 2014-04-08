@@ -179,7 +179,9 @@ public class CommentListBaseAdapter extends BaseAdapter {
 	 * A View Holder
 	 */
 	private class MyViewHolder {
+		@SuppressWarnings("unused")
 		TextView itemPreview, itemAuthor, itemDistance, itemNumChildren;
+		@SuppressWarnings("unused")
 		ImageView itemIcon;
 	}
 	

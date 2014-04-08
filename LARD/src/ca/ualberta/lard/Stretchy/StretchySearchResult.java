@@ -56,6 +56,7 @@ public class StretchySearchResult<T> {
 	 *
 	 * @param <T> Type of the object recieved
 	 */
+	@SuppressWarnings("hiding")
 	public class StretchySearchHits<T> {
 		protected int total;
 		protected double max_score;

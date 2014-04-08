@@ -2,9 +2,6 @@ package ca.ualberta.lard.test;
 
 import ca.ualberta.lard.LocationSelectionActivity;
 import ca.ualberta.lard.R;
-import ca.ualberta.lard.model.Comment;
-import android.content.Context;
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -16,7 +13,6 @@ import android.widget.Spinner;
  *
  */
 public class LocationSelectionActivityTests extends ActivityInstrumentationTestCase2<LocationSelectionActivity> {
-	private Intent intent;
 	private LocationSelectionActivity activity;
 	private RadioButton gpsLocationRadioButton;
 	private RadioButton customLocationRadioButton;
@@ -28,7 +24,6 @@ public class LocationSelectionActivityTests extends ActivityInstrumentationTestC
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
 		activity = this.getActivity();
 		
 		gpsLocationRadioButton = (RadioButton) activity.findViewById(R.id.gpsRadioButton);

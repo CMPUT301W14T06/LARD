@@ -19,9 +19,13 @@ public class StretchyResult<T> {
 	private T _source;
 	
 	// Unused, but necessary to deserialize the result from elastic search
+	@SuppressWarnings("unused")
 	private String _index;
+	@SuppressWarnings("unused")
 	private String _type;
+	@SuppressWarnings("unused")
 	private String _id;
+	@SuppressWarnings("unused")
 	private int _version;
 	
 	

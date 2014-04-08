@@ -3,8 +3,6 @@ package ca.ualberta.lard.test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
-import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Pair;
 import ca.ualberta.lard.MainActivity;

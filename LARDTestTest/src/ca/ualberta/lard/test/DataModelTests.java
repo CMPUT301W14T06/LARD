@@ -1,11 +1,7 @@
 package ca.ualberta.lard.test;
 
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
-
 import ca.ualberta.lard.MainActivity;
-import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
