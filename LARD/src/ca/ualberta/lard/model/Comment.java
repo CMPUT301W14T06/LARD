@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+
 /**
  * An instance of Comment represents a comment a user creates to share
  * her thoughts about a particular location. Every comment has a generated
@@ -27,6 +29,15 @@ public class Comment {
 	private String author;
 	private GeoLocation location;
 	private Picture picture;
+	
+	/**
+	 * Lazy-loaded members. Uninstantiated, until a method requires the data.
+	 */
+	private transient Integer numReplies;
+	private transient ArrayList<Comment> children;
+	
+	// Context is transient because it is required at runtime, but is not relevant for serialization
+	private transient Context context;
 	/**
 	 * ID of parent comment element.
 	 */
@@ -37,17 +48,16 @@ public class Comment {
 	 * <p>
 	 * Initializes code common to the multiple Comment constructors.
 	 * </p>
-	 * @param c The Comment object to populate
-	 * @param body BodyText of the Comment
-	 * @param context Application context of the current Comment Creation request
+	 * @param c Comment The Comment object to populate
+	 * @param body String BodyText of the Comment
+	 * @param context Context Application context of the current Comment Creation request
 	 */
 	public void init(Comment c, String body, Context context) {
+		this.context = context;
 		c.createdAt = new Date();
 		c.updatedAt = new Date();
-		
-		User user = new User("Anonymous", context);// TODO put this in preferences
+		this.setAuthor(null);
 		this.bodyText = body;
-		c.author = user.getUsername();
 		//c.location = new GeoLocation(context);
 		c.location = new GeoLocation(53.525896, -113.52172);
 		c.id = UUID.randomUUID().toString();
@@ -55,23 +65,35 @@ public class Comment {
 		c.parent = null;
 	}
 	
-	/* Minimal constructor, contains only body text */
+	/**
+	 * Constructor for creating a body given only the body text
+	 * @param body String body text
+	 * @param context Context Application context
+	 */
 	public Comment(String body, Context context) {
 		this.init(this, body, context);
 	}
 	
-	/* Constructor for creating replies */
+	/**
+	 * Constructor used for creating replies
+	 * @param body String body text
+	 * @param parentID String The ID of the comment we are replying to
+	 * @param context Context application context
+	 */
 	public Comment (String body, String parentID, Context context) {
 		this.init(this, body, context);
 		this.parent = parentID;
 	}
 	
+	/**
+	 * Overridden toString
+	 * @return String Body text of comment
+	 */
 	public String toString() {
 		return this.bodyText;
 	}
 	
 	// Getters
-	
 	public String getId() {
 		return this.id;
 	}
@@ -92,6 +114,14 @@ public class Comment {
 		return this.author;
 	}
 	
+	/**
+	 * Get the author name without any hashing appended to it
+	 * @return String Author name without any hash.
+	 */
+	public String getRawAuthor() {
+		return this.author.split("#")[0];
+	}
+	
 	public GeoLocation getLocation() {
 		return this.location;
 	}
@@ -101,9 +131,7 @@ public class Comment {
 	}
 	
 	/**
-	 * Returns null if the comment does not have a parent, so the 
-	 * parent comment cannot be retrieved. Otherwise, the parent comment
-	 * is returned.
+	 * Get the parent comment of the current object.
 	 * @return null or the parent Comment
 	 */
 	public Comment getParent() {
@@ -113,7 +141,7 @@ public class Comment {
 		}		
 		CommentRequest req = new CommentRequest(1);
 		req.setId(this.parent);
-		ArrayList<Comment> arr = DataModel.retrieveComments(req);
+		ArrayList<Comment> arr = DataModel.retrieveComments(req, context);
 		
 		if (arr.size() > 0) {
 			return arr.get(0);
@@ -122,114 +150,193 @@ public class Comment {
 	}
 	
 	/**
-	 * Returns null is a comment has no children. Otherwise returns the 
-	 * children in a ArrayList. Children should be sorted by date created.
+	 * Get the ID of the parent of this comment
+	 * @return String parent id
+	 */
+	public String getParentId() {
+		return parent;
+	}
+	
+	/**
+	 * Get the children of the current comment object.
+	 * Children should be sorted by date created.
 	 * @return null or ArrayList of children
 	 */
 	public ArrayList<Comment> children() {
+		if (this.children != null) {
+			return this.children;
+		}
 		CommentRequest req = new CommentRequest(100);
 		req.setParentId(this.id);
-		// TODO: Children should be sorted by date of creation.
-		ArrayList<Comment> childList  = DataModel.retrieveComments(req);
-		return childList;
+		this.children  = DataModel.retrieveComments(req);
+		
+		return this.children;
 	}
 	
 	// Setters
-	
+	// By default all setters retrun themselves for chaining.
 	/**
 	 * Sets the text of the comment. If an empty input is given the text will
 	 * be set to [Comment Text Removed] by default. 
 	 * @param bodyText
 	 */
-	public void setBodyText(String bodyText) {
+	public Comment setBodyText(String bodyText) {
 		// Check the body text is not empty.
 		if (bodyText == "" || bodyText == null) {
 			bodyText = "[Comment Text Removed]";
 		}
 		this.bodyText = bodyText;
 		this.setUpdated();
+		return this;
 	}
 	
 	/**
 	 * Sets the author of the comment. The author will be the user name appended
 	 * with a hash unique to the device being used. If an empty user name or no name
 	 * is given author will be set to Anonymous by default.
-	 * @param username
-	 * @param context
+	 * @param username String the username we want to set as the author.
 	 */
-	public void setAuthor(String username, Context context) {
+	public Comment setAuthor(String username) {
 		// Check the username is not empty. If it is set to Anonymous.
-		if (username == "" || username == null) {
-			username = "Anonymous";
-			this.author = username;
-			this.setUpdated();
-			return;
-		}	
-		User user = new User(username, context);
+		
+		User user = new User(this.context.getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
+		
+		if (username != null && !username.isEmpty()) {
+			user.setUsername(username);
+		}
 		this.author = user.getUsername();
 		this.setUpdated();
+		return this;
 	}
 	
-	public void setLocation(GeoLocation location) {
+	public Comment setLocation(GeoLocation location) {
 		this.location = location;
 		this.setUpdated();
+		return this;
 	}
 	
-	public void setPicture(Picture picture) {
+	public Comment setPicture(Picture picture) {
 		this.picture = picture;
 		this.setUpdated();
+		return this;
 	}
 	
-	public void setParent(String parentID) {
+	public Comment setParent(String parentID) {
 		this.parent = parentID;
 		this.setUpdated();
+		return this;
+	}
+	
+	// For testing comparators
+	public Comment setCreationDate(Date date) {
+		this.createdAt = date;
+		return this;
+	}
+	
+	public Comment setContext(Context context) {
+		this.context = context;
+		return this;
+	}
+	
+	public Comment setUpdated() {
+		this.updatedAt = new Date();
+		return this;
 	}
 	
 	
 	// Helper functions
 	
+	/**
+	 * Check if the comment is a top level comment or a reply
+	 * @return boolean Does this comment have a parent?
+	 */
 	public boolean hasParent() {
 		return (this.parent != null);
 	}
 	
-	public void setUpdated() {
-		this.updatedAt = new Date();
-	}
-	
+	/**
+	 * Check if the comment has a picture associated with it
+	 * @return boolean Does the comment have a picture?
+	 */
 	public boolean hasPicture() {
-		if (this.picture == null) {
+		if (this.picture == null || this.picture.isNull()) {
+			return false;
+		} else if (this.picture.getImageByte() == null) {
 			return false;
 		}
 		return true;
 	}
 	
 	/**
-	 * Returns an integer. The number of children is 0 if the list
+	 * The number of children is 0 if the list
 	 * of children is null. Otherwise the number of elements in the list
 	 * of children is returned.
-	 * @return Number of children 
+	 * @return int Number of children 
 	 */
 	public int numReplies() {
-		if (this.children() == null) {
-			return 0;
+		if (this.numReplies == null) {
+			this.numReplies = this.children().size();
 		}
-		return this.children().size();
+		return this.numReplies;
 	}
 	
 	/**
 	 * Returns true if the comment is saved locally and false if
 	 * it is not.
-	 * @return true or false
+	 * @return boolean Is the comment local?
 	 */
-	public boolean isLocal(Context context) {
-		CommentRequest req = new CommentRequest(1);
-		req.setId(this.id);
-		ArrayList<Comment> results = DataModel.retrieveComments(req);
-		if (results == null) {
-			// We should never be in here?
+	public boolean isLocal() {
+		return DataModel.isLocal(this, context);
+	}
+	
+	/**
+	 * Checks whether the id's of 2 comments are the same. This is
+	 * used by DataModel to decide if a comment has been saved locally
+	 * but might have had it's fields edited.
+	 * @param Object The comment object we're comparing
+	 * @return boolean true if IDs are same, false otherwise
+	 */
+	public boolean equals (Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
 			return false;
+		// Don't call comment.equal on a non-comment object
+		try {
+			if (((Comment) o).getId().equals(this.getId())) {
+				return true;
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 		}
-		return DataModel.isLocal(results.get(0), context);
+		return false;
+	}
+	
+	/**
+	 * Override hashcode so that it's solely dependent on id, for equivalency checking
+	 */
+	@Override
+	public int hashCode () {
+		return this.id.hashCode();
+	}
+	
+	/**
+	 * Converts a comment to a json string.
+	 * @return Comment as a json string
+	 */
+	public String toJson() {
+		Gson gson = new Gson();
+		return gson.toJson(this);
+	}
+	
+	/**
+	 * Converts a json string back to a comment.
+	 * @param json Comment as a string
+	 * @return Comment
+	 */
+	public static Comment fromJson(String json) {
+		Gson gson = new Gson();
+		return gson.fromJson(json, Comment.class);
 	}
 }
 

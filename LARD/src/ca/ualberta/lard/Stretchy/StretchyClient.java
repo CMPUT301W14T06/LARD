@@ -3,14 +3,17 @@ package ca.ualberta.lard.Stretchy;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import android.util.Log;
+
 import ca.ualberta.lard.model.Comment;
 
 import com.google.gson.Gson;
@@ -50,19 +53,24 @@ public class StretchyClient {
 	 * @return Comment if found, null otherwise
 	 */
 	public Comment getById(final String id) {
+		// We implement this using a Runnable
 		class RunGet implements Runnable {
 			private Comment foundComment = null;
+			private boolean failed = false;
 			@Override
 			public void run() {
 				HttpGet getReq = new HttpGet(ES_LOCATION + id + "?pretty=1");
 				getReq.addHeader("Accept", "application/json");
 				try {
 					HttpResponse response = client.execute(getReq);
-
+					if (response == null) {
+						failed = true;
+					}
 					StretchyResult<Comment> sResult = StretchyResult.create(response);
-					if (sResult.exists()) {
+					if (sResult == null) {
+						failed = true;
+					} else if (sResult.exists()) {
 						foundComment = sResult.getSource();
-						//return sResult.getSource();
 					}
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
@@ -71,9 +79,15 @@ public class StretchyClient {
 				}
 				// We've come too far, the Comment doesn't exist
 			}
+			/**
+			 * Continually polls until the network times out to see if we have found any comments.
+			 * This should only be run inside of an Async Task, so it should not cause any worker or
+			 * UI thread to lock
+			 * @return Comment if found, else null
+			 */
 			public Comment get() {
 				Long curtime = System.currentTimeMillis();
-				while (foundComment == null) {
+				while (foundComment == null && failed == false) {
 					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
 						break;
 					}
@@ -81,14 +95,14 @@ public class StretchyClient {
 				return foundComment;
 			}
 		}
+		// Run the runnable
 		RunGet s = new RunGet();
 		try {
 			new Thread(s).start();
 		} catch (Exception e) {
-			Log.d("HELP", "PLZ HALP");
 			e.printStackTrace();
 		}
-
+		//return the result of the runnable.
 		return s.get();
 	}
 
@@ -98,30 +112,101 @@ public class StretchyClient {
 	 * @param comment The comment that the user wishes to save over the network
 	 * @return StretchyResponse containing the server's response.
 	 */
-	public StretchyResponse save(Comment comment) {
+	public StretchyResponse save(final Comment comment) {
 		HttpPost postReq = new HttpPost(ES_LOCATION);
-		
-		StringEntity json = null;
-		try { 
-			json = new StringEntity(gson.toJson(comment));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		return push(postReq, comment);
+	}
+	
+	/**
+	 * Updates a comment Elastic Search.
+	 * @param comment The comment that the user wishes to save over the network
+	 * @return StretchyResponse containing the server's response.
+	 */
+	public StretchyResponse update(final Comment comment) {
+		HttpPut postReq = new HttpPut(ES_LOCATION + comment.getId() + "");
+		return push(postReq, comment);
+	}
+	
+	/**
+	 * Pushes a comment to elastic search.
+	 * @param postReq HttpPost A post request to the server.
+	 * @param comment Comment The data payload.
+	 * @return StretchyResponse Contains the server's response
+	 */
+	private StretchyResponse push(final HttpEntityEnclosingRequestBase postReq, final Comment comment) {
+		// We implement server interfacing using a Runnable
+		class RunPush implements Runnable {
+			private StretchyResponse sResponse = null;
+			private boolean failed = false;
+			@Override
+			public void run() {
+				HttpEntityEnclosingRequestBase mutableReq = postReq;
+				String json = "";
+				
+				// While rare, we experienced stackoverflows before, so it's always good to protect against them.
+				try {
+					json = gson.toJson(comment);
+				} catch (StackOverflowError ex) {
+					System.err.println("Major error in StretchyClient - Update: stackoverflow ");
+					sResponse = new StretchyResponse(false, comment.getId());
+					return;
+				}
+				
+				mutableReq.setHeader("Accept", "application/json");
+				StringEntity insert = null;
+				try { 
+					insert = new StringEntity(json);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				mutableReq.setEntity(insert);
+				
+				HttpResponse response = null;
+				try {
+					response = client.execute(mutableReq);
+					sResponse = StretchyResponse.create(response);
+					if (sResponse == null) {
+						failed = true;
+					}
+					return;
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			
+			/**
+			 * Continually polls until the network times out to see if we have completed the operation and
+			 * receieved a response.
+			 * This should only be run inside of an Async Task, so it should not cause any worker or
+			 * UI thread to lock
+			 * @return StretchyResponse Server's response
+			 */
+			public StretchyResponse get() {
+				Long curtime = System.currentTimeMillis();
+				while (sResponse == null && failed == false) {
+					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
+						sResponse = new StretchyResponse(false, comment.getId());
+						return sResponse;
+					}
+				}
+				return sResponse;
+			}
 		}
 		
-		postReq.setHeader("Accept", "application/json");
-		
-		postReq.setEntity(json);
-		
-		HttpResponse response = null;
+		// Run the runnable
+		RunPush run = new RunPush();
 		try {
-			response = client.execute(postReq);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			new Thread(run).start();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return StretchyResponse.create(response);
+		// Get the result
+		return run.get();
+			
 	}
 	
 	/**
@@ -132,6 +217,7 @@ public class StretchyClient {
 	public ArrayList<Comment> search(final SearchRequest req) {
 		class RunSearch implements Runnable {
 			private volatile ArrayList<Comment> returnComments;
+			private boolean failed = false;
 
 			@Override
 			public synchronized void run() {
@@ -150,6 +236,9 @@ public class StretchyClient {
 				HttpResponse response = null;
 				try { 
 					response = client.execute(postReq);
+					if (response == null) {
+						failed = true;
+					}
 				} catch (ClientProtocolException e) {
 					e.printStackTrace(); // TODO
 				} catch (IOException e) {
@@ -157,15 +246,24 @@ public class StretchyClient {
 				}
 
 				StretchySearchResult<Comment> result = StretchySearchResult.create(response);
-				if (result.timedOut()) {
+				if (result == null) {
+					failed = true;
+				} else if (result.timedOut()) {
 					// TODO
 					//throw new IOException("Timed out");
+				} else {
+					returnComments = result.hits().get();
 				}
-				returnComments = result.hits().get();
 			}
+			/**
+			 * Continually polls until the network times out to see if we have found any comments.
+			 * This should only be run inside of an Async Task, so it should not cause any worker or
+			 * UI thread to lock
+			 * @return ArrayList<Comment> if found, else null
+			 */
 			public ArrayList<Comment> get() {
 				Long curtime = System.currentTimeMillis();
-				while (returnComments == null) {
+				while (returnComments == null && failed == false) {
 					if (System.currentTimeMillis() - curtime > NETWORKTIMEOUT) {
 						break;
 					}
@@ -173,14 +271,15 @@ public class StretchyClient {
 				return returnComments;
 			}
 		}
+		// Run the runnable
 		RunSearch s = new RunSearch();
 		try {
 			new Thread(s).start();
 		} catch (Exception e) {
-			Log.d("HELP", "PLZ HALP");
 			e.printStackTrace();
 		}
-
+		
+		// Get the results
 		return s.get();
 	}
 	

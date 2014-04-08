@@ -7,91 +7,120 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".NewCommentActivity" >
-
-    <TextView
-        android:id="@+id/lardTextView"
-        android:layout_width="wrap_content"
+    tools:context=".NewEditCommentActivity" >
+	
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Reply"
-        android:textColor="#FFFFFF" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/usernameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lardTextView"
-        android:text="@string/username_text_view"
-        android:textColor="#FFFFFF" />
+        <TextView
+	        android:id="@+id/lardTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/Reply"
+		    android:textColor="#FFFFFF" />
+        
+	    <TextView
+	        android:id="@+id/usernameTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/username_text_view"
+		    android:textColor="#FFFFFF" />
+	
+	    <EditText
+	        android:id="@+id/usernameEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:ems="14"
+	        android:gravity="center_vertical|left"
+	        android:hint="@string/username_edittext_view"
+	        android:textColor="#FFFFFF" >
+	        
+	        <requestFocus />
+	    </EditText>
+	
+	    <TextView
+	        android:id="@+id/commentTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/comment_text_view"
+		    android:textColor="#FFFFFF" />
+	
+	    <EditText
+	        android:id="@+id/commentEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:ems="14"
+	        android:gravity="center_vertical|left"
+	        android:hint="@string/fake_hint"
+	        android:inputType="textMultiLine"
+	        android:textColor="#FFFFFF" >
+	        
+	        <requestFocus />
+	    </EditText>
 
-    <EditText
-        android:id="@+id/usernameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/usernameTextView"
-        android:layout_below="@+id/usernameTextView"
-        android:ems="10"
-        android:gravity="center_vertical|left"
-        android:hint="@string/username_edittext_view"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" >
+	    <TextView
+	        android:id="@+id/current_pic_title_textview"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="10dp"
+	        android:layout_marginTop="10dp"
+	        android:text="@string/cur_pic_title"
+		    android:textColor="@android:color/holo_blue_light"/>
+	    
+	    <ImageView
+	        android:id="@+id/currentPicture"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:src="@android:drawable/ic_menu_camera" />
+	    
+        <TextView
+            android:id="@+id/currentLatLocation"
+            android:layout_width="fill_parent"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content" />
 
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/commentTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/usernameEditText"
-        android:layout_below="@+id/usernameEditText"
-        android:text="@string/comment_text_view"
-        android:textColor="#FFFFFF" />
-
-    <EditText
-        android:id="@+id/commentEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/commentTextView"
-        android:layout_below="@+id/commentTextView"
-        android:ems="10"
-        android:gravity="center_vertical|left"
-        android:hint="@string/fake_hint"
-        android:inputType="textMultiLine"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" >
-
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/attachButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/currentLongLocation"
+            android:layout_width="fill_parent"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content" />
+	    
+	</LinearLayout>
+	
+    <LinearLayout 
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onClickAttachButton"
-        android:text="@string/attach_button"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/attachButton"
-        android:layout_toRightOf="@+id/attachButton"
-        android:onClick="onClickSendButton"
-        android:text="@string/send_button"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/locationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/attachButton"
-        android:layout_toLeftOf="@+id/attachButton"
-        android:onClick="onClickLocationButton"
-        android:text="@string/location_button"
-        android:textColor="#FFFFFF" />
+        android:gravity="center">
+ 
+	    <Button
+	        android:id="@+id/attachButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onClickAttachButton"
+	        android:text="@string/attach_button"
+	        android:textColor="#FFFFFF" />
+	
+	    <Button
+	        android:id="@+id/locationButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onClickLocationButton"
+	        android:text="@string/location_button"
+	        android:textColor="#FFFFFF"/>
+	    
+	    <Button
+	        android:id="@+id/sendButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onClickSendButton"
+	        android:text="@string/save_button"
+	        android:textColor="#FFFFFF" />
+        
+    </LinearLayout>
 
 </RelativeLayout>

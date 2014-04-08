@@ -1,9 +1,7 @@
 package ca.ualberta.lard.test;
 
 import java.util.ArrayList;
-
 import ca.ualberta.lard.MainActivity;
-import ca.ualberta.lard.Stretchy.SearchRequest;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
 import ca.ualberta.lard.model.DataModel;
@@ -16,27 +14,48 @@ import android.test.ActivityInstrumentationTestCase2;
 
 public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
+	
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+	
 	public DataModelTests() {
 		super(MainActivity.class);
 	}
 	
 	/**
-	 * Tests that a comment can successfully be saved to stretchy client.
+	 * Tests that a comment can successfully be saved to server.
 	 */
-	// This test will be a little bit handwavey, I suppose. We're involving external infrastructure.
 	public void testSave() {
-		Comment c = new Comment("Super comment wow, such comment amaze", getActivity());
-		boolean result = DataModel.save(c);
-		assertTrue(result); // this is a finnicky not-a-test
+		Comment comment = new Comment("Eldon is mad stinky", getActivity());
+		System.err.println(comment.toJson());
+		boolean result = DataModel.save(comment);
+		assertTrue(result);
+	}
+	
+	/**
+	 * Tests that an existing comment can successfully be updated on the server.
+	 */
+	public void testUpdate() {
+		CommentRequest req = new CommentRequest(1);
+		Comment comment = DataModel.retrieveComments(req).get(0);
+		// Change some fields
+		comment.setBodyText("NewBodyText");
+		boolean result = DataModel.update(comment);
+		assertTrue(result);
 	}
 	
 	/**
 	 * Tests making a request to the Datamodel for an existing comment returns the correct
 	 * comment and returns only 1 comment.
-	 * Currently uses a hard-coded id that we know exists.
 	 */
 	public void testGetByIdExists() {
-		final String id = "64e5d2c9-97f3-42d4-844e-911ebbfdd2e5"; 
+		Comment comment = new Comment("new comment", getActivity());
+		DataModel.save(comment);
+		String id = comment.getId();
 		
 		CommentRequest req = new CommentRequest(1);
 		req.setId(id);
@@ -60,14 +79,31 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 		req.setId(id);
 		
 		ArrayList<Comment> arr = DataModel.retrieveComments(req);
-		assertNull(arr);
+		assertTrue(arr.isEmpty());
 	}
 	
 	/**
 	 * Tests that the Datamodel is able to check if a comment is saved locally.
 	 */
+	public void testLocalStorage() {
+		//creates a comment then tests to see if it is saved local
+		Comment localComment = new Comment("I am lost? am I local?", getActivity());
+		DataModel.saveLocal(localComment, true, getActivity(), false);
+		//Gets the id of the last element of the local list, it should be the same as our newly created comment
+		ArrayList<Comment> localList = DataModel.readLocal(getActivity());
+		//tests if equal
+		assertEquals("The locally stored comment should be the same", localComment.getId(), localList.get(localList.size() - 1).getId());
+	}
+	
+	/**
+	 * Tests that isLocal function
+	 */
 	public void testIsLocal() {
-		fail();
+		//creates a comment then tests to see if it is saved local
+		Comment localComment = new Comment("I am lost? am I local?", getActivity());
+		DataModel.saveLocal(localComment, true, getActivity(), false);
+		//tests to see if true
+		assertTrue("The isLocal should return true", DataModel.isLocal(localComment, getActivity()));
 	}
 	
 	/**
@@ -80,18 +116,8 @@ public class DataModelTests extends ActivityInstrumentationTestCase2<MainActivit
 		CommentRequest req = new CommentRequest(5);
 		ArrayList<Comment> comments = DataModel.retrieveComments(req);
 		
-		
 		assertTrue(comments.size() > 1);
 		System.err.println(comments.get(0));	
-	}
-	
-	/**
-	 * Tests that the Datamodel can search for a comment using only body text.
-	 */
-	public void testSearchByBody() {
-		CommentRequest req = new CommentRequest(5);
-		// TODO
-		fail();
 	}
 
 }

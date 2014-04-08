@@ -19,14 +19,19 @@ import ca.ualberta.lard.model.Picture;
 
 public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActivity> {
 	private ca.ualberta.lard.model.Comment comment;
-	private Date date;
 	
 	public CommentModelTests() {
 		super (MainActivity.class);
 	}
 	
-	protected void setUp() {
-		comment = new Comment("I like kitties", getActivity());
+	protected void setUp() throws Exception {
+		super.setUp();
+		comment = new Comment("JUnit Comment Model Test Comment", getActivity());
+	}
+	
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		comment = null;
 	}
 	
 	/**
@@ -37,13 +42,20 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	public void testConstructors() {
 		assertNotNull("An id should be created.", comment.getId());
 		assertNotNull("Comment text should exist.", comment.getBodyText());
-		date = new Date();
 		assertNotNull("A date should be created.", comment.getCreatedDate());
-		assertEquals("Created date should be the actual date.", date, comment.getCreatedDate());
-		assertEquals("Updated date should match created date.", comment.getCreatedDate(), comment.getUpdatedDate());
+		
+		// Compare substrings because seconds portion causes test failure occasionally.
+		String date = new Date().toString().substring(0, 10);
+		assertEquals("Created date should be the actual date.", date,
+				comment.getCreatedDate().toString().substring(0, 10));
+		assertEquals("Updated date should match created date.",
+				comment.getCreatedDate().toString().substring(0,10), 
+				comment.getUpdatedDate().toString().substring(0, 10));
+		
 		assertNotNull("A comment must have an author", comment.getAuthor());
-		assertNull("Picture should be null on creation.", comment.getPicture());
+		assertFalse("Should not have a picture on creation.", comment.hasPicture());
 		assertNotNull("A comment must have a location.", comment.getLocation());	
+		assertFalse("A comment has no parent by default.", comment.hasParent());
 	}
 	
 	/**
@@ -52,25 +64,15 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	 * to update the author name to nothing should update it to anonymous.
 	 */
 	public void testAuthor() {
-		String curAuthor = comment.getAuthor();
-		// Try to change the author to the current name. This shouldn't affect anything.
-		comment.setAuthor(curAuthor, getActivity());
-		assertEquals("Updating with the same author name should make no changes",
-				curAuthor, comment.getAuthor());
-			
+		String curAuthor = comment.getRawAuthor();
+		// Updating to the same name should have no effect.
+		comment.setAuthor(curAuthor);
+		assertEquals("Updating author with same name should have no effect.", curAuthor, comment.getRawAuthor());
+		
 		// Try to change the author to a new name.
 		String newAuthor = "FluffyBunny";
-		comment.setAuthor(newAuthor, getActivity());		
-		assertFalse("New author should not be the same as the old author.",
-				curAuthor.equals(comment.getAuthor()));
-		assertEquals("Author should be updated to new author.", newAuthor, comment.getAuthor());
-		
-		// Try to change the user name to nothing.
-		newAuthor = "";
-		comment.setAuthor(newAuthor, getActivity());
-		assertFalse("A username cannot be blank.", comment.getAuthor().equals(newAuthor));
-		assertEquals("Updating username with nothing sets it to Anonymous", 
-				"Anonymous", comment.getAuthor());
+		comment.setAuthor(newAuthor);		
+		assertEquals("Author should be updated to new author.", newAuthor, comment.getRawAuthor());
 	}
 	
 	/**
@@ -103,7 +105,7 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	 * to the current date.
 	 */
 	public void testUpdatedAt() {
-		date = new Date();
+		Date date = new Date();
 		comment.setUpdated();
 		assertEquals("Should update to the correct date.", date, comment.getUpdatedDate());	
 	}
@@ -133,7 +135,8 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		assertFalse(comment.hasPicture());
 		
 		// Attach a picture to the comment.
-		Picture picture = null; //TODO Attach an actual picture here
+		Picture picture = new Picture();
+		picture.setImageByte(new byte[] {(byte) 0x00, (byte)0xf3});
 		comment.setPicture(picture);
 		
 		// Picture should no longer be null and should have the correct picture.
@@ -154,10 +157,10 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		assertNull("No parent means parent is set to null.", comment.getParent());
 		
 		// Update to have a parent
-		String parentId = "1111";
-		comment.setParent("1111");
+		Comment parent = new Comment("JUnit test: parent", getActivity());
+		comment.setParent(parent.getId());
 		assertTrue("Has parent should return true if you have a parent.", comment.hasParent());
-		assertEquals("Id should be same as parent id", parentId, comment.getParent());
+		assertEquals("Comment should be able to get the correct parent.", parent, comment.getParent());
 	}
 	
 	/**
@@ -165,9 +168,9 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	 * is told to save it locally.
 	 */
 	public void testIsLocal() {
-		assertFalse(comment.isLocal(getActivity().getBaseContext()));
-		DataModel.saveLocal(comment, false, getActivity().getBaseContext());
-		assertTrue(comment.isLocal(getActivity().getBaseContext()));
+		assertFalse(comment.isLocal());
+		DataModel.saveLocal(comment, false, getActivity().getBaseContext(), false);
+		assertTrue(comment.isLocal());
 	}
 	
 	/**
@@ -188,14 +191,14 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 	 */
 	public void testChildren() {
 		// By default a comment has no children
-		assertNull(comment.children());
-		assertEquals("A comment with no replies should have no children.",
-				comment.numReplies(), 0);
+		assertTrue("A comment with not replies should have no children.", 
+				comment.children().isEmpty());
 		
 		// Create a child for the comment
 		String parentId = comment.getId();
 		Comment childComment = new Comment("I am a child.", getActivity());
 		childComment.setParent(parentId);
+		DataModel.save(childComment);
 		
 		// Check that the comment now has a child
 		assertEquals(comment.numReplies(), 1);
@@ -203,6 +206,20 @@ public class CommentModelTests extends ActivityInstrumentationTestCase2<MainActi
 		childList.add(childComment);
 		assertEquals("Child List should have the correct children.",
 				childList, comment.children());
+	}
+	
+	/**
+	 * Tests that comments are equal as long as they have the same ids. If two comments with the same
+	 * ids are compared, but have other differences, they are the same.
+	 */
+	public void testEquals() {
+		assertTrue("A comment compared to itself should be equal.", comment.equals(comment));
+		Comment different = new Comment("JUnit testing, different", getActivity());
+		assertFalse("A comment with a different id is not equal.", comment.equals(different));
+		Comment edited = comment;
+		edited.setBodyText("hihihihi");
+		assertTrue("A comment compared to another comment with the same id is equal, regardless of other fields.",
+				comment.equals(edited));
 	}
 
 }

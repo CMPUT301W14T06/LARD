@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000" 
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,7 +13,8 @@
         android:id="@+id/locationSettingsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location Settings" />
+        android:text="Location Settings" 
+        android:textColor="#FFFFFF"/>
 
     <Button
         android:id="@+id/saveLocationButton"
@@ -21,7 +23,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="locationSaveClick"
-        android:text="Save" />
+        android:text="Save"
+        android:textColor="#FFFFFF" />
 
     <RadioButton
         android:id="@+id/gpsRadioButton"
@@ -29,7 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/locationSettingsTextView"
         android:text="GPS Location" 
-        android:onClick= "gpsLocationClick"/>
+        android:onClick= "gpsLocationClick"
+        android:textColor="#FFFFFF"/>
 
     <RadioButton
         android:id="@+id/selectLocationRadioButton"
@@ -38,13 +42,52 @@
         android:layout_alignLeft="@+id/locationSettingsTextView"
         android:layout_below="@+id/gpsRadioButton"
         android:text="Selected Location:"
-        android:onClick= "customLocationClick" />
+        android:onClick= "selectedLocationClick" 
+        android:textColor="#FFFFFF"/>
+    
+    <RadioButton
+        android:id="@+id/customLocationRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/selectLocationRadioButton"
+        android:layout_alignRight="@+id/selectLocationRadioButton"
+        android:layout_below="@+id/selectLocationRadioButton"
+        android:text="Custom Location:"
+        android:onClick= "customLocationClick"
+        android:textColor="#FFFFFF" />
 
-        <Spinner
-            android:id="@+id/locationSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/selectLocationRadioButton"
-            android:layout_below="@+id/selectLocationRadioButton" />
+    <Spinner
+        android:id="@+id/locationSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/customLocationRadioButton"
+        android:layout_below="@+id/gpsRadioButton"
+        android:layout_toRightOf="@+id/selectLocationRadioButton"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/lonEditText"
+        android:inputType="numberDecimal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/latEditText"
+        android:layout_below="@+id/latEditText"
+        android:ems="10"
+        android:hint="Lon"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/latEditText"
+        android:inputType="numberDecimal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/customLocationRadioButton"
+        android:layout_below="@+id/customLocationRadioButton"
+        android:ems="10"
+        android:hint="Lat"
+        android:textColor="#FFFFFF" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

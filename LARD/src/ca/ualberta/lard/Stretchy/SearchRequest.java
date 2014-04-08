@@ -1,6 +1,7 @@
 package ca.ualberta.lard.Stretchy;
 
 import ca.ualberta.lard.model.CommentRequest;
+import ca.ualberta.lard.model.GeoLocation;
 
 /**
  * Elastic search uses specific string literal formatting. SearchRequest
@@ -13,6 +14,7 @@ public class SearchRequest {
 	private int _size;
 	private String bodyText;
 	private String parent;
+	private GeoLocation location;
 	
 	public SearchRequest(int size) {
 		this._size = size;
@@ -21,6 +23,8 @@ public class SearchRequest {
 	public SearchRequest(CommentRequest req) {
 		this._size = req.size();
 		this.bodyText = req.getBodyText();
+		this.parent = req.getParentId();
+		this.location = req.getLocation();
 	}
 	
 	/**
@@ -35,8 +39,12 @@ public class SearchRequest {
 			+ "\"query\" : { ";
 		if (!this.anyQuery()) {
 			ret += "\"match_all\" : { } ";
-		} else {
+		} else if (this.bodyText != null) {
 			ret += this.bodyString();
+		} else if (this.parent != null) {
+			ret += this.parentString();
+		} else if (this.location != null) {
+			ret += this.locationString();
 		}
 
 		ret += "} ";
@@ -58,7 +66,7 @@ public class SearchRequest {
 	 * @return true if either bodyText or parent is set
 	 */
 	public boolean anyQuery() {
-		return !(this.bodyText == null && this.parent == null);
+		return !(this.bodyText == null && this.parent == null && this.location == null);
 	}
 	
 	/**
@@ -69,6 +77,33 @@ public class SearchRequest {
 	public String bodyString() {
 		if (this.bodyText != null && !this.bodyText.isEmpty()) {
 			return "\"term\" : { \"bodyText\" : \"" + this.bodyText + "\" } "; 
+		}
+		return "";
+	}
+	
+	/**
+	 * Generates the JSON string to search for a parent ID
+	 * @return The JSON string to send to elastic search
+	 */
+	public String parentString() {
+		if (this.parent != null && !this.parent.isEmpty()) {
+			return "\"query_string\" : { \"query\" : \"" + this.parent + "\" , \"fields\": [\"parent\"] } ";
+		}
+		return "";
+	}
+	
+	/**
+	 * Generates the JSON string for filtering by location
+	 * @return String the JSON string to pass to elastic Search.
+	 */
+	public String locationString() {
+		if (this.location != null) {
+			String searchString = "{ \"sort\" : [ { \"_geo_distance\" : { \"comment.location\" : { \"lat\" : " +
+					Double.toString(location.getLatitude()) + " , \"lon\" : " +
+					Double.toString(location.getLongitude()) +
+					", \"order\" : \"asc\", \"unit\" : \"km\" } } ], \"query\" : { \"match_all\" : {} }";
+			System.out.println(searchString);
+			return searchString;
 		}
 		return "";
 	}

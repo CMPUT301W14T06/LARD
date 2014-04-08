@@ -1,7 +1,5 @@
 package ca.ualberta.lard.test;
 
-import java.util.Random;
-
 import ca.ualberta.lard.MainActivity;
 import ca.ualberta.lard.model.Picture;
 import android.test.ActivityInstrumentationTestCase2;
@@ -13,16 +11,6 @@ public class PictureModelTests extends ActivityInstrumentationTestCase2<MainActi
 	
 	public PictureModelTests() {
 		super (MainActivity.class);
-	}
-	
-	/**
-	 * Tests the String setters and getters with an arbitrary String
-	 */
-	public void testSetImageString() {
-		Picture picture = new Picture();
-		String string = "The quick brown fox jumps over the lazy dog!";
-		picture.setImageString(string);
-		assertEquals("The String getter should return the setted string", string, picture.getImageString() );
 	}
 	
 	/**

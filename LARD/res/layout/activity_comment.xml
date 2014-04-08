@@ -21,7 +21,6 @@
 		    android:layout_height="wrap_content"
 		    android:gravity="left"
 		    android:scrollHorizontally="true"
-		    android:text="TextView"
 		    android:textAlignment="gravity"
 		    android:textColor="@android:color/holo_blue_light"
 		    android:textSize="13sp"
@@ -40,16 +39,22 @@
     	    android:ellipsize="end"
     	    android:maxLines="3"
     	    android:scrollHorizontally="true"
-    	    android:src="@android:drawable/ic_menu_camera" />
+    	    android:src="@android:drawable/screen_background_dark" />
     	
     	<!-- Parent Comment Text  -->
-    	<TextView
+    	<ScrollView 
+    	    android:id="@+id/scroller"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content"
+    	    android:scrollbars="vertical" >
+    	    
+	    	<TextView
     	    android:id="@+id/parent_comment_body"
     	    android:layout_width="match_parent"
-    	    android:layout_height="match_parent"
-    	    android:text="TextView"
+    	    android:layout_height="wrap_content"
     	    android:textColor="#FFFFFF"
-    	    android:textSize="20sp" />
+    	    android:textSize="20sp" />    	    
+    	</ScrollView>
 
     </LinearLayout>
     
@@ -66,7 +71,6 @@
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:gravity="left"
-            android:text="Location goes here"
             android:textAlignment="gravity"
             android:textColor="@android:color/holo_blue_light"
             android:textSize="14sp" />
@@ -78,7 +82,6 @@
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="TextView"
             android:textColor="@android:color/holo_blue_light"
             android:textSize="14sp" />
     </LinearLayout>

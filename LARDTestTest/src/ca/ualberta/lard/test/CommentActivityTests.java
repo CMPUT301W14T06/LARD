@@ -1,21 +1,20 @@
 package ca.ualberta.lard.test;
 
-import java.util.Date;
-
+import android.app.Activity;
 import android.app.Instrumentation;
+import android.app.Instrumentation.ActivityMonitor;
+import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.InstrumentationTestCase;
 import android.test.ViewAsserts;
 import android.view.View;
+import android.widget.ListView;
 import ca.ualberta.lard.CommentActivity;
-import ca.ualberta.lard.NewCommentActivity;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.DataModel;
 
 /**
- * Tests CommentActivity UI functionality. Tests that all the buttons
- * in the action bar work when clicked and that another CommentActivity
+ * Tests CommentActivity UI functionality. Tests another CommentActivity
  * is started when a child comment is clicked.
  * @author Victoria
  */
@@ -35,12 +34,19 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		
-        setActivityInitialTouchMode(true);
-        
+
         // Get the id of the comment
-		comment = new Comment("This is a comment", getActivity());
+        Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
+		comment = new Comment("JUnit testing comment", context);
 		id = comment.getId();
+		DataModel.save(comment);
+		
+		Comment child = new Comment("Junit test child", context);
+		child.setParent(id);
+		DataModel.save(child);
+		
+		// Sleep to ensure the comments are pushed to the server before we begin the activity.
+		Thread.sleep(1000);
 		
 		// Pass the activity the id
 		intent = new Intent();
@@ -51,12 +57,52 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 		instru = getInstrumentation();
 	}
 	
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		comment = null;
+		id = null;
+		activity = null;
+		intent = null;
+	}
+	
 	/**
 	 * Tests that when the activity is started, a comment id is received.
 	 */
 	public void testReceiveId() {
 		String passedId = (String)activity.getIntent().getStringExtra(CommentActivity.EXTRA_PARENT_ID);
 		assertEquals("CommentActivity should receive a parent id from intent.", id, passedId);
+	}
+	
+	/**
+	 * Tests that clicking a reply to a comment opens another Comment Activity.
+	 * @throws InterruptedException 
+	 */
+	public void testClickChild() throws InterruptedException {
+		ActivityMonitor monitor = new ActivityMonitor(CommentActivity.class.getName(), null, false);
+		instru.addMonitor(monitor);
+	    
+		final ListView listview = (ListView) activity.findViewById(ca.ualberta.lard.R.id.children_list);
+		assertNotNull("Listview should not be null", listview);
+		
+		// Wait to ensure list view is actually retrieved
+		Thread.sleep(1000);
+		
+		final View child = listview.getChildAt(0);
+		assertNotNull("Child should not be null", child);
+		
+		// Click the child comment
+        activity.runOnUiThread(new Runnable() {
+        	@Override
+            public void run() {
+        		listview.performItemClick(child, 0, listview.getItemIdAtPosition(0));
+            }
+        });
+		
+        // Check the activity was started.
+        instru.waitForIdleSync();
+		Activity childActivity = monitor.waitForActivityWithTimeout(5000);
+		assertNotNull("Comment Activity should have started", childActivity);
+		childActivity.finish();
 	}
 
 	/**
@@ -66,82 +112,12 @@ public class CommentActivityTests extends ActivityInstrumentationTestCase2<Comme
 	 */
 	public void testListViewIsVisable() throws Throwable {
 		View view = activity.getWindow().getDecorView();
+		
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.children_list));
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.parent_author));
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.parent_comment_body));
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.parent_location));
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.parent_num_replies));
 		ViewAsserts.assertOnScreen(view, activity.findViewById(ca.ualberta.lard.R.id.parent_picture));
-	}
-	
-	/**
-	 * Tests that a NewCommentActivity is opened when the reply button in the action bar
-	 * is clicked and that the id of the parent comment is sent.
-	 * @throws Throwable
-	 */
-	public void testReply() throws Throwable {
-		// Get the reply button and click it
-	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_reply);
-	    runTestOnUiThread(new Runnable() {
-	    	@Override
-	    	public void run() {
-	    		view.requestFocus();
-	    		view.performClick();
-	    	}
-	    });
-
-	    instru.waitForIdleSync();
-	    
-	    // Get the id from the NewCommentActivity intent.
-	    String passedId = intent.getStringExtra(NewCommentActivity.PARENT_ID);	    
-	    assertEquals("Passed id should match parent id.", id, passedId);
-	}
-	
-	/**
-	 * Tests that the parent comment of the list is added to the favourites list when
-	 * the favourite button in the action bar is clicked.
-	 * @throws Throwable
-	 */
-	public void testFavourites() throws Throwable {
-		// Fails automatically
-		fail();
-		
-		// TODO: Add the comment to the favourites list
-		
-		// Get the save button
-	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_fav);
-	    runTestOnUiThread(new Runnable() {
-	    	@Override
-	    	public void run() {
-	    		view.requestFocus();
-	    		view.performClick();
-	    	}
-	    });
-	    
-	    instru.waitForIdleSync();
-	}
-
-	/**
-	 * Tests that the parent comment of the list is saved locally when the reply button
-	 * in the action bar is clicked.
-	 * @throws Throwable
-	 */
-	public void testSave() throws Throwable {	
-		assertFalse("Comment originally is not saved locally.", DataModel.isLocal(comment, activity.getBaseContext()));
-		
-		// Get the save button
-	    final View view = (View) activity.findViewById(ca.ualberta.lard.R.id.action_save);
-	    runTestOnUiThread(new Runnable() {
-	    	@Override
-	    	public void run() {
-	    		view.requestFocus();
-	    		view.performClick();
-	    	}
-	    });
-	    
-	    instru.waitForIdleSync();
-	    
-	    DataModel.saveLocal(comment, false, getActivity().getBaseContext());
-	    assertTrue("Comment should be saved locally", DataModel.isLocal(comment, activity.getBaseContext()));
 	}
 }

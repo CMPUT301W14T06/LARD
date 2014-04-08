@@ -3,7 +3,10 @@ package ca.ualberta.lard;
 import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +20,9 @@ import android.widget.Toast;
 import ca.ualberta.lard.controller.CommentController;
 import ca.ualberta.lard.model.Comment;
 import ca.ualberta.lard.model.CommentRequest;
-import ca.ualberta.lard.model.DataModel;
+import ca.ualberta.lard.model.Follow;
+import ca.ualberta.lard.model.GeoLocation;
+import ca.ualberta.lard.model.User;
 
 /**
  * CommentActivity is called when a comment is selected.
@@ -25,28 +30,33 @@ import ca.ualberta.lard.model.DataModel;
  * The selected comment can be replied to, added to favourites, or saved locally.
  * Selecting a one of the child comments will open another CommentActivity. 
  *
- * @param  EXTRA_PARENT_ID	Expects the id of the parent comment as a String
+ * EXTRA_PARENT_ID	Expects the id of the parent comment as a String
  * @author Victoria
  */
 
 public class CommentActivity extends Activity {
 	private String commentId;
-	private ListView commentListView;
 	private Comment comment;
-	private ArrayList<Comment> commentList;
+	private static ArrayList<Comment> commentList;
+	
 	private CommentListBaseAdapter adapter;
+	private CommentController commentController;
+	
+	private ListView commentListView;
 	private TextView parentAuthorView;
 	private TextView parentCommentTextView;
 	private TextView parentNumRepliesView;
-	
-	@SuppressWarnings("unused") // TODO: Remove
-	private ImageView parentPicView;
-	@SuppressWarnings("unused") // TODO: Remove
 	private TextView parentLocationView;
+	private ImageView parentPicView;
 
 	// For getting the id of clicked comment in MainActivity
 	public static final String EXTRA_PARENT_ID = "PARENT_ID";
 	
+	/**
+	 * onCreate grabs all the ids of all the views used in CommentActivity. It uses the comment 
+	 * id it is given from MainActivity to retrieve the comment. onCreate also attaches a click
+	 * listener to the list view, which is supposed to display a list of children.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,32 +83,17 @@ public class CommentActivity extends Activity {
 	    CommentRequest commentRequest = new CommentRequest(1);
 	    commentRequest.setId(commentId);
 	    
-	    // ----------------------------------------------------------------------------
-	    
-	    // TODO: Dylan changed this. I think that we are supposed to access the comments through CommentController
-	    
 	    // Check a comment was received 
-	    CommentController commentController = new CommentController(commentRequest);
-    	if (commentController.any()) {
+	    commentController = new CommentController(commentRequest, this);
+    	if (!commentController.isEmpty()) {
     		comment = commentController.getSingle();
-    	}
-    	else {
+    	} else {
+    		Toast.makeText(getApplicationContext(), "Error loading the requested comment", Toast.LENGTH_SHORT).show();
+    		System.err.println("Exiting Comment Activity with an Empty commentController.. Comment ID: " + commentId);
     		// Couldn't find the comment, should never get here though.
 	    	finish();
     	}
     	
-    	/*
-	    // Check a comment was received 
-	    ArrayList<Comment> temp = DataModel.retrieveComments(commentRequest);
-	    if (temp == null) {
-	    	// Couldn't find the comment, should never get here though.
-	    	finish();
-	    }
-	    comment = temp.get(0);
-	    */
-    	
-    	// ----------------------------------------------------------------------------
-	    
 	    // Configure the list view
 	    commentListView = (ListView)findViewById(R.id.children_list);
 	    commentListView.setOnItemClickListener(new OnItemClickListener() {
@@ -112,41 +107,21 @@ public class CommentActivity extends Activity {
 	    		startActivity(intent);		
 	    	}	    	
 		});
+	    
+	    // Set up the adapter.
+		commentList = new ArrayList<Comment>();
+	    adapter = new CommentListBaseAdapter(this, commentList);
+	    commentListView.setAdapter(adapter);
+	    
+	    // Display comment and children
+	    displayCommentAndChildren(comment);  
 		
 	}
 	
+	/**
+	 * This inflates the action bar and sets which icons are to be displayed.
+	 */
 	@Override
-	protected void onResume() {
-		super.onResume();	
-		
-		// Get children of the comment
-		if (comment.children() == null) {
-			commentList = new ArrayList<Comment>();
-		}
-		else {
-			commentList = comment.children();
-		}
-		
-		// Set the parent comment info in the view
-		// Make sure comment body isn't empty
-		if (comment.getBodyText() == null || comment.getBodyText() == "") {
-			parentCommentTextView.setText("[Comment Text Removed]");
-		}
-		else {
-			parentCommentTextView.setText(comment.getBodyText());			
-		}
-		parentAuthorView.setText("By: "+comment.getAuthor());
-		//TODO: parentLocationView.setText(comment.);
-		parentNumRepliesView.setText(Integer.toString(comment.numReplies())+" replies");
-		//TODO: parentPicView.setP
-	
-	    adapter = new CommentListBaseAdapter(this, commentList);
-	    commentListView.setAdapter(adapter);
-	} 
-	
-	// TODO: Not sure if we even need this function
-	@Override
-	// Display action bar
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.comment_actionbar, menu); 
 	    return super.onCreateOptionsMenu(menu);
@@ -154,9 +129,9 @@ public class CommentActivity extends Activity {
 	
 	/**
 	 * Deals with items in the action bar. When the heart icon is clicked the parent comment
-	 * is saved locally and added to favourites. When the floppy disk icon is clicked the parent
-	 * comment is saved locally. When the reply icon is clicked NewCommentActivity is opened
-	 * and is passed the id of the parent comment.
+	 * and it's children is saved locally and added to favourites. When the floppy disk icon 
+	 * is clicked the parent comment is saved locally. When the reply icon is clicked NewCommentActivity
+	 * is opened and is passed the id of the parent comment.
 	 * @param item A MenuItem
 	 */
     @Override
@@ -164,20 +139,140 @@ public class CommentActivity extends Activity {
         switch (item.getItemId()) {
         case R.id.action_fav:
         	Toast.makeText(getApplicationContext(), "Comment Favourited.", Toast.LENGTH_SHORT).show();
-        	DataModel.saveLocal(comment, true, this);
+        	// Save all the comments replies as well
+        	commentController.favourite(comment);
             return true;
+        case R.id.action_edit:        	
+        	// Make a new user based on the current user
+    		User curUser = new User(getSharedPreferences(User.PREFS_NAME, Context.MODE_PRIVATE));
+    		
+    		// Compute what the author with hash would be using the current users device id.
+    		String authorWithCurUserId = curUser.hashWithGivenName(comment.getRawAuthor());
+    		
+    		// If author and computed author are the same, allow the user to edit the comment.
+    		if (comment.getAuthor().equals(authorWithCurUserId)) {
+        		Intent intent = new Intent(getApplicationContext(), NewEditCommentActivity.class);
+        		intent.putExtra(NewEditCommentActivity.COMMENT_STRING, comment.toJson());
+        		// Set flag to edit comment.
+        		startActivity(intent);
+    		} else {
+        		Toast.makeText(getApplicationContext(), "You do not have permission to edit this comment.", Toast.LENGTH_SHORT).show();
+        	} 
+        	return true;
         case R.id.action_save:
-        	DataModel.saveLocal(comment, true, this);
-        	Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
+        	if (commentController.paper(comment))
+        	{
+        		Toast.makeText(getApplicationContext(), "Comment Saved.", Toast.LENGTH_SHORT).show();
+        	} else {
+        		Toast.makeText(getApplicationContext(), "Error saving comment", Toast.LENGTH_SHORT).show();
+        	}
             return true;
         case R.id.action_reply:
-    		Intent intent = new Intent(getApplicationContext(), NewCommentActivity.class);
-    		intent.putExtra(NewCommentActivity.PARENT_ID, commentId);
+    		Intent intent = new Intent(getApplicationContext(), NewEditCommentActivity.class);
+    		intent.putExtra(NewEditCommentActivity.PARENT_STRING, comment.toJson());
     		startActivity(intent);
             return true;
+        case R.id.action_follow:
+        	Follow follow = new Follow(getApplicationContext().getSharedPreferences(Follow.PREFS_NAME, Context.MODE_PRIVATE));
+        	follow.addFollow(comment.getAuthor());
+        	Toast.makeText(getApplicationContext(), "Followed user: " + comment.getAuthor(), Toast.LENGTH_SHORT).show();
+        case R.id.action_refresh:
+        	displayCommentAndChildren(comment);
+        	Toast.makeText(getApplicationContext(), "Page Refreshed.", Toast.LENGTH_SHORT).show();
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+    
+    /**
+     * Displays a comments information and its children.
+     * @param comment The Comment to be displayed
+     */
+    private void displayCommentAndChildren(Comment comment) {
+		// Set the parent comment info in the view
+		SetCommentInfo setInfo = new SetCommentInfo();
+		setInfo.execute(comment);
+		
+		// Get the children if there are any
+	    CommentRequest commentRequest = new CommentRequest(100);
+	    commentRequest.setParentId(comment.getId());
+		FetchChildren fetchChildren = new FetchChildren();
+		fetchChildren.execute(commentRequest);
+    }
+    
+    /**
+     * Fetch all of the comments children.
+     * Takes a comment request which has the parent id set.
+     */
+    private class FetchChildren extends AsyncTask<CommentRequest, Integer, ArrayList<Comment>> {
+		ProgressDialog spinner = new ProgressDialog(CommentActivity.this);
+    	
+		/**
+		 * Display a spinner while retrieving children
+		 */
+    	@Override
+    	protected void onPreExecute() {
+    		spinner.setMessage("Loading Replies...");
+    		spinner.show();
+    	}
+    	
+    	/**
+    	 * Fetches the comments from the comment controller
+    	 */
+    	@Override
+    	protected ArrayList<Comment> doInBackground(CommentRequest... params) {
+    		CommentController commentController = new CommentController(params[0], getBaseContext());
+			if (commentController.isEmpty() == false) {
+				return commentController.get();
+			}
+			else {
+				return new ArrayList<Comment>();
+			}			
+    	}
+    	
+    	/**
+    	 *  Sets the number of childen and updates the list of children to be displayed, then
+    	 *  gets rid of the loading spinner
+    	 */
+    	protected void onPostExecute(ArrayList<Comment> result) {
+    		parentNumRepliesView.setText(Integer.toString(result.size()) + " replies");
+    		
+    		commentList.clear();
+    		commentList.addAll(result);
+    		adapter.notifyDataSetChanged();
+    		
+    		spinner.dismiss();
+    	}
+    }
+    
+    /**
+     * Sets all of main comments info in text and image views.
+     * Takes a comment which provides all the info to display.
+     * @author Victoria
+     *
+     */
+    private class SetCommentInfo extends AsyncTask<Comment, Void, Comment> {
+
+		@Override
+		protected Comment doInBackground(Comment... params) {
+			return params[0];
+		}
+		
+		protected void onPostExecute(Comment result) {
+			// Set the picture, if there is one
+			if (comment.hasPicture()) {
+				parentPicView.setImageBitmap(comment.getPicture().getBitmap());
+			}
+			
+			// Set the distance
+			GeoLocation myCurLoc = new GeoLocation(getBaseContext());
+			String distance = comment.getLocation().roundedDistanceFrom(myCurLoc);
+			parentLocationView.setText(distance+"m away");
+			
+			// Set text and author
+			parentCommentTextView.setText(comment.getBodyText());			
+			parentAuthorView.setText("By: " + comment.getAuthor());			
+		} 	
     }
 }
 
